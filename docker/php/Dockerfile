@@ -1,4 +1,4 @@
-FROM php:8.3-fpm
+FROM php:8.4-fpm
 
 # Extensões essenciais do Laravel
 RUN apt-get update && apt-get install -y \
@@ -14,7 +14,21 @@ COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
 
 WORKDIR /var/www
 
+# 1. Copia arquivos que mudam com pouca frequência (composer.json e lock)
+COPY composer.json composer.lock ./
+
+# 2. COPIA O CÓDIGO FONTE COMPLETO (NECESSÁRIO PARA O ARTISAN)
+COPY . .
+
+# 3. Instala dependências (agora que o 'artisan' existe)
+RUN composer install --no-dev --optimize-autoloader
+
+# 4. COPIA O ARQUIVO DE AMBIENTE
+COPY .env.example .env
+
 # Permissões do Laravel
 RUN chown -R www-data:www-data /var/www
+
+RUN chmod -R 775 storage bootstrap/cache
 
 CMD ["php-fpm"]

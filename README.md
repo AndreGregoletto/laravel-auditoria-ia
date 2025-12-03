@@ -1,59 +1,135 @@
 <p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+# Laravel AI integration with Auditing.
 
-## About Laravel
+This project presents a robust web application developed in Laravel (PHP), 
+with the primary goal of **optimizing and supporting the auditing workflow**. 
+By integrating **Artificial Intelligence (AI) capabilities**, the platform aims 
+to automate the analysis of large volumes of data, identify patterns and 
+anomalies with greater accuracy and speed than manual methods, and provide 
+predictive insights for auditors. 
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+The combination of the Laravel framework for a **secure and intuitive** user 
+interface with the analytical power of AI results in a tool that **increases 
+efficiency, reduces the risk of human error, and elevates the overall quality** 
+of internal and external audits.
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+## 🚀 Getting started
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+These instructions will allow you to obtain a working copy of the project on your 
+local machine for development and testing purposes.
 
-## Learning Laravel
+### 📋 Prerequisites
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework. You can also check out [Laravel Learn](https://laravel.com/learn), where you will be guided through building a modern Laravel application.
+You will need the following software installed on your machine:
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+```
+PHP version 8.4
 
-## Laravel Sponsors
+Composer
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+Node.js and npm (or Yarn)
 
-### Premium Partners
+Database MySQL or SQLite
 
-- **[Vehikl](https://vehikl.com)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Redberry](https://redberry.international/laravel-development)**
-- **[Active Logic](https://activelogic.com)**
+Git
+```
 
-## Contributing
+### ⚙️ Setting Up the Project Locally
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+Open your terminal or command prompt and run 
+the following command to download the project:
 
-## Code of Conduct
+```
+git clone https://github.com/AndreGregoletto/laravel-auditoria-ia.git
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+cd [nome-do-diretorio-do-projeto]
+```
 
-## Security Vulnerabilities
+Build the container:
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+```
+docker compose build
+docker compose up -d
+```
 
-## License
+Copy .env.example to .env:
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+```
+docker cp .env.example laravel-php:/var/www/.env
+```
+
+Access the container and install the Composer dependencies:
+
+```
+docker exec -it laravel-php bash
+
+composer install
+
+php artisan key:generate
+
+php artisan migrate
+```
+
+If you are using SQLite, run the following commands:
+
+```
+docker exec -it laravel-php bash
+
+chown -R www-data:www-data database/
+
+chmod 775 database/database.sqlit
+ 
+chmod 775 database/
+```
+
+
+If everything goes as expected, the application will be available to be 
+accessed on port 8000.
+
+
+## 📦 Implantation
+
+This application is an essential working tool for the auditor, created to 
+drastically optimize the routine analysis. Instead of manually reviewing 
+spreadsheets, the platform uses Artificial Intelligence (AI) to automate 
+all the processing, normalization, and identification of anomalies across 
+large volumes of data. The goal is for the auditor to dedicate their time 
+only to the final review of the risk insights generated by the AI, 
+validating the findings and making strategic decisions, effectively 
+transforming the auditor from an executor into a strategic supervisor of 
+the process.
+
+## 🛠️ Built with
+
+* [Laravel](https://laravel.com/docs/12.x) - Framework web
+* [Redis](https://redis.io/docs/latest/) - Used for cache management.
+
+## 🖇️ Colaborando
+
+Please contact us at **argregoletto@gmail.com** for details regarding our code of conduct and the process for submitting requests.
+
+## 📌 Version
+
+Currently, the model is in its 1.0 version.
+
+## ✒️ Autores
+
+* **André Gregoletto** - *Technical Lead and Principal Developer* - [AndreGregoletto](https://github.com/AndreGregoletto)
+* **Isaías Teofilo** - *Consultant and Creator of Business Rules.* - [Isaias]()
+
+
+## 🎁 Expressions of gratitude
+
+* **Gratitude to God**: 🙏 Above all, we acknowledge and thank God for the strength, wisdom, and opportunity to develop this project.
+
+
+* **Family Support**: To our families, whose patience, support, and understanding provided the foundation needed to dedicate the necessary time and effort to this endeavor.
+
+
+* **Collaborator**: **Isaias** 🤝 A special thank you to Isaias for his invaluable collaboration, technical contributions, and dedication that were crucial to the successful development of this system.
+
+
+* **The Power of Union**: ✨ This project is a testament to what can be achieved through teamwork, shared vision, and synergy. We celebrate the combined effort that turned this vision into a reality.
+
+
