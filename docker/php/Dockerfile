@@ -2,9 +2,9 @@ FROM php:8.5-fpm
 
 # Extensões essenciais do Laravel
 RUN apt-get update && apt-get install -y \
-    zip unzip curl git libpq-dev libzip-dev libpng-dev libonig-dev libxml2-dev \
-    && docker-php-ext-install pdo pdo_mysql pdo_pgsql zip gd mbstring exif pcntl \
-    && apt-get clean
+        zip unzip curl git libpq-dev libzip-dev libpng-dev libonig-dev libxml2-dev nodejs npm\
+        && docker-php-ext-install pdo pdo_mysql pdo_pgsql zip gd mbstring exif pcntl \
+        && apt-get clean
 
 # Instalar Redis PHP extension
 RUN pecl install redis && docker-php-ext-enable redis

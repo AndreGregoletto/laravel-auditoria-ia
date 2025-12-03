@@ -2,14 +2,14 @@
 
 use Illuminate\Support\Facades\Route;
 
-use App\Models\AuditLog;
+Route::view('/', 'welcome');
 
+Route::view('dashboard', 'dashboard')
+    ->middleware(['auth', 'verified'])
+    ->name('dashboard');
 
-Route::get('/', function () {
-    return view('welcome');
-});
+Route::view('profile', 'profile')
+    ->middleware(['auth'])
+    ->name('profile');
 
-Route::get('/audits', function () {
-    return AuditLog::get();
-//    return AuditLog::latest()->paginate(50);
-});
+require __DIR__.'/auth.php';

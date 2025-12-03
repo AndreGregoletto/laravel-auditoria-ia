@@ -69,6 +69,10 @@ composer install
 php artisan key:generate
 
 php artisan migrate
+
+npm install
+
+npm run build
 ```
 
 If you are using SQLite, run the following commands:
