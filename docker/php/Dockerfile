@@ -1,4 +1,4 @@
-FROM php:8.4-fpm
+FROM php:8.5-fpm
 
 # Extensões essenciais do Laravel
 RUN apt-get update && apt-get install -y \
