@@ -24,7 +24,7 @@ local machine for development and testing purposes.
 You will need the following software installed on your machine:
 
 ```
-PHP version 8.4
+PHP version 8.5
 
 Composer
 
@@ -43,7 +43,7 @@ the following command to download the project:
 ```
 git clone https://github.com/AndreGregoletto/laravel-auditoria-ia.git
 
-cd [nome-do-diretorio-do-projeto]
+cd [name-of-work-space]
 ```
 
 Build the container:
