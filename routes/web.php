@@ -12,4 +12,9 @@ Route::view('profile', 'profile')
     ->middleware(['auth'])
     ->name('profile');
 
+Route::get('/audits', function () {
+    return \App\Models\git ::get();
+//    return AuditLog::latest()->paginate(50);
+});
+
 require __DIR__.'/auth.php';
