@@ -8,6 +8,15 @@ Route::view('dashboard', 'dashboard')
     ->middleware(['auth', 'verified'])
     ->name('dashboard');
 
+
+//Route::view('excel', 'excel')
+//    ->middleware(['auth', 'verified'])
+//    ->name('excel');
+
+Route::get('excel', \App\Livewire\SendExcel::class)
+    ->middleware(['auth', 'verified'])
+    ->name('excel');
+
 Route::view('profile', 'profile')
     ->middleware(['auth'])
     ->name('profile');
