@@ -1,9 +1,9 @@
 <nav class="pc-sidebar">
     <div class="navbar-wrapper">
         <div class="m-header flex items-center py-4 px-6 h-header-height">
-            <a href="{{ route('dashboard') }}" class="b-brand flex items-center gap-3">
-                <img src="{{ asset('assets/images/logo-white.svg') }}" class="img-fluid logo logo-lg" alt="logo" />
-                <img src="{{ asset('assets/images/favicon.svg') }}" class="img-fluid logo logo-sm" alt="logo" />
+            <a href="#!" class="b-brand flex items-center gap-3">
+                <span class="text-white">Portal Auditor</span>
+{{--                <img src="{{ asset('assets/images/notification/ok-48.png') }}" class="img-fluid logo logo-lg" alt="logo" />--}}
             </a>
         </div>
         <div class="navbar-content h-[calc(100vh_-_74px)] py-2.5">
@@ -22,7 +22,7 @@
 
                 <li class="pc-item pc-hasmenu">
                     <a href="#!" class="pc-link">
-                        <span class="pc-micon"> <i class="ph ph-tree-structure"></i> </span>
+                        <span class="pc-micon"> <i class="ph ph-file-text"></i> </span>
                         <span class="pc-mtext" data-i18n="Menu levels">Fila de Importação</span>
                         <span class="pc-arrow"><i class="ti ti-chevron-right"></i></span>
                     </a>
