@@ -49,33 +49,6 @@ new class extends Component
         <div class="ms-auto">
             <ul class="inline-flex *:min-h-header-height *:inline-flex *:items-center">
                 <li class="dropdown pc-h-item">
-                    <a class="pc-head-link dropdown-toggle me-0" data-pc-toggle="dropdown" href="#" role="button" aria-haspopup="false" aria-expanded="false">
-                        <i class="ph ph-diamonds-four"></i>
-                    </a>
-                    <div class="dropdown-menu dropdown-menu-end pc-h-dropdown">
-                        <a href="{{ route('profile') }}" class="dropdown-item">
-                            <i class="ph ph-user"></i>
-                            <span>My Account</span>
-                        </a>
-                        <a href="#!" class="dropdown-item">
-                            <i class="ph ph-gear"></i>
-                            <span>Settings</span>
-                        </a>
-                        <a href="#!" class="dropdown-item">
-                            <i class="ph ph-lifebuoy"></i>
-                            <span>Support</span>
-                        </a>
-                        <a href="#!" class="dropdown-item">
-                            <i class="ph ph-lock-key"></i>
-                            <span>Lock Screen</span>
-                        </a>
-                        <a href="#!" class="dropdown-item">
-                            <i class="ph ph-power"></i>
-                            <span>Logout</span>
-                        </a>
-                    </div>
-                </li>
-                <li class="dropdown pc-h-item">
                     <a class="pc-head-link dropdown-toggle me-0" data-pc-toggle="dropdown" href="#" role="button"
                        aria-haspopup="false" aria-expanded="false">
                         <i class="ph ph-bell"></i>
@@ -178,7 +151,11 @@ new class extends Component
                                     </span>
                                 </a>
                                 <div class="grid my-3">
-                                    <button class="btn btn-primary flex items-center justify-center">
+                                    <button
+                                        type="button"
+                                        wire:click.prevent="logout"
+                                        class="btn btn-primary flex items-center justify-center"
+                                    >
                                         <i class="ph ph-sign-out align-middle me-2"></i>
                                         Logout
                                     </button>

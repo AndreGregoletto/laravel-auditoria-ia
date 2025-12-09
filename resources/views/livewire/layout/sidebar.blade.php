@@ -27,7 +27,7 @@
                         <span class="pc-arrow"><i class="ti ti-chevron-right"></i></span>
                     </a>
                     <ul class="pc-submenu">
-                        <li class="pc-item"><a class="pc-link" href="{{ route('excel') }}" data-i18n="Level 2.1">Balancete</a></li>
+                        <li class="pc-item"><a class="pc-link" href="{{ route('balancete') }}" data-i18n="Level 2.1">Balancete</a></li>
                     </ul>
                 </li>
 

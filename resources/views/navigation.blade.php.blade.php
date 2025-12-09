@@ -90,8 +90,8 @@ new class extends Component
 
 
                 <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
-                    <x-nav-link :href="route('excel')" :active="request()->routeIs('excel')" wire:navigate>
-                        {{ __('Excel') }}
+                    <x-nav-link :href="route('balancete')" :active="request()->routeIs('balancete')" wire:navigate>
+                        {{ __('Balancete') }}
                     </x-nav-link>
                 </div>
             </div>

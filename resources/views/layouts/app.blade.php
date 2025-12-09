@@ -21,10 +21,13 @@
 
         <!-- Scripts -->
         @vite(['resources/css/app.css', 'resources/js/app.js'])
+
+        @livewireStyles
     </head>
     <body class="font-sans antialiased">
 
         <div class="loader-bg fixed inset-0 bg-white dark:bg-themedark-cardbg z-[1034]">
+{{--        <div class="loader-bg fixed inset-0 bg-white dark:bg-themedark-cardbg z-[1034]" id="page-loader">--}}
             <div class="loader-track h-[5px] w-full inline-block absolute overflow-hidden top-0">
                 <div class="loader-fill w-[300px] h-[5px] bg-primary-500 absolute top-0 left-0 animate-[hitZak_0.6s_ease-in-out_infinite_alternate]"></div>
             </div>
@@ -78,29 +81,49 @@
         </footer>
 
 
-        <script src="{{ asset('assets/js/plugins/apexcharts.min.js') }}"></script>
-        <script src="{{ asset('assets/js/plugins/jsvectormap.min.js') }}"></script>
-        <script src="{{ asset('assets/js/plugins/world.js') }}"></script>
+{{--        <script src="{{ asset('assets/js/plugins/apexcharts.min.js') }}"></script>--}}
+{{--        <script src="{{ asset('assets/js/plugins/jsvectormap.min.js') }}"></script>--}}
+{{--        <script src="{{ asset('assets/js/plugins/world.js') }}"></script>--}}
 
         <!-- custom widgets js -->
-        <script src="{{ asset('assets/js/widgets/world-low.js') }}"></script>
-        <script src="{{ asset('assets/js/widgets/Widget-line-chart.js') }}"></script>
+{{--        <script src="{{ asset('assets/js/widgets/world-low.js') }}"></script>--}}
+{{--        <script src="{{ asset('assets/js/widgets/Widget-line-chart.js') }}"></script>--}}
         <!-- [Page Specific JS] end -->
         <!-- Required Js -->
         <script src="{{ asset('assets/js/plugins/simplebar.min.js') }}"></script>
         <script src="{{ asset('assets/js/plugins/popper.min.js') }}"></script>
+
         <script src="{{ asset('assets/js/component.js') }}"></script>
         <script src="{{ asset('assets/js/theme.js') }}"></script>
         <script src="{{ asset('assets/js/script.js') }}"></script>
 
-        <script>layout_change('false');</script>
-        <script>layout_theme_sidebar_change('dark');</script>
-        <script>change_box_container('false');</script>
-        <script>layout_caption_change('true');</script>
-        <script>layout_rtl_change('false');</script>
-        <script>preset_change('preset-1');</script>
-        <script>main_layout_change('vertical');</script>
+        @livewireScripts
+
+        <script>
+            function initThemeLayout() {
+                if (typeof layout_change === "function") layout_change('false');
+                if (typeof layout_theme_sidebar_change === "function") layout_theme_sidebar_change('dark');
+                if (typeof change_box_container === "function") change_box_container('false');
+                if (typeof layout_caption_change === "function") layout_caption_change('true');
+                if (typeof layout_rtl_change === "function") layout_rtl_change('false');
+                if (typeof preset_change === "function") preset_change('preset-1');
+                if (typeof main_layout_change === "function") main_layout_change('vertical');
+
+                // 🔥 REBIND DO MENU (ISSO QUE ESTAVA FALTANDO)
+                if (typeof initSidebar === "function") initSidebar();
+                if (typeof initComponents === "function") initComponents();
+            }
+
+            // PRIMEIRO LOAD REAL
+            window.addEventListener('load', function () {
+                setTimeout(initThemeLayout, 50);
+            });
+
+            // TODAS AS NAVEGAÇÕES LIVEWIRE
+            document.addEventListener("livewire:navigated", function () {
+                setTimeout(initThemeLayout, 0);
+            });
+        </script>
 
     </body>
-
 </html>

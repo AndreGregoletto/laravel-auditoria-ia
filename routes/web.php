@@ -8,10 +8,14 @@ Route::view('dashboard', 'dashboard')
     ->middleware(['auth', 'verified'])
     ->name('dashboard');
 
+Route::group(['prefix' => 'queue-import'], function(){
 
-Route::get('excel', \App\Livewire\SendExcel::class)
-    ->middleware(['auth', 'verified'])
-    ->name('excel');
+    Route::get('balancete', \App\Livewire\SendExcel::class)
+        ->middleware(['auth', 'verified'])
+        ->name('balancete');
+
+});
+
 
 Route::view('profile', 'profile')
     ->middleware(['auth'])

@@ -2,9 +2,9 @@
 
 namespace App\Livewire;
 
-use App\Livewire\Forms\TestExcel;
-use Livewire\Component;
+use App\Livewire\Forms\QueueImport\Balancete;
 use Livewire\Attributes\Layout;
+use Livewire\Component;
 use Livewire\WithFileUploads;
 use Maatwebsite\Excel\Facades\Excel;
 
@@ -13,7 +13,7 @@ class SendExcel extends Component
 {
     use WithFileUploads;
 
-    public TestExcel $form;
+    public Balancete $form;
 
     public function save()
     {

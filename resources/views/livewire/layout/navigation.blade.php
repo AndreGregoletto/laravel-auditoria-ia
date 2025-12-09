@@ -1,21 +1,3 @@
-<?php
-
-use App\Livewire\Actions\Logout;
-use Livewire\Volt\Component;
-
-new class extends Component
-{
-    /**
-     * Log the current user out of the application.
-     */
-    public function logout(Logout $logout): void
-    {
-        $logout();
-
-        $this->redirect('/', navigate: true);
-    }
-}; ?>
-
 <nav x-data="{ open: false }" class="bg-white dark:bg-gray-800 border-b border-gray-100 dark:border-gray-700">
     <!-- Primary Navigation Menu -->
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -115,11 +97,8 @@ new class extends Component
                             {{ __('Profile') }}
                         </x-dropdown-link>
 
-                        <button wire:click="logout" class="w-full text-start">
-                            <x-dropdown-link>
-                                {{ __('Log Out') }}
-                            </x-dropdown-link>
-                        </button>
+                        <livewire:logout-button />
+
                     </x-slot>
                 </x-dropdown>
             </div>
@@ -155,11 +134,8 @@ new class extends Component
                 </x-responsive-nav-link>
 
                 <!-- Authentication -->
-                <button wire:click="logout" class="w-full text-start">
-                    <x-responsive-nav-link>
-                        {{ __('Log Out') }}
-                    </x-responsive-nav-link>
-                </button>
+                <livewire:logout-button />
+
             </div>
         </div>
     </div>
@@ -217,10 +193,8 @@ new class extends Component
                             <i class="ph ph-lock-key"></i>
                             <span>Lock Screen</span>
                         </a>
-                        <a href="#!" class="dropdown-item">
-                            <i class="ph ph-power"></i>
-                            <span>Logout</span>
-                        </a>
+                        <livewire:logout-button />
+
                     </div>
                 </li>
                 <li class="dropdown pc-h-item">
@@ -319,10 +293,8 @@ new class extends Component
               </span>
                                 </a>
                                 <div class="grid my-3">
-                                    <button class="btn btn-primary flex items-center justify-center">
-                                        <i class="ph ph-sign-out align-middle me-2"></i>
-                                        Logout
-                                    </button>
+                                    <livewire:logout-button />
+
                                 </div>
                             </div>
                         </div>

@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Livewire\Forms;
+namespace App\Livewire\Forms\QueueImport;
 
 use Livewire\Attributes\Validate;
 use Livewire\Form;
 
-class TestExcel extends Form
+class Balancete extends Form
 {
     #[Validate('required|file|mimes:xlsx,xls,csv|max:5240')] // Máximo 10MB
     public $file;
