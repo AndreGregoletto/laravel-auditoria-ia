@@ -6,13 +6,14 @@
 
     <!-- Histórico -->
     <div class="bg-gray-100 dark:bg-gray-900 p-4 rounded-lg h-96 overflow-y-auto mb-4 space-y-3">
-
         @foreach ($history as $msg)
-            <div class="p-3 rounded-lg text-sm
+            <div class="flex justify-{{ $msg['type'] === 'user' ? 'end' : 'start' }} items-center">
+                <div class="p-3 rounded-lg text-sm w-3/4
                 {{ $msg['type'] === 'user'
-                    ? 'bg-blue-500 text-white ml-auto w-3/4'
-                    : 'bg-white dark:bg-gray-700 text-gray-800 dark:text-white mr-auto w-3/4' }}">
-                {!! nl2br(e($msg['text'])) !!}
+                    ? 'bg-blue-500 text-black'
+                    : 'bg-white dark:bg-gray-700 text-gray-800 dark:text-white' }}">
+                    {!! nl2br(e($msg['text'])) !!}
+                </div>
             </div>
         @endforeach
 
