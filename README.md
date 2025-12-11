@@ -106,10 +106,15 @@ the process.
 
 ## 🛠️ Built with
 
-* [Laravel](https://laravel.com/docs/12.x) - Framework web
+* [Laravel](https://laravel.com/docs/12.x) - Framework web.
+* [Livewire](https://livewire.laravel.com/docs/3.x/quickstart) - Responsible for the form requests used on the front-end.
+* [Tailwindcss](https://tailwindcss.com/) - Used for style of front-end.
 * [Redis](https://redis.io/docs/latest/) - Used for cache management.
+* [MySQL](https://dev.mysql.com/doc/) - Used for system usability.
+* [MongoDB](https://www.mongodb.com/pt-br/lp/cloud/atlas/try4-reg?utm_source=google&utm_campaign=search_gs_pl_evergreen_atlas_core_prosp-brand_gic-null_amers-br_ps-all_desktop_pt-br_lead&utm_term=documenta%C3%A7%C3%A3o%20mongodb&utm_medium=cpc_paid_search&utm_ad=p&utm_ad_campaign_id=20378068769&adgroup=154980291521&cq_cmp=20378068769&gad_source=1&gad_campaignid=20378068769&gbraid=0AAAAADQ1403Kd3DvcEpqWCvTnLcxHidDr&gclid=Cj0KCQiA9OnJBhD-ARIsAPV51xO8drHm9YUr-zDhvcsbjCPoXGehJGUFtJ7WOQjL--EQ5yElLR-rJyoaAnKlEALw_wcB) - Used to save logs and history.
 
-## 🖇️ Colaborando
+
+## 🖇️ Collaborating
 
 Please contact us at **argregoletto@gmail.com** for details regarding our code of conduct and the process for submitting requests.
 
