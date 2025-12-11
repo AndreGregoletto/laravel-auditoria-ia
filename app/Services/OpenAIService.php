@@ -14,12 +14,12 @@ class OpenAIService
         ])->post('https://api.openai.com/v1/chat/completions', [
             'model' => config('services.openai.model'),
             'messages' => [
-                ['role' => 'system', 'content' => 'Você é um auditor financeiro profissional.'],
+                ['role' => 'system', 'content' => 'Você é um auditor contábil geral.'],
                 ['role' => 'user', 'content' => $prompt]
             ],
             'temperature' => 0.2
         ]);
-
+//        dd($response);
         if (!$response->successful()) {
             logger()->error('Erro OpenAI', $response->json());
             return 'Erro ao consultar IA.';

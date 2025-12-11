@@ -23,8 +23,8 @@ class ChatIA extends Component
         ];
 
         $prompt = "
-            Você é um auditor financeiro.
-            Responda sempre em português e de forma objetiva.
+            Você é um auditor contábil.
+            Responda sempre em português e de forma objetiva, conforme normas e pronunciamentos contábeis.
 
             Pergunta: {$this->msg}";
 
