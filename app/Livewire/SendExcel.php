@@ -18,6 +18,12 @@ class SendExcel extends Component
     use WithFileUploads;
 
     public Balancete $form;
+    private string $pathBalance;
+
+    public function __construct()
+    {
+        $this->pathBalance = env('IMPORT_BALANCE', 'balance/');
+    }
 
     public function save()
     {
@@ -32,13 +38,13 @@ class SendExcel extends Component
             $size         = $file->getSize();
             $path         = $idUser . '-' . $originalName;
 
-            if(Storage::disk('private')->exists($path)) {
+            if(Storage::disk('private')->exists($this->pathBalance . $path)) {
                 throw ValidationException::withMessages([
                     'form.file' => 'Este arquivo já foi enviado por você.',
                 ]);
             }
 
-            $storePath = $file->storeAS('', $path, 'private');
+            $storePath = $file->storeAS('', $this->pathBalance . $path, 'private');
 
             if(!$storePath) {
                 throw new \Exception('Falha ao salvar o arquivo.');
