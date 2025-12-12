@@ -2,32 +2,32 @@
     <div class="navbar-wrapper">
         <div class="m-header flex items-center py-4 px-6 h-header-height">
             <a href="#!" class="b-brand flex items-center gap-3">
-                <span class="text-white">Portal Auditor</span>
+                <span class="text-white">{{ __('navbar.system_name') }}</span>
 {{--                <img src="{{ asset('assets/images/notification/ok-48.png') }}" class="img-fluid logo logo-lg" alt="logo" />--}}
             </a>
         </div>
         <div class="navbar-content h-[calc(100vh_-_74px)] py-2.5">
             <ul class="pc-navbar">
                 <li class="pc-item pc-caption">
-                    <label data-i18n="Navigation">Navigation</label>
+                    <label data-i18n="Navigation">{{ __('navbar.tools') }}</label>
                 </li>
                 <li class="pc-item">
                     <a href="{{ route('dashboard') }}" class="pc-link">
                         <span class="pc-micon">
                             <i class="ph ph-house-line"></i>
                         </span>
-                        <span class="pc-mtext" data-i18n="Dashboard">Dashboard</span>
+                        <span class="pc-mtext" data-i18n="Dashboard">{{ __('navbar.dashboard') }}</span>
                     </a>
                 </li>
 
                 <li class="pc-item pc-hasmenu">
                     <a href="#!" class="pc-link">
                         <span class="pc-micon"> <i class="ph ph-file-text"></i> </span>
-                        <span class="pc-mtext" data-i18n="Menu levels">Fila de Importação</span>
+                        <span class="pc-mtext" data-i18n="Menu levels">{{ __('navbar.import_queue') }}</span>
                         <span class="pc-arrow"><i class="ti ti-chevron-right"></i></span>
                     </a>
                     <ul class="pc-submenu">
-                        <li class="pc-item"><a class="pc-link" href="{{ route('balancete') }}" data-i18n="Level 2.1">Balancete</a></li>
+                        <li class="pc-item"><a class="pc-link" href="{{ route('balancete') }}" data-i18n="Level 2.1">{{ __('navbar.balance') }}</a></li>
                     </ul>
                 </li>
 

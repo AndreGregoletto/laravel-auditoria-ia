@@ -22,7 +22,7 @@
                             @click="openImport = !openImport"
                             class="flex items-center gap-x-1 whitespace-nowrap text-gray-600 hover:text-gray-900 dark:text-gray-300 dark:hover:text-white"
                         >
-                            {{ __('Fila de Importação') }}
+                            {{ __('navbar.import_queue') }}
 
                             <svg viewBox="0 0 20 20" fill="currentColor"
                                  class="size-5 flex-none text-gray-400 transition-transform"

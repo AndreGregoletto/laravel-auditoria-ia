@@ -1,7 +1,7 @@
 <div class="w-full max-w-3xl mx-auto">
 
     <h3 class="text-lg font-semibold mb-4 text-center">
-        Consulta Inteligente de Auditoria
+        {{ __('files.title_dashboard') }}
     </h3>
 
     <!-- Histórico -->
@@ -10,7 +10,7 @@
             <div class="flex justify-{{ $msg['type'] === 'user' ? 'end' : 'start' }} items-center">
                 <div class="p-3 rounded-lg text-sm w-3/4
                 {{ $msg['type'] === 'user'
-                    ? 'bg-blue-500 text-black'
+                    ? 'bg-blue-500 text-white'
                     : 'bg-white dark:bg-gray-700 text-gray-800 dark:text-white' }}">
                     {!! nl2br(e($msg['text'])) !!}
                 </div>
@@ -19,7 +19,7 @@
 
         @if($loading)
             <div class="text-center text-sm text-gray-500">
-                Processando auditoria...
+                {{ __('files.processing_audit') }}
             </div>
         @endif
     </div>
@@ -31,7 +31,7 @@
             type="text"
             wire:model.defer="msg"
             class="flex-1 rounded-md border-gray-300 dark:border-gray-700 dark:bg-gray-800"
-            placeholder="Digite sua pergunta de auditoria..."
+            placeholder="{{ __('files.enter_audit_ask') }}"
         />
 
         <button
@@ -39,7 +39,7 @@
             class="px-4 py-2 bg-indigo-600 text-white rounded-md"
             wire:loading.attr="disabled"
         >
-            Enviar
+            {{ __('files.submit') }}
         </button>
 
     </form>

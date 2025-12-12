@@ -39,7 +39,7 @@ new class extends Component
                     </a>
                     <div class="dropdown-menu pc-h-dropdown drp-search">
                         <form class="px-2 py-1">
-                            <input type="search" class="form-control !border-0 !shadow-none" placeholder="Search here. . ." />
+                            <input type="search" class="form-control !border-0 !shadow-none" placeholder="{{ __('navbar.search_here') }}" />
                         </form>
                     </div>
                 </li>
@@ -56,8 +56,8 @@ new class extends Component
                     </a>
                     <div class="dropdown-menu dropdown-notification dropdown-menu-end pc-h-dropdown p-2">
                         <div class="dropdown-header flex items-center justify-between py-4 px-5">
-                            <h5 class="m-0">Notifications</h5>
-                            <a href="#!" class="btn btn-link btn-sm">Mark all read</a>
+                            <h5 class="m-0">{{ __('navbar.notifications') }}</h5>
+                            <a href="#!" class="btn btn-link btn-sm">{{ __('navbar.make_all_read') }}</a>
                         </div>
                         <div class="dropdown-body header-notification-scroll relative py-4 px-5"
                              style="max-height: calc(100vh - 215px)">
@@ -102,7 +102,7 @@ new class extends Component
                         </div>
                         <div class="text-center py-2">
                             <a href="#!" class="text-danger-500 hover:text-danger-600 focus:text-danger-600 active:text-danger-600">
-                                Clear all Notifications
+                                {{ __('navbar.clear_all_notifications') }}
                             </a>
                         </div>
                     </div>
@@ -128,26 +128,26 @@ new class extends Component
                                 <a href="{{ route('profile') }}" class="dropdown-item">
                                     <span>
                                         <i class="ph ph-user"></i>
-                                        <span>Meu Perfil</span>
+                                        <span>{{ __('navbar.my_profile') }}</span>
                                     </span>
                                 </a>
 
                                 <a href="#" class="dropdown-item">
                                     <span>
                                         <i class="ph ph-user"></i>
-                                        <span>Settings</span>
+                                        <span>{{ __('navbar.settings') }}</span>
                                     </span>
                                 </a>
                                 <a href="#" class="dropdown-item">
                                     <span>
                                         <i class="ph ph-share-network align-middle me-2"></i>
-                                        <span>Share</span>
+                                        <span>{{ __('navbar.share') }}</span>
                                     </span>
                                 </a>
                                 <a href="#" class="dropdown-item">
                                     <span>
                                         <i class="ph ph-lock-key align-middle me-2"></i>
-                                        <span>Change Password</span>
+                                        <span>{{ __('navbar.change_password') }}</span>
                                     </span>
                                 </a>
                                 <div class="grid my-3">
@@ -157,7 +157,7 @@ new class extends Component
                                         class="btn btn-primary flex items-center justify-center"
                                     >
                                         <i class="ph ph-sign-out align-middle me-2"></i>
-                                        Logout
+                                        <span>{{ __('navbar.logout') }}</span>
                                     </button>
                                 </div>
                             </div>

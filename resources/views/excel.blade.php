@@ -27,17 +27,17 @@
                             id="file-upload"
                             type="file"
                             wire:model="form.file"
-                            class="
-                                block w-full text-sm text-gray-500 dark:text-gray-400
+                            class="appearance-none
+                                w-full text-sm text-gray-500 dark:text-gray-400
                                 file:mr-4 file:py-2 file:px-4
                                 file:rounded-lg file:border-0
                                 file:text-sm file:font-semibold
-                                file:bg-indigo-600 file:text-white dark:file:bg-indigo-700
-                                hover:file:bg-indigo-700 dark:hover:file:bg-indigo-600
-                                file:cursor-pointer
-                                border border-gray-300 dark:border-gray-700 rounded-lg
-                            "
+                                file:bg-indigo-600 file:text-white
+                                hover:file:bg-indigo-700
+                                dark:file:bg-indigo-700 dark:file:text-white
+                                 cursor-pointer file:cursor-pointer"
                         />
+
 
                         @if ($form->file)
                             <p class="mt-2 text-sm text-green-600 dark:text-green-400">
