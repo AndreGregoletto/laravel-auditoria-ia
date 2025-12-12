@@ -1,0 +1,78 @@
+name: Laravel Docker CI
+
+on:
+  push:
+    branches: ["main"]
+  pull_request:
+
+jobs:
+  laravel-tests:
+    runs-on: ubuntu-latest
+
+    services:
+      mysql:
+        image: mysql:8
+        env:
+          MYSQL_ROOT_PASSWORD: root
+          MYSQL_DATABASE: test
+        ports:
+          - 3306:3306
+        options: >-
+          --health-cmd="mysqladmin ping --silent"
+          --health-interval=5s
+          --health-timeout=3s
+          --health-retries=5
+
+    steps:
+      - name: Checkout Repo
+        uses: actions/checkout@v4
+
+      # ------------------------------
+      # 1. CRIA ARQUIVO .env DE TESTE
+      # ------------------------------
+      - name: Copy .env
+        run: cp .env.example .env
+
+      - name: Update .env for CI
+        run: |
+          sed -i 's/DB_CONNECTION=.*/DB_CONNECTION=mysql/' .env
+          sed -i 's/DB_HOST=.*/DB_HOST=127.0.0.1/' .env
+          sed -i 's/DB_PORT=.*/3306/' .env
+          sed -i 's/DB_DATABASE=.*/test/' .env
+          sed -i 's/DB_USERNAME=.*/root/' .env
+          sed -i 's/DB_PASSWORD=.*/root/' .env
+
+      # ------------------------------
+      # 2. BUILD DOCKER COMPOSE
+      # ------------------------------
+      - name: Build Docker Containers
+        run: docker compose build
+
+      # ------------------------------
+      - name: Start Docker Environment
+        run: docker compose up -d
+
+      # ------------------------------
+      # 3. INSTALA DEPENDÊNCIAS
+      # ------------------------------
+      - name: Install Composer Dependencies
+        run: docker exec laravel-php composer install
+
+      - name: Generate App Key
+        run: docker exec laravel-php php artisan key:generate
+
+      - name: Run Migrations
+        run: docker exec laravel-php php artisan migrate
+
+      # ------------------------------
+      # 4. RODAR TESTES (PHPUNIT / PEST)
+      # ------------------------------
+      - name: Run Tests
+        run: docker exec laravel-php php artisan test
+
+      # ------------------------------
+      # DEBUG opcional
+      # ------------------------------
+      - name: Docker Logs
+        if: failure()
+        run: docker compose logs
