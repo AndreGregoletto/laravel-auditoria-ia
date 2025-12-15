@@ -32,12 +32,12 @@
                 </li>
 
                 <li class="pc-item pc-caption">
-                    <label data-i18n="UI Components">UI Components</label>
+                    <label data-i18n="{{ __('reports') }}">{{ __('reports') }}</label>
                 </li>
                 <li class="pc-item">
-                    <a href="../elements/bc_color.html" class="pc-link">
-                        <span class="pc-micon"><i class="ph ph-palette"></i></span>
-                        <span class="pc-mtext">Color</span>
+                    <a href="{{ route('imports.my-files') }}"  class="pc-link">
+                        <span class="pc-micon"><i class="ph ph-file"></i></span>
+                        <span class="pc-mtext">{{ __('navbar.my_uploaded_files') }}</span>
                     </a>
                 </li>
                 <li class="pc-item">

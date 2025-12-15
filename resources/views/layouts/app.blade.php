@@ -40,7 +40,7 @@
         <div class="pc-container">
             <div class="pc-content">
 
-                <div class="min-h-screen bg-gray-100 dark:bg-gray-900">
+                <div class="bg-gray-100 dark:bg-gray-900">
                     <!-- Page Heading -->
                     @if (isset($header))
                         <header class="bg-white dark:bg-gray-800 shadow">
@@ -65,8 +65,7 @@
                 <div class="grid grid-cols-12 gap-1.5">
                     <div class="col-span-12 md:col-span-6 my-1">
                         <p class="m-0"></p>
-                        <a href="https://codedthemes.com/" class="text-theme-bodycolor dark:text-themedark-bodycolor hover:text-primary-500 dark:hover:text-primary-500" target="_blank">CodedThemes</a>
-                        , Built with ♥ for a smoother web presence.
+                        <a href="https://codedthemes.com/" class="text-theme-bodycolor dark:text-themedark-bodycolor hover:text-primary-500 dark:hover:text-primary-500" target="_blank">{{ __('navbar.system_name') }}</a>
                         </p>
                     </div>
                     <div class="col-span-12 md:col-span-6 my-1">
@@ -123,6 +122,7 @@
             document.addEventListener("livewire:navigated", function () {
                 setTimeout(initThemeLayout, 0);
             });
+
         </script>
 
     </body>

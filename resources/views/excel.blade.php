@@ -71,7 +71,7 @@
                             "
                             wire:loading.attr="disabled"
                     >
-                        <span wire:loading.remove wire:target="save">Enviar</span>
+                        <span wire:loading.remove wire:target="save">{{ __('buttons.send') }}</span>
                         <span wire:loading wire:target="save">Aguarde...</span>
                     </button>
 

@@ -1,11 +1,13 @@
 <?php
 
 return [
-    'system_name'  => 'Auditor Portal',
-    'tools'        => 'Tools',
-    'dashboard'    => 'Dashboard',
-    'import_queue' => 'Import Queue',
-    'balance'      => 'Balance',
+    'system_name'       => 'Auditor Portal',
+    'tools'             => 'Tools',
+    'dashboard'         => 'Dashboard',
+    'import_queue'      => 'Import Queue',
+    'balance'           => 'Balance',
+    'reports'           => 'Reports',
+    'my_uploaded_files' => 'My Uploaded Files',
 
     'search_here'   => 'Search here. . .',
 

@@ -13,6 +13,12 @@ class ImportFile extends Model
         'file_extension',
         'file_service',
         'file_size',
+        'file_step',
         'status'
+    ];
+
+    protected $casts = [
+        'created_at',
+        'updated_at'
     ];
 }

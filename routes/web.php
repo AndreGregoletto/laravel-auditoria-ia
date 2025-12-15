@@ -16,6 +16,12 @@ Route::group(['prefix' => 'queue-import'], function(){
 
 });
 
+Route::group(['prefix' => 'queue-import'], function(){
+    Route::get('/my-files', \App\Livewire\Reports\Imports\MyFiles::class)
+        ->middleware('auth')
+        ->name('imports.my-files');
+});
+
 
 Route::view('profile', 'profile')
     ->middleware(['auth'])

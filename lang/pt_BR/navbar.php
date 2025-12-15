@@ -1,11 +1,13 @@
 <?php
 
 return [
-    'system_name'  => 'Portal do Auditor',
-    'tools'        => 'Ferramentas',
-    'dashboard'    => 'Dashboard',
-    'import_queue' => 'Fila de Importação',
-    'balance'      => 'Balancete',
+    'system_name'       => 'Portal do Auditor',
+    'tools'             => 'Ferramentas',
+    'dashboard'         => 'Dashboard',
+    'import_queue'      => 'Fila de Importação',
+    'balance'           => 'Balancete',
+    'reports'           => 'Relatórios',
+    'my_uploaded_files' => 'Meus Arquivos Enviados',
 
     'search_here'   => 'Pesquisar. . .',
 

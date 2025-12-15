@@ -1,11 +1,11 @@
-<div class="w-full max-w-3xl mx-auto">
+<div class="">
 
     <h3 class="text-lg font-semibold mb-4 text-center">
         {{ __('files.title_dashboard') }}
     </h3>
 
     <!-- Histórico -->
-    <div class="bg-gray-100 dark:bg-gray-900 p-4 rounded-lg h-96 overflow-y-auto mb-4 space-y-3">
+    <div class="bg-gray-100 dark:bg-gray-900 p-4 rounded-lg max-h-[60vh] overflow-y-auto mb-4 space-y-3">
         @foreach ($history as $msg)
             <div class="flex justify-{{ $msg['type'] === 'user' ? 'end' : 'start' }} items-center">
                 <div class="p-3 rounded-lg text-sm w-3/4
