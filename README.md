@@ -93,7 +93,6 @@ If you wish to perform queue tests, follow these steps and leave the terminal op
 docker exec -it laravel-php bash
 
 php artisan queue:work
-
 ```
 
 
