@@ -1,5 +1,7 @@
 <?php
 
 return [
-    'choose_file' => 'Escolher o Arquivo'
+    'choose_file' => 'Escolher o Arquivo',
+    'send' => 'Enviar'
+
 ];

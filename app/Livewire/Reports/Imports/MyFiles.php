@@ -15,9 +15,10 @@ class MyFiles extends Component
         $file = ImportFile::whereId($id)
             ->whereUserId(Auth::id())
             ->whereFileStep(0)
-            ->whereStatus(1)->firstOrFail();
+            ->whereStatus(1)
+            ->firstOrFail();
 
-        $file->update(['status', 0]);
+        $file->update(['status', 0, 'file_step' => 4]);
         session()->flash('success', 'Arquivo cancelado com sucesso');
     }
 

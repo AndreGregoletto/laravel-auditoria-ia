@@ -22,9 +22,11 @@ class ChatIA extends Component
             'text' => $this->msg
         ];
 
+        $lenguage = session()->get('locale') == 'en' ? 'Inglês' : 'Português do Brasil';
+
         $prompt = "
             Você é um auditor contábil.
-            Responda sempre em português e de forma objetiva, conforme normas e pronunciamentos contábeis.
+            Responda sempre em {$lenguage} e de forma objetiva, conforme normas e pronunciamentos contábeis.
 
             Pergunta: {$this->msg}";
 

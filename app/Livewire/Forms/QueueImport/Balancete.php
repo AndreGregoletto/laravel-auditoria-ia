@@ -12,10 +12,11 @@ class Balancete extends Form
 
     public function messages(): array
     {
+
         return [
-            'file.required' => 'Por favor, selecione um arquivo para upload.',
-            'file.mimes'    => 'O arquivo deve ser no formato Excel (xlsx, xls) ou CSV.',
-            'file.max'      => 'O tamanho máximo do arquivo é de 10MB.',
+            'file.required' => __('error.please_select_a_file_to_upload'),
+            'file.mimes'    => __('error.the_file_must_be_in_excel_format'),
+            'file.max'      => __('error.the_maximum_file_size_is_10_mb'),
         ];
     }
 }

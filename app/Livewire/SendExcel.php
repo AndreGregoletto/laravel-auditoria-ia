@@ -2,6 +2,7 @@
 
 namespace App\Livewire;
 
+use App\Jobs\ProcessTrialBalanceImport;
 use App\Livewire\Forms\QueueImport\Balancete;
 use App\Models\ImportFile;
 use Illuminate\Validation\ValidationException;
@@ -10,7 +11,6 @@ use Illuminate\Support\Facades\Storage;
 use Livewire\Attributes\Layout;
 use Livewire\Component;
 use Livewire\WithFileUploads;
-use Maatwebsite\Excel\Facades\Excel;
 
 #[Layout('layouts.app')]
 class SendExcel extends Component
@@ -22,56 +22,81 @@ class SendExcel extends Component
 
     public function __construct()
     {
-        $this->pathBalance = env('IMPORT_BALANCE', 'balance/');
+        // Garante a barra no final
+        $path = env('IMPORT_BALANCE', 'balance/');
+        $this->pathBalance = str_ends_with($path, '/') ? $path : $path . '/';
     }
 
     public function save()
     {
         try {
-
             $this->form->validate();
             $file = $this->form->file;
 
-            $idUser       = Auth::user()->id;
+            $idUser       = Auth::id();
             $originalName = $file->getClientOriginalName();
             $extension    = $file->getClientOriginalExtension();
             $size         = $file->getSize();
-            $path         = $idUser . '-' . $originalName;
+            $fileName     = "{$idUser}-{$originalName}";
 
-            if(Storage::disk('private')->exists($this->pathBalance . $path)) {
-                throw ValidationException::withMessages([
-                    'form.file' => 'Este arquivo já foi enviado por você.',
-                ]);
+            $failedImport = ImportFile::where('user_id', $idUser)
+                ->where('file_name', $originalName)
+                ->where('file_service', 1)
+                ->whereIn('file_step', [3, 4])
+                ->first();
+
+            $finalPath = $this->pathBalance . $fileName;
+
+            if ($failedImport) {
+                if (Storage::disk('private')->exists($finalPath)) {
+                    $errorPath = "error/{$this->pathBalance}{$fileName}";
+//                        Storage::disk('private')->makeDirectory("error/{$this->pathBalance}");
+                    Storage::disk('private')->move($finalPath, $errorPath);
+                }
+
+                $failedImport->update(['status' => 0]);
+
+            } else {
+                if (Storage::disk('private')->exists($finalPath)) {
+                    throw ValidationException::withMessages([
+                        'form' => __('error.you_have_already_send_this_file'),
+                    ]);
+                }
             }
 
-            $storePath = $file->storeAS('', $this->pathBalance . $path, 'private');
+            $storePath = $file->storeAs($this->pathBalance, $fileName, 'private');
 
-            if(!$storePath) {
-                throw new \Exception('Falha ao salvar o arquivo.');
+            if (!$storePath) {
+                throw new \Exception(__('error.failed_to_save_the_file'));
             }
 
-            $importFile = [
+            $importFileData = [
                 'user_id'        => $idUser,
                 'file_name'      => $originalName,
                 'file_extension' => $extension,
                 'file_service'   => 1,
-                'file_size'      => "{$size}",
+                'file_step'      => 0,
+                'file_size'      => $size,
+                'status'         => 1,
             ];
 
-            if(Storage::disk('private')->path($storePath)){
-                if(!ImportFile::create($importFile)){
-                    Storage::disk('private')->delete($storePath);
-                    throw new \Exception('Falha ao salvar dados do arquivos');
-                }
+            $importFileRecord = ImportFile::create($importFileData);
+
+            if (!$importFileRecord) {
+                Storage::disk('private')->delete($storePath);
+                throw new \Exception(__('error.failed_to_save_the_file'));
             }
 
-            $this->reset('form.file');
+            ProcessTrialBalanceImport::dispatch($importFileRecord->id);
+
+            $this->reset('form');
+
             session()->flash('success', 'Arquivo enviado com sucesso!');
 
-        }catch (ValidationException $e){
+        } catch (ValidationException $e) {
             throw $e;
-        }catch (\Exception $e){
-            $this->addError('form.file', $e->getMessage());
+        } catch (\Exception $e) {
+            $this->addError('form', $e->getMessage());
         }
     }
 

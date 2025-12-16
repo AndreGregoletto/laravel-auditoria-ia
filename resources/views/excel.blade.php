@@ -1,12 +1,11 @@
 <x-slot name="header">
     <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
-        {{ __('Fila de Importação / Balancete') }}
+        {{ __('navbar.tools') }} / {{ __('navbar.import_queue') }} / {{ __('navbar.balance') }}
     </h2>
 </x-slot>
 
 <div class="py-12">
     <div>
-{{--    <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">--}}
         <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
             <div class="p-6 text-gray-900 dark:text-gray-100">
 
@@ -20,7 +19,7 @@
 
                     <div class="mb-6">
                         <label for="file-upload" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                            Selecione o Arquivo (Excel)
+                            {{ __('files.selected_file_excel') }}
                         </label>
 
                         <input
@@ -38,20 +37,19 @@
                                  cursor-pointer file:cursor-pointer"
                         />
 
-
-                        @if ($form->file)
+                        @if (isset($form->file) && $form->file)
                             <p class="mt-2 text-sm text-green-600 dark:text-green-400">
-                                Arquivo selecionado: **{{ $form->file->getClientOriginalName() }}**
+                                {{ __('files.selected_file') }}: **{{ $form->file->getClientOriginalName() }}**
                             </p>
                         @endif
 
                         <div wire:loading wire:target="form.file" class="mt-2 text-sm text-indigo-500">
-                            <span class="animate-pulse">Carregando arquivo (aguarde)...</span>
+                            <span class="animate-pulse">{{ __('files.loading_file') }}</span>
                         </div>
                     </div>
 
                     <div>
-                        @error('form.file')
+                        @error(__('error.form'))
                             <span class="text-sm text-red-600 dark:text-red-400 font-medium">{{ $message }}</span>
                         @enderror
                     </div>
@@ -72,7 +70,7 @@
                             wire:loading.attr="disabled"
                     >
                         <span wire:loading.remove wire:target="save">{{ __('buttons.send') }}</span>
-                        <span wire:loading wire:target="save">Aguarde...</span>
+                        <span wire:loading wire:target="save">{{ __('files.wait') }}</span>
                     </button>
 
                 </form>

@@ -3,7 +3,9 @@
         <div class="m-header flex items-center py-4 px-6 h-header-height">
             <a href="#!" class="b-brand flex items-center gap-3">
                 <span class="text-white">{{ __('navbar.system_name') }}</span>
-{{--                <img src="{{ asset('assets/images/notification/ok-48.png') }}" class="img-fluid logo logo-lg" alt="logo" />--}}
+                <div class="hidden sm:flex sm:items-center sm:ms-2">
+                    <livewire:language-switcher />
+                </div>
             </a>
         </div>
         <div class="navbar-content h-[calc(100vh_-_74px)] py-2.5">
@@ -32,7 +34,7 @@
                 </li>
 
                 <li class="pc-item pc-caption">
-                    <label data-i18n="{{ __('reports') }}">{{ __('reports') }}</label>
+                    <label data-i18n="{{ __('navbar.reports') }}">{{ __('navbar.reports') }}</label>
                 </li>
                 <li class="pc-item">
                     <a href="{{ route('imports.my-files') }}"  class="pc-link">

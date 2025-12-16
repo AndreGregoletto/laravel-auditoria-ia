@@ -87,6 +87,16 @@ chmod 775 database/database.sqlit
 chmod 775 database/
 ```
 
+If you wish to perform queue tests, follow these steps and leave the terminal open listening for jobs.
+
+```
+docker exec -it laravel-php bash
+
+php artisan queue:work
+
+```
+
+
 
 If everything goes as expected, the application will be available to be 
 accessed on port 8000.

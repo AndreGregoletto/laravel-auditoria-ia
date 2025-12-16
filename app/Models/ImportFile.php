@@ -14,7 +14,8 @@ class ImportFile extends Model
         'file_service',
         'file_size',
         'file_step',
-        'status'
+        'status',
+        'error_log'
     ];
 
     protected $casts = [
