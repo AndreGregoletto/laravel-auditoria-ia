@@ -30,7 +30,9 @@ class AIService
 
         foreach ($normalized as $index => $column) {
 
-            if (str_contains($column, 'conta')) {
+            if (
+                str_contains($column, 'conta')
+            ) {
                 $map['account'] = $index;
             }
 
@@ -67,9 +69,9 @@ class AIService
                 $map['percentage_variation'] = $index;
             }
         }
+        dd($map);
 
         Log::info('Mapeamento final de colunas', $map);
-
         return $map;
     }
 }

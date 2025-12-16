@@ -8,6 +8,7 @@ return [
     'status' => 'Status',
     'send_in' => 'Enviado em',
     'updated_in' => 'Atualizado em',
+    'error_log' => 'Log do Erro',
     'actions' => 'Ações',
 
     'processing' => 'Processando',

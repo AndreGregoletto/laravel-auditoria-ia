@@ -21,15 +21,13 @@ class ProcessTrialBalanceImport implements ShouldQueue
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
     public int $importFileId;
-    public string $AIService;
 
     public function __construct(int $importFileId)
     {
         $this->importFileId = $importFileId;
-        $this->AIService = AIService::class;
     }
 
-    public function handle(): void
+    public function handle(AIService $aiService): void
     {
         DB::beginTransaction();
 
@@ -56,13 +54,13 @@ class ProcessTrialBalanceImport implements ShouldQueue
             $headers    = $collection->first()->toArray();
             $sampleRows = $collection->slice(1, 5)->values()->toArray();
 
-            $columnMap = $this->AIService->mapTrialBalanceColumns(
+            $columnMap = $aiService->mapTrialBalanceColumns(
                 headers: $headers,
                 sample: $sampleRows
             );
 
             if (empty($columnMap['account'])) {
-                throw new \Exception('error.the_ai_was_unable_to_identify_the_necessary_columns');
+                throw new \Exception(__('error.the_ai_was_unable_to_identify_the_necessary_columns'));
             }
 
             $batchData = [];
@@ -108,11 +106,13 @@ class ProcessTrialBalanceImport implements ShouldQueue
 
             ImportFile::where('id', $this->importFileId)->update([
                 'file_step'  => 3,
+                'status'     => 0,
                 'error_log'  => substr($e->getMessage(), 0, 250)
             ]);
 
             Log::error("Erro na importação ID {$this->importFileId}: " . $e->getMessage());
-            report($e);
+//            report($e);
+//            return;
             throw $e;
         }
     }
