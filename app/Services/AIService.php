@@ -30,6 +30,9 @@ class AIService
         ];
 
         foreach ($normalized as $index => $column) {
+            $column = strtolower($column);
+            $column = mb_strtolower($column);
+            $column = trim(preg_replace('/\s+/', ' ', $column));
 
             if (
                 str_contains($column, 'conta')
@@ -49,25 +52,33 @@ class AIService
             }
 
             if (
-                str_contains($column, 'movimento') ||
-                str_contains($column, 'mês') ||
-                str_contains($column, 'mes')
+                str_contains($column, 'débito') ||
+                str_contains($column, 'debito')
             ) {
-                $map['month_balance'] = $index;
+                $map['debit'] = $index;
+            }
+
+            if (
+                str_contains($column, 'crédito') ||
+                str_contains($column, 'credito')
+            ) {
+                $map['credit'] = $index;
+            }
+
+            if (
+                str_contains($column, 'mov periodo') ||
+                str_contains($column, 'período') ||
+                str_contains($column, 'periodo')
+            ) {
+                $map['monthly_activity'] = $index;
             }
 
             if (
                 str_contains($column, 'saldo atual') ||
-                str_contains($column, 'atual')
+                str_contains($column, 'atual') ||
+                str_contains($column, 'final')
             ) {
-                $map['current_balance'] = $index;
-            }
-
-            if (
-                str_contains($column, '%') ||
-                str_contains($column, 'variação')
-            ) {
-                $map['percentage_variation'] = $index;
+                $map['closing_balance'] = $index;
             }
         }
 //        dd($map);

@@ -59,7 +59,7 @@ class ProcessTrialBalanceImport implements ShouldQueue
                 sample: $sampleRows
             );
 
-            if (empty($columnMap['account'])) {
+            if (!isset($columnMap['account'])) {
                 throw new \Exception(__('error.the_ai_was_unable_to_identify_the_necessary_columns'));
             }
 
@@ -73,19 +73,19 @@ class ProcessTrialBalanceImport implements ShouldQueue
                 if (empty($row[$columnMap['account']])) continue;
 
                 $batchData[] = [
-                    'file_id'              => $importFile->id,
-                    'file_line'            => $line + 1,
-                    'account'              => $row[$columnMap['account']] ?? null,
-                    'description'          => $row[$columnMap['description']] ?? null,
-                    'month_balance'        => $this->toDecimal($row[$columnMap['month_balance']] ?? null),
-                    'current_balance'      => $this->toDecimal($row[$columnMap['current_balance']] ?? null),
-                    'previous_balance'     => $this->toDecimal($row[$columnMap['previous_balance']] ?? null),
-                    'absolute_variation'   => $this->calcAbsolute($row, $columnMap),
-                    'percentage_variation' => $this->toDecimal($row[$columnMap['percentage_variation']] ?? null),
-                    'red_flag'             => 0,
-                    'status'               => 1,
-                    'created_at'           => $now,
-                    'updated_at'           => $now,
+                    'file_id'          => $importFile->id,
+                    'file_line'        => $line + 1,
+                    'account'          => $row[$columnMap['account']] ?? null,
+                    'description'      => $row[$columnMap['description']] ?? null,
+                    'previous_balance' => $this->toDecimal($row[$columnMap['previous_balance']] ?? null),
+                    'debit'            => $this->toDecimal($row[$columnMap['debit']] ?? null),
+                    'credit'           => $this->toDecimal($row[$columnMap['credit']] ?? null),
+                    'monthly_activity' => $this->toDecimal($row[$columnMap['monthly_activity']] ?? null),
+                    'closing_balance'  => $this->toDecimal($row[$columnMap['closing_balance']] ?? null),
+                    'red_flag'         => 0,
+                    'status'           => 1,
+                    'created_at'       => $now,
+                    'updated_at'       => $now,
                 ];
 
                 if (count($batchData) >= $batchSize) {

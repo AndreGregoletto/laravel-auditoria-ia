@@ -17,7 +17,7 @@
                 <th>{{ __('reports.status') }}</th>
                 <th>{{ __('reports.send_in') }}</th>
                 <th>{{ __('reports.updated_in') }}</th>
-{{--                <th>{{ __('reports.error') }}</th>--}}
+                <th>{{ __('reports.error') }}</th>
                 <th>{{ __('reports.actions') }}</th>
             </tr>
             </thead>
@@ -44,7 +44,7 @@
 
                     <td>{{ $file->created_at->translatedFormat('d F Y, H:i') }}</td>
                     <td>{{ $file->updated_at->translatedFormat('d F Y, H:i') }}</td>
-{{--                    <td>{{ $file->error_log }}</td>--}}
+                    <td>{{ $file->error_log }}</td>
                     <td class="space-x-2">
                         @if($file->file_step === 0 && $file->status === 1)
                             <button wire:click="cancel({{ $file->id }})"
