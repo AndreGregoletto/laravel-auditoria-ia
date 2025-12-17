@@ -17,11 +17,11 @@ return new class extends Migration
             $table->integer('file_line')->isNotEmpty();
             $table->string('account', 250)->isNotEmpty();
             $table->string('description', 250)->isNotEmpty();
-            $table->integer('month_balance')->isNotEmpty();
-            $table->integer('current_balance')->isNotEmpty();
             $table->integer('previous_balance')->isNotEmpty();
-            $table->integer('absolute_variation')->isNotEmpty();
-            $table->integer('percetage_variation')->isNotEmpty();
+            $table->integer('debit')->isNotEmpty();
+            $table->integer('credit')->isNotEmpty();
+            $table->integer('monthly_activity')->isNotEmpty();
+            $table->integer('closing_balance')->isNotEmpty();
             $table->integer('red_flag')->isNotEmpty();
             $table->boolean('status')->default(1);
             $table->timestamps();
@@ -35,4 +35,5 @@ return new class extends Migration
     {
         Schema::dropIfExists('trial_balance_data');
     }
+//    php artisan migrate:refresh --path=database/migrations/2025_12_15_114647_create_trial_balance_data_table.php
 };

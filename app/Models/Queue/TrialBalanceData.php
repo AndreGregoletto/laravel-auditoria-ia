@@ -9,14 +9,14 @@ class TrialBalanceData extends Model
     protected $fillable = [
         'file_id',
         'file_line',
-        'account', //connta
-        'description', //descrição
-        'month_balance', // Saldo mes
-        'current_balance',  // SAldo atual
+        'account',          // conta
+        'description',      // descrição
         'previous_balance', // Saldo anterio
-        'absolute_variation', // variação absoluta
-        'percentage_variation', // Variação %
+        'debit',            // Débito
+        'credit',           // Crédito
+        'monthly_activity', // Mov Mensal / Periodo
+        'closing_balance',  // Saldo final / Atual
         'red_flag',
-        'status'
+        'status',
     ];
 }

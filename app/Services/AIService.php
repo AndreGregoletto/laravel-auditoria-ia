@@ -20,12 +20,13 @@ class AIService
         $normalized = array_map(fn ($h) => mb_strtolower(trim($h)), $headers);
 
         $map = [
-            'account'              => null,
-            'description'          => null,
-            'previous_balance'     => null,
-            'month_balance'        => null,
-            'current_balance'      => null,
-            'percentage_variation' => null,
+            'account'          => null,
+            'description'      => null,
+            'previous_balance' => null,
+            'debit'            => null,
+            'credit'           => null,
+            'monthly_activity' => null,
+            'closing_balance'  => null,
         ];
 
         foreach ($normalized as $index => $column) {
@@ -69,7 +70,7 @@ class AIService
                 $map['percentage_variation'] = $index;
             }
         }
-        dd($map);
+//        dd($map);
 
         Log::info('Mapeamento final de colunas', $map);
         return $map;
