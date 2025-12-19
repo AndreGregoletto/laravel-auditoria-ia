@@ -29,7 +29,7 @@
                     <td>{{ $file->file_extension }}</td>
                     <td>{{ number_format($file->file_size / 1024, 1) }} KB</td>
                     <td>
-                        @switch($file->file_step)
+                        @switch($file->file_step_id)
                             @case(1) <span class="text-yellow-500">{{ __('reports.processing') }}</span> @break
                             @case(2) <span class="text-green-500">{{ __('reports.processed') }}</span> @break
                             @case(3) <span class="text-red-500">{{ __('reports.error') }}</span> @break
@@ -38,8 +38,8 @@
                         @endswitch
                     </td>
 
-                    <td class="{{ $file->status === 1 ? 'text-green-500' : 'text-red-500' }}">
-                        {{ $file->status === 1 ? __('reports.active') : __('reports.inactive') }}
+                    <td class="{{ $file->file_status_id === 1 ? 'text-green-500' : 'text-red-500' }}">
+                        {{ $file->file_status_id === 1 ? __('reports.active') : __('reports.inactive') }}
                     </td>
 
                     <td>{{ $file->created_at->translatedFormat('d F Y, H:i') }}</td>
@@ -62,7 +62,7 @@
 
             @empty
                 <tr>
-                    <td colspan="4" class="text-center py-6 text-gray-400">
+                    <td colspan="4" class="text-left py-6 text-gray-400">
                         {{ __('reports.no_files_uploaded_yet') }}
                     </td>
                 </tr>

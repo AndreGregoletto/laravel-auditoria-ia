@@ -33,11 +33,11 @@ class ProcessTrialBalanceImport implements ShouldQueue
 
         try {
             $importFile = ImportFile::where('id', $this->importFileId)
-                ->where('status', 1)
-                ->where('file_step', 0)
+                ->where('file_status_id', 1)
+                ->where('file_step_id', 0)
                 ->firstOrFail();
 
-            $importFile->update(['file_step' => 1]);
+            $importFile->update(['file_step_id' => 1]);
 
             $relativePath = "balance/{$importFile->user_id}-{$importFile->file_name}";
 
@@ -98,16 +98,16 @@ class ProcessTrialBalanceImport implements ShouldQueue
                 TrialBalanceData::insert($batchData);
             }
 
-            $importFile->update(['file_step' => 2]);
+            $importFile->update(['file_step_id' => 2]);
             DB::commit();
 
         } catch (\Exception $e) {
             DB::rollBack();
 
             ImportFile::where('id', $this->importFileId)->update([
-                'file_step'  => 3,
-                'status'     => 0,
-                'error_log'  => substr($e->getMessage(), 0, 250)
+                'file_step_id'   => 3,
+                'file_status_id' => 0,
+                'error_log'      => substr($e->getMessage(), 0, 250)
             ]);
 
             Log::error("Erro na importação ID {$this->importFileId}: " . $e->getMessage());

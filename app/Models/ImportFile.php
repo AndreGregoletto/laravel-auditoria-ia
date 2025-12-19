@@ -13,8 +13,8 @@ class ImportFile extends Model
         'file_extension',
         'file_service',
         'file_size',
-        'file_step',
-        'status',
+        'file_step_id',
+        'file_status_id',
         'error_log'
     ];
 

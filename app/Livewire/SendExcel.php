@@ -42,7 +42,8 @@ class SendExcel extends Component
             $failedImport = ImportFile::where('user_id', $idUser)
                 ->where('file_name', $originalName)
                 ->where('file_service', 1)
-                ->whereIn('file_step', [3, 4])
+                ->where('file_status_id', 1)
+                ->whereIn('file_step_id', [3, 4])
                 ->first();
 
             $finalPath = $this->pathBalance . $fileName;
@@ -54,7 +55,7 @@ class SendExcel extends Component
                     Storage::disk('private')->move($finalPath, $errorPath);
                 }
 
-                $failedImport->update(['status' => 0]);
+                $failedImport->update(['file_status_id' => 0]);
 
             } else {
                 if (Storage::disk('private')->exists($finalPath)) {
@@ -75,9 +76,9 @@ class SendExcel extends Component
                 'file_name'      => $originalName,
                 'file_extension' => $extension,
                 'file_service'   => 1,
-                'file_step'      => 0,
+                'file_step_id'   => 0,
                 'file_size'      => $size,
-                'status'         => 1,
+                'file_status_id' => 1,
             ];
 
             $importFileRecord = ImportFile::create($importFileData);

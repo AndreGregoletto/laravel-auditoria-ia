@@ -16,10 +16,11 @@ return [
     'error'      => 'Erro',
     'cancelled'  => 'Cancelado',
     'in_queue'   => 'Na Fila',
+    'rag_generated' => 'RAG Gerada',
 
     'active' => 'Ativo',
     'inactive' => 'Inativo',
-    'cancel' => 'Cancelado',
+    'cancel' => 'Cancelar',
     'replace' => 'Subistituir',
     'no_files_uploaded_yet' => 'Nenhum arquivo enviado ainda.',
 ];

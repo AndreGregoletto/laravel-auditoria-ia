@@ -16,6 +16,7 @@ return [
     'error'      => 'Error',
     'cancelled'  => 'Cancelled',
     'in_queue'   => 'In Queue',
+    'rag_generated' => 'RAG Generated',
 
     'active' => 'Active',
     'inactive' => 'Inactive',
