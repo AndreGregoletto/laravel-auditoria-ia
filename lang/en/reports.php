@@ -23,4 +23,5 @@ return [
     'cancel' => 'Cancel',
     'replace' => 'Replace',
     'no_files_uploaded_yet' => 'No files uploaded yet.',
+    'download' => 'Download RAG',
 ];

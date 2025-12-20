@@ -23,4 +23,5 @@ return [
     'cancel' => 'Cancelar',
     'replace' => 'Subistituir',
     'no_files_uploaded_yet' => 'Nenhum arquivo enviado ainda.',
+    'download' => 'Baixar RAG',
 ];
