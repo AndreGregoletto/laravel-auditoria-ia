@@ -45,7 +45,7 @@ class SendExcel extends Component
                 ->where('file_status_id', 1)
                 ->whereIn('file_step_id', [3, 4])
                 ->first();
-
+//            dd($fileName);
             $finalPath = $this->pathBalance . $fileName;
 
             if ($failedImport) {
@@ -58,6 +58,7 @@ class SendExcel extends Component
                 $failedImport->update(['file_status_id' => 0]);
 
             } else {
+//                dd(Storage::disk('private')->exists($finalPath), $finalPath);
                 if (Storage::disk('private')->exists($finalPath)) {
                     throw ValidationException::withMessages([
                         'form' => __('error.you_have_already_send_this_file'),
@@ -76,7 +77,7 @@ class SendExcel extends Component
                 'file_name'      => $originalName,
                 'file_extension' => $extension,
                 'file_service'   => 1,
-                'file_step_id'   => 0,
+                'file_step_id'   => 5,
                 'file_size'      => $size,
                 'file_status_id' => 1,
             ];

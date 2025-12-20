@@ -14,6 +14,7 @@ return [
     'the_file_must_be_in_excel_format' => 'O arquivo deve ser no formato Excel (xlsx, xls) ou CSV.',
     'the_maximum_file_size_is_10_mb'   => 'O tamanho máximo do arquivo é de 10MB.',
 
-    'the_ai_was_unable_to_identify_the_necessary_columns' => 'A IA não conseguiu identificar as colunas necessárias.'
-
+    'the_ai_was_unable_to_identify_the_necessary_columns' => 'A IA não conseguiu identificar as colunas necessárias.',
+    'file_not_found_on_disk' => 'Arquivo nào encontrado no disco.',
+    'error_importing_id' => 'Erro na importação ID: ',
 ];

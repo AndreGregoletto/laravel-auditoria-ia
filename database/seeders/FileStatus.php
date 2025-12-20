@@ -12,25 +12,13 @@ class FileStatus extends Seeder
      */
     public function run(): void
     {
-        \App\Models\FileStatus::create(
+        \App\Models\FileStatus::insert(
             [
-                'name'      => 'Processing',
-                'name_conf' => 'processing',
+                'name'      => 'Inactive',
+                'name_conf' => 'inactive',
             ], [
-                'name'      => 'Processed',
-                'name_conf' => 'processed',
-            ], [
-                'name'      => 'Error',
-                'name_conf' => 'error',
-            ], [
-                'name'      => 'Cancelled',
-                'name_conf' => 'cancelled',
-            ], [
-                'name'      => 'In Queue',
-                'name_conf' => 'in_queue',
-            ], [
-                'name'      => 'RAG generated',
-                'name_conf' => 'rag_generated',
+                'name'      => 'Active',
+                'name_conf' => 'active',
             ],
         );
     }

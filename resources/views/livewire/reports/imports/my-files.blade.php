@@ -46,7 +46,7 @@
                     <td>{{ $file->updated_at->translatedFormat('d F Y, H:i') }}</td>
                     <td>{{ $file->error_log }}</td>
                     <td class="space-x-2">
-                        @if($file->file_step === 0 && $file->status === 1)
+                        @if($file->file_step_id === 5 && $file->file_status_id === 1)
                             <button wire:click="cancel({{ $file->id }})"
                                     class="text-red-500 hover:underline">
                                 {{ __('reports.cancel') }}

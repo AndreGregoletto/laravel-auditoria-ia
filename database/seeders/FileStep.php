@@ -12,7 +12,7 @@ class FileStep extends Seeder
      */
     public function run(): void
     {
-        \App\Models\FileStatus::create(
+        \App\Models\FileStep::insert([
             [
                 'name'      => 'Processing',
                 'name_conf' => 'processing',
@@ -32,6 +32,6 @@ class FileStep extends Seeder
                 'name'      => 'RAG generated',
                 'name_conf' => 'rag_generated',
             ],
-        );
+        ]);
     }
 }

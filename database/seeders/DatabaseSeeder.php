@@ -23,9 +23,10 @@ class DatabaseSeeder extends Seeder
             'password' => 'padrao123',
         ]);
 
-        $this->call(
+        $this->call([
             FileStatus::class,
             TypeFiles::class,
-        );
+            FileStep::class,
+        ]);
     }
 }

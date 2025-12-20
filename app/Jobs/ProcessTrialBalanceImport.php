@@ -34,7 +34,7 @@ class ProcessTrialBalanceImport implements ShouldQueue
         try {
             $importFile = ImportFile::where('id', $this->importFileId)
                 ->where('file_status_id', 1)
-                ->where('file_step_id', 0)
+                ->where('file_step_id', 5)
                 ->firstOrFail();
 
             $importFile->update(['file_step_id' => 1]);
@@ -42,7 +42,7 @@ class ProcessTrialBalanceImport implements ShouldQueue
             $relativePath = "balance/{$importFile->user_id}-{$importFile->file_name}";
 
             if (!Storage::disk('private')->exists($relativePath)) {
-                throw new \Exception("Arquivo não encontrado no disco: {$relativePath}");
+                throw new \Exception(__('error.file_not_found_on_disk').": {$relativePath}");
             }
 
             $collection = Excel::toCollection(null, $relativePath, 'private')->first();
@@ -129,8 +129,6 @@ class ProcessTrialBalanceImport implements ShouldQueue
 
         $value = (string) $value;
 
-        // Correção Lógica: Removido Pipe para garantir compatibilidade e funcionamento correto
-        // com str_replace onde o 'subject' é o terceiro parâmetro.
         if (strrpos($value, ',') > strrpos($value, '.')) {
             $value = str_replace('.', '', $value);
             $value = str_replace(',', '.', $value);

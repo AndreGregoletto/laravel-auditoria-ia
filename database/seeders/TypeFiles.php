@@ -13,7 +13,7 @@ class TypeFiles extends Seeder
      */
     public function run(): void
     {
-        TypeFile::create(
+        TypeFile::insert(
             ['name' => 'balance', 'status' => 1],
             ['name' => 'rag', 'status' => 1],
         );

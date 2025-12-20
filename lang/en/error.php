@@ -15,5 +15,7 @@ return [
     'the_maximum_file_size_is_10_mb'   => 'The maximum file size is 10MB.',
 
 
-    'the_ai_was_unable_to_identify_the_necessary_columns' => 'The AI was unable to identify the necessary columns.'
+    'the_ai_was_unable_to_identify_the_necessary_columns' => 'The AI was unable to identify the necessary columns.',
+    'file_not_found_on_disk' => 'File not found on disk.',
+    'error_importing_id' => 'Error importing ID',
 ];
