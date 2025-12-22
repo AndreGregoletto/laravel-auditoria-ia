@@ -9,6 +9,7 @@ class ImportFile extends Model
 
     protected $fillable = [
         'user_id',
+        'company_id',
         'file_name',
         'file_extension',
         'file_service',

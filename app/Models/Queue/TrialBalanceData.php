@@ -8,6 +8,7 @@ class TrialBalanceData extends Model
 {
     protected $fillable = [
         'file_id',
+        'company_id',
         'file_line',
         'account',          // conta
         'description',      // descrição
