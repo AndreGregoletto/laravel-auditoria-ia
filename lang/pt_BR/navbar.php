@@ -8,6 +8,12 @@ return [
     'balance'           => 'Balancete',
     'reports'           => 'Relatórios',
     'my_uploaded_files' => 'Meus Arquivos Enviados',
+    'settings'          => 'Configurações',
+    'company'           => 'Empresa',
+    'company_tree'      => 'Árvore da Empresa',
+    'consult'           => 'Consultar',
+    'new'               => 'Novo',
+    'edit'              => 'Editar',
 
     'search_here'   => 'Pesquisar. . .',
 
@@ -16,7 +22,7 @@ return [
     'clear_all_notifications' => 'Limpar todas notificações',
 
     'my_profile'      => 'Meu Perfil',
-    'settings'        => 'Configuração',
+    'setting'         => 'Configuração',
     'share'           => 'Compartilhar',
     'change_password' => 'Alterar Senha',
     'logout'          => 'Sair',

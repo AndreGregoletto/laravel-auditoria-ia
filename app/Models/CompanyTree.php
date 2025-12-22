@@ -4,7 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class company_tree extends Model
+class CompanyTree extends Model
 {
     protected $fillable = [
         'company_parent_id',
@@ -13,4 +13,9 @@ class company_tree extends Model
         'levels',
         'status'
     ];
+
+    public function company()
+    {
+        return $this->hasOne(Company::class, 'id', 'company_parent_id');
+    }
 }

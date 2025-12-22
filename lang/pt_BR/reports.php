@@ -24,4 +24,12 @@ return [
     'replace' => 'Subistituir',
     'no_files_uploaded_yet' => 'Nenhum arquivo enviado ainda.',
     'download' => 'Baixar RAG',
+
+    'name'            => 'Nome',
+    'commercial_name' => 'Nome Comercial',
+    'cnpj'            => 'CNPJ',
+    'publicity_trade' => 'Comércio Público',
+    'no_results_found' => 'Sem resultado encontrado.',
+    'search_here'      => 'Busque Aqui . . .',
+    'company_parent'   => 'Empresa Topo',
 ];

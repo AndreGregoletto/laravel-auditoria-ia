@@ -42,33 +42,31 @@
                         <span class="pc-mtext">{{ __('navbar.my_uploaded_files') }}</span>
                     </a>
                 </li>
-                <li class="pc-item">
-                    <a href="../elements/bc_typography.html" class="pc-link">
-                        <span class="pc-micon"><i class="ph ph-text-aa"></i></span>
-                        <span class="pc-mtext">Typography</span>
-                    </a>
-                </li>
-                <li class="pc-item">
-                    <a href="../elements/icon-phosphor.html" class="pc-link">
-                        <span class="pc-micon"> <i class="ph ph-feather"></i></span>
-                        <span class="pc-mtext">Icons</span>
-                    </a>
-                </li>
-
                 <li class="pc-item pc-caption">
-                    <label data-i18n="pages">Pages</label>
+                    <label data-i18n="{{ __('navbar.settings') }}">{{ __('navbar.settings') }}</label>
                 </li>
-                <li class="pc-item">
-                    <a href="../pages/login-v1.html" class="pc-link" target="_blank">
-                        <span class="pc-micon"> <i class="ph ph-lock-key"></i></span>
-                        <span class="pc-mtext">Login</span>
+                <li class="pc-item pc-hasmenu">
+                    <a href="#!" class="pc-link">
+                        <span class="pc-micon"> <i class="ph ph-building"></i> </span>
+                        <span class="pc-mtext">{{ __('navbar.company') }}</span>
+                        <span class="pc-arrow"><i class="ti ti-chevron-right"></i></span>
                     </a>
+                    <ul class="pc-submenu">
+                        <li class="pc-item"><a class="pc-link" href="{{ route('companies.index') }}" data-i18n="Level 2.1">{{ __('navbar.consult') }}</a></li>
+                        <li class="pc-item"><a class="pc-link" href="{{ route('companies.create') }}" data-i18n="Level 2.1">{{ __('navbar.new') }}</a></li>
+                    </ul>
                 </li>
-                <li class="pc-item">
-                    <a href="../pages/register-v1.html" class="pc-link" target="_blank">
-                        <span class="pc-micon"> <i class="ph ph-user-circle-plus"></i></span>
-                        <span class="pc-mtext">Register</span>
+                <li class="pc-item pc-hasmenu">
+                    <a href="#!" class="pc-link">
+                        <span class="pc-micon"> <i class="ph ph-tree-structure"></i> </span>
+                        <span class="pc-mtext">{{ __('navbar.company_tree') }}</span>
+                        <span class="pc-arrow"><i class="ti ti-chevron-right"></i></span>
                     </a>
+                    <ul class="pc-submenu">
+                        <li class="pc-item"><a class="pc-link" href="{{ route('companies_tree.index') }}" data-i18n="Level 2.1">{{ __('navbar.consult') }}</a></li>
+                        <li class="pc-item"><a class="pc-link" href="{{ route('companies_tree.create') }}" data-i18n="Level 2.1">{{ __('navbar.new') }}</a></li>
+                        <li class="pc-item"><a class="pc-link" href="{{ route('balancete') }}" data-i18n="Level 2.1">{{ __('navbar.edit') }}</a></li>
+                    </ul>
                 </li>
 
                 <li class="pc-item pc-caption">

@@ -135,7 +135,7 @@ new class extends Component
                                 <a href="#" class="dropdown-item">
                                     <span>
                                         <i class="ph ph-user"></i>
-                                        <span>{{ __('navbar.settings') }}</span>
+                                        <span>{{ __('navbar.setting') }}</span>
                                     </span>
                                 </a>
                                 <a href="#" class="dropdown-item">

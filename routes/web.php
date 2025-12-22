@@ -2,6 +2,13 @@
 
 use Illuminate\Support\Facades\Route;
 
+use App\Livewire\Company\Index  as CompanyIndex;
+use App\Livewire\Company\Create as CompanyCreate;
+use App\Livewire\Company\Edit   as CompanyEdit;
+
+use App\Livewire\CompanyTree\Index  as CompanyTreeIndex;
+use App\Livewire\CompanyTree\Create as CompanyTreeCreate;
+
 Route::view('/', 'welcome');
 
 Route::view('dashboard', 'dashboard')
@@ -31,5 +38,18 @@ Route::get('/audits', function () {
     return \App\Models\git ::get();
 //    return AuditLog::latest()->paginate(50);
 });
+
+#Settings
+Route::prefix('companies')->name('companies.')->group(function () {
+    Route::get('/', CompanyIndex::class)->name('index');
+    Route::get('/create', CompanyCreate::class)->name('create');
+    Route::get('/{company}/edit', CompanyEdit::class)->name('edit');
+})->middleware(['auth', 'verified']);
+
+Route::prefix('companies_tree')->name('companies_tree.')->group(function () {
+    Route::get('/', CompanyTreeIndex::class)->name('index');
+    Route::get('/create', CompanyTreeCreate::class)->name('create');
+//    Route::get('/{company}/edit', CompanyEdit::class)->name('edit');
+})->middleware(['auth', 'verified']);
 
 require __DIR__.'/auth.php';

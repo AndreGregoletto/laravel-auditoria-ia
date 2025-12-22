@@ -2,6 +2,11 @@
 
 return [
     'choose_file' => 'Escolher o Arquivo',
-    'send' => 'Enviar'
-
+    'send'        => 'Enviar',
+    'new'         => 'Novo',
+    'edit'        => 'Editar',
+    'create'      => 'Criar',
+    'cancel'      => 'Cancelar',
+    'save'        => 'Salvar',
+    'save_change' => 'Salvar Mudanças',
 ];

@@ -24,4 +24,13 @@ return [
     'replace' => 'Replace',
     'no_files_uploaded_yet' => 'No files uploaded yet.',
     'download' => 'Download RAG',
+
+    'name'             => 'Name',
+    'commercial_name'  => 'Commercial Name',
+    'cnpj'             => 'CNPJ',
+    'publicity_trade'  => 'Publicity Trade',
+    'no_results_found' => 'No results found.',
+    'search_here'      => 'Search Here . . .',
+    'company_parent'   => 'Top Company',
+    'select_company'   => 'Select the top company.',
 ];
