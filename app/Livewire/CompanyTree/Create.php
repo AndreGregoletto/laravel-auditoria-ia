@@ -43,6 +43,7 @@ class Create extends Component
         if(
             CompanyTree::where('company_parent_id', $idCompany)
                 ->where('status', 1)
+                ->where('levels', 1)
                 ->first()
         ){
             throw ValidationException::withMessages([

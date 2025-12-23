@@ -17,6 +17,7 @@ return [
     'the_ai_was_unable_to_identify_the_necessary_columns' => 'The AI was unable to identify the necessary columns.',
     'file_not_found_on_disk' => 'File not found on disk.',
     'error_importing_id' => 'Error importing ID',
+    'no_results_found' => 'Sem resultado encontrado',
 
     #form
     'name_required'      => 'This field is required.',

@@ -15,7 +15,7 @@
         {{-- SELECT: COMPANY PARENT --}}
         <div class="max-w-md">
             <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                {{ __('reports.company_parent') }}
+                {{ __('reports.company_parent') }} <span class="text-red-600">*</span>
             </label>
 
             <select wire:model.live="form.company_parent_id"

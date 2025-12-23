@@ -17,6 +17,7 @@ return [
     'the_ai_was_unable_to_identify_the_necessary_columns' => 'A IA não conseguiu identificar as colunas necessárias.',
     'file_not_found_on_disk' => 'Arquivo nào encontrado no disco.',
     'error_importing_id' => 'Erro na importação ID: ',
+    'no_results_found' => 'No results found',
 
     #form
     'name_required' => 'O campo é Obrigatório.',
@@ -24,7 +25,7 @@ return [
     'name_max_255'  => 'O campo pode ter até 255 caracteres.',
     'name_unique'   => 'O campo deve ser único.',
     'name_max_20'   => 'O campo deve ter até 20 caracteres.',
-    'company_required' => 'Empresa Topo é obrigatório.',
+    'company_required' => 'Empresa é obrigatório.',
     'select_company'   => 'Selecione a Empresa Topo.',
     'company_has_active' => 'Essa empresa possui árvore ativa.'
 

@@ -33,4 +33,6 @@ return [
     'search_here'      => 'Search Here . . .',
     'company_parent'   => 'Top Company',
     'select_company'   => 'Select the top company.',
+    'open_in_new_tab'  => 'Open in new tab',
+    'tree'             => 'Tree',
 ];

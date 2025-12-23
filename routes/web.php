@@ -8,6 +8,7 @@ use App\Livewire\Company\Edit   as CompanyEdit;
 
 use App\Livewire\CompanyTree\Index  as CompanyTreeIndex;
 use App\Livewire\CompanyTree\Create as CompanyTreeCreate;
+use App\Livewire\CompanyTree\Edit   as CompanyTreeEdit;
 
 Route::view('/', 'welcome');
 
@@ -49,7 +50,7 @@ Route::prefix('companies')->name('companies.')->group(function () {
 Route::prefix('companies_tree')->name('companies_tree.')->group(function () {
     Route::get('/', CompanyTreeIndex::class)->name('index');
     Route::get('/create', CompanyTreeCreate::class)->name('create');
-//    Route::get('/{company}/edit', CompanyEdit::class)->name('edit');
+    Route::get('/{company_tree}/edit', CompanyTreeEdit::class)->name('edit');
 })->middleware(['auth', 'verified']);
 
 require __DIR__.'/auth.php';

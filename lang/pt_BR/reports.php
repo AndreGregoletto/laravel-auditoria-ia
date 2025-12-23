@@ -31,5 +31,8 @@ return [
     'publicity_trade' => 'Comércio Público',
     'no_results_found' => 'Sem resultado encontrado.',
     'search_here'      => 'Busque Aqui . . .',
-    'company_parent'   => 'Empresa Topo',
+    'company_parent'   => 'Empresa topo',
+    'select_company'   => 'Selecione a Empresa topo.',
+    'open_in_new_tab'  => 'Abrir em uma nova aba',
+    'tree'             => 'Árvore',
 ];

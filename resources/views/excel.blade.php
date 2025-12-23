@@ -19,7 +19,7 @@
 
                     <div class="mb-6">
                         <label for="file-upload" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                            {{ __('files.selected_file_excel') }}
+                            {{ __('files.selected_file_excel') }} <span class="text-red-600">*</span>
                         </label>
 
                         <input

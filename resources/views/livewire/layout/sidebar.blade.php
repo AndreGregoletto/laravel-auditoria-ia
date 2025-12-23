@@ -65,7 +65,6 @@
                     <ul class="pc-submenu">
                         <li class="pc-item"><a class="pc-link" href="{{ route('companies_tree.index') }}" data-i18n="Level 2.1">{{ __('navbar.consult') }}</a></li>
                         <li class="pc-item"><a class="pc-link" href="{{ route('companies_tree.create') }}" data-i18n="Level 2.1">{{ __('navbar.new') }}</a></li>
-                        <li class="pc-item"><a class="pc-link" href="{{ route('balancete') }}" data-i18n="Level 2.1">{{ __('navbar.edit') }}</a></li>
                     </ul>
                 </li>
 
