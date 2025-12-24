@@ -9,4 +9,7 @@ return [
     'cancel'      => 'Cancel',
     'save'        => 'Save',
     'save_change' => 'Save Changes',
+    'add'         => 'Add',
+    'confirm'     => 'Confirm',
 ];
+

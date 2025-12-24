@@ -18,7 +18,7 @@ class Create extends Component
     public function  rules(): array
     {
         return [
-            'form.company_parent_id' => ['required', 'integer'],
+            'form.company_tree_id' => ['required', 'integer'],
             'form.status' => ['boolean']
         ];
     }
@@ -26,8 +26,7 @@ class Create extends Component
     public function messages(): array
     {
         return [
-            'form.company_parent_id.required' => __('error.company_required'),
-//            'form.unique'        => __('error.name_unique'),
+            'form.company_tree_id.required' => __('error.company_required'),
         ];
     }
 
@@ -38,27 +37,29 @@ class Create extends Component
             $this->messages()
         );
 
-        $idCompany = $this->form['company_parent_id'];
+        $idCompany = $this->form['company_tree_id'];
 
         if(
-            CompanyTree::where('company_parent_id', $idCompany)
+            CompanyTree::where('company_tree_id', $idCompany)
                 ->where('status', 1)
                 ->where('levels', 1)
                 ->first()
         ){
             throw ValidationException::withMessages([
-                'form.company_parent_id' => trans(__('error.company_has_active'))
+                'form.company_tree_id' => trans(__('error.company_has_active'))
             ]);
         }
 
         $aCompanyTree = [
+            'company_tree_id'   => $idCompany,
             'company_parent_id' => $idCompany,
             'company_id'        => $idCompany,
             'company_parent'    => 1,
+            'holding'           => 1,
             'levels'            => 1,
             'status'            => 1,
         ];
-//        dd($aCompanyTree);
+
         CompanyTree::create($aCompanyTree);
 
         return redirect()->route('companies_tree.index');

@@ -20,10 +20,9 @@ class Index extends Component
         $false = $this->toUp( __('reports.inactive'));
 
         $query = CompanyTree::query()
-            ->select('id', 'company_parent_id', 'levels', 'status')
-            ->where('status', 1)
+            ->select('id', 'company_tree_id', 'company_parent_id', 'levels', 'status')
             ->where('levels', 1)
-            ->with(['company:id,name,status']);
+            ->with(['companyTree:id,name,status']);
 
         if ($term !== '') {
             if(in_array($term, [$true, $false])){
@@ -38,8 +37,8 @@ class Index extends Component
 
         $aCompanyTree = $query->get()
             ->map(fn ($row) => [
-                'id'     => $row->company_parent_id,
-                'name'   => $row->company?->name ?? '',
+                'id'     => $row->company_tree_id,
+                'name'   => $row->companyTree?->name ?? '',
                 'status' => (bool) $row->status,
             ])
             ->filter(fn ($row) => $row['name'] !== '')

@@ -18,7 +18,7 @@
                 {{ __('reports.company_parent') }} <span class="text-red-600">*</span>
             </label>
 
-            <select wire:model.live="form.company_parent_id"
+            <select wire:model.live="form.company_tree_id"
                     class="w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm
                            focus:border-indigo-500 focus:ring-indigo-500
                            dark:border-gray-700 dark:bg-gray-900 dark:text-gray-100">
@@ -33,7 +33,7 @@
                 @endforeach
             </select>
 
-            @error('form.company_parent_id')
+            @error('form.company_tree_id')
             <p class="mt-1 text-xs text-red-600">{{ $message }}</p>
             @enderror
         </div>
