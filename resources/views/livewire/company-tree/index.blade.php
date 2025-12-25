@@ -33,7 +33,7 @@
                 <div class="flex items-start justify-between gap-3">
                     <div class="min-w-0">
                         <p class="text-sm font-semibold text-gray-900 dark:text-gray-100 truncate">
-                            {{ $company['name'] }}
+                            {{ $company['commercial_name'] ?? $company['name'] }}
                         </p>
                         <p class="mt-1 text-xs text-gray-500 dark:text-gray-400">
                             Número de empresas aqui dentro

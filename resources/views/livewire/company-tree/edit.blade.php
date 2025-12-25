@@ -6,7 +6,7 @@
                 / {{ __('navbar.company_tree') }}
                 / {{ __('navbar.edit') }}
                 @if(isset($companies[0]))
-                    / {{ __('reports.tree') }} {{ $companies[0]['company']['name'] }}
+                    / {{ __('reports.tree') }} {{ $companies[0]['company']['commercial_name'] ?? $companies[0]['company']['name'] }}
                 @endif
             </h1>
         </div>
@@ -18,8 +18,9 @@
                 <thead class="bg-gray-50 dark:bg-gray-950">
                 <tr class="text-left text-xs font-semibold uppercase tracking-wider text-gray-600 dark:text-gray-300">
                     <th class="px-4 py-3">{{ __('company.name') }}</th>
-                    <th class="px-4 py-3">{{ __('company.holding') }}</th>
+                    <th class="px-4 py-3">{{ __('reports.commercial_name') }}</th>
                     <th class="px-4 py-3">{{ __('company.lvl') }}</th>
+                    <th class="px-4 py-3">{{ __('company.holding') }}</th>
                     <th class="px-4 py-3">{{ __('reports.status') }}</th>
                     <th class="px-4 py-3">{{ __('reports.actions') }}</th>
                 </tr>
@@ -27,9 +28,38 @@
 
                 <tbody class="divide-y divide-gray-200 dark:divide-gray-800">
                 @forelse($companies as $company)
-                    {{--                @dd($company)--}}
-                    <tr class="text-sm text-gray-800 dark:text-gray-100">
-                        <td class="px-4 py-3">{{ $company->company->name }}</td>
+                    <tr wire:key="company-tree-row-{{ $company->id }}" class="text-sm text-gray-800 dark:text-gray-100">
+                        <td class="px-4 py-3">
+                            @php
+                                $level = (int) ($company->levels ?? 1);
+                                $depth = max(0, $level - 1);
+                                $indent = $depth * 24;
+                            @endphp
+
+                            <div class="flex items-center min-w-0">
+                                <span class="shrink-0" style="width: {{ $indent }}px;"></span>
+                                @if($depth > 0)
+                                    <svg xmlns="http://www.w3.org/2000/svg"
+                                         class="mr-2 h-4 w-4 text-gray-400 dark:text-gray-500 shrink-0"
+                                         viewBox="0 0 24 24"
+                                         fill="none"
+                                         stroke="currentColor"
+                                         stroke-width="2"
+                                         stroke-linecap="round"
+                                         stroke-linejoin="round">
+                                        <path d="M6 3v12" />
+                                        <path d="M6 15h6" />
+                                    </svg>
+                                @endif
+
+                                <span class="truncate">
+                                    {{ $company->company->name }}
+                                </span>
+                            </div>
+                        </td>
+
+                        <td class="px-4 py-3">{{ $company->company->commercial_name }}</td>
+                        <td class="px-4 py-3">{{ $company->levels }}</td>
                         <td class="px-4 py-3">
                         <span class="inline-flex items-center rounded-full px-2 py-1 text-xs font-semibold
                             {{ $company->holding ? 'bg-emerald-100 text-emerald-700 dark:bg-emerald-900/40 dark:text-emerald-200'
@@ -37,7 +67,6 @@
                             {{ $company->holding ? __('company.controller') : __('company.controlled') }}
                         </span>
                         </td>
-                        <td class="px-4 py-3">{{ $company->levels }}</td>
                         <td class="px-4 py-3">
                         <span class="inline-flex items-center rounded-full px-2 py-1 text-xs font-semibold
                             {{ $company->company->status ? 'bg-emerald-100 text-emerald-700 dark:bg-emerald-900/40 dark:text-emerald-200'
@@ -60,8 +89,9 @@
                                 </button>
 
                                 <button
+                                    wire:key="toggle-btn-{{ $company->id }}"
                                     type="button"
-                                    wire:click="confirmToggleStatus({{ $company->company_id }})"
+                                    wire:click="confirmToggleStatus({{ $company->id }})"
                                     class="inline-flex items-center justify-center rounded-lg p-2
                                     {{ $company->status ? 'text-emerald-600 hover:bg-emerald-50 hover:text-emerald-800 dark:text-emerald-400 dark:hover:bg-emerald-950/30'
                                       : 'text-rose-600 hover:bg-rose-50 hover:text-rose-800 dark:text-rose-400 dark:hover:bg-rose-950/30' }}"

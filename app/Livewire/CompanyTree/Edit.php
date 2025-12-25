@@ -4,6 +4,7 @@ namespace App\Livewire\CompanyTree;
 
 use App\Models\Company;
 use App\Models\CompanyTree;
+use App\Services\CompanyTreeOrderService;
 use Livewire\Component;
 
 class Edit extends Component
@@ -28,34 +29,13 @@ class Edit extends Component
 
     private function loadCompanies(): void
     {
-        $query = CompanyTree::where('company_tree_id', $this->company_tree)
+        $nodes = CompanyTree::query()
+            ->where('company_tree_id', $this->company_tree)
             ->with(['company'])
-            ->orderBy('levels', 'asc');
+            ->get();
 
-        $response = [];
-        $children = [];
-
-        foreach ($query->get() as $company){
-//            dd($company->company_tree_id);
-            $response[$company->company_parent_id][$company->company_id] = [];
-//            $response[''] = [
-//                "id"              => $company->id,
-//                "company_tree_id" => $company->company_tree_id,
-//                "company_id"      => $company->company_id,
-//                "holding"         => $company->holding,
-//                "levels"          => $company->levels,
-//                "status"          => $company->status,
-//                "company" => [
-//                    "name"            => $company->company->name,
-//                    "commercial_name" => $company->company->commercial_name,
-//                    "cnpj"            => $company->company->cnpj,
-//                    "publicity_trade" => $company->company->publicity_trade,
-//                    "status"          => $company->company->status,
-//                ],
-//            ];
-//            dd($response);
-        }
-        dd($response);
+        $ordered = CompanyTreeOrderService::orderPreOrder($nodes);
+        $this->companies = $ordered;
     }
 
     public function openAddChild(int $treeId): void

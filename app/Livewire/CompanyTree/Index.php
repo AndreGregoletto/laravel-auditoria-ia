@@ -22,7 +22,7 @@ class Index extends Component
         $query = CompanyTree::query()
             ->select('id', 'company_tree_id', 'company_parent_id', 'levels', 'status')
             ->where('levels', 1)
-            ->with(['companyTree:id,name,status']);
+            ->with(['company']);
 
         if ($term !== '') {
             if(in_array($term, [$true, $false])){
@@ -30,16 +30,17 @@ class Index extends Component
                 $query->where('status', $boll);
             }else{
                 $query->whereHas('company', function ($q) use ($term) {
-                    $q->where('name', 'like', "%{$term}%");
+                    $q->where('commercial_name', 'like', "%{$term}%");
                 });
             }
         }
 
         $aCompanyTree = $query->get()
             ->map(fn ($row) => [
-                'id'     => $row->company_tree_id,
-                'name'   => $row->companyTree?->name ?? '',
-                'status' => (bool) $row->status,
+                'id'              => $row->company_tree_id,
+                'name'            => $row->companyTree?->name ?? '',
+                'commercial_name' => $row->companyTree?->commercial_name ?? '',
+                'status'          => (bool) $row->status,
             ])
             ->filter(fn ($row) => $row['name'] !== '')
             ->values();
