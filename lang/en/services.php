@@ -1,0 +1,5 @@
+<?php
+
+return [
+    'balance' => 'Balance',
+];

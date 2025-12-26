@@ -10,6 +10,9 @@ return [
     'updated_in' => 'Atualizado em',
     'error_log' => 'Log do Erro',
     'actions' => 'Ações',
+    'reference_month' => 'Mês de referência',
+    'reference_year' => 'Ano de referência',
+    'destination_service' => 'Destino do Serviço',
 
     'processing' => 'Processando',
     'processed'  => 'Processado',

@@ -25,7 +25,10 @@ class MyFiles extends Component
     public function render()
     {
         return view('livewire.reports.imports.my-files', [
-            'files' => ImportFile::whereUserId(Auth::id())->latest()->get()
+            'files' => ImportFile::whereUserId(Auth::id())
+                ->with('type_file')
+                ->latest()
+                ->get()
         ]);
     }
 }

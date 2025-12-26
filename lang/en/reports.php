@@ -10,6 +10,9 @@ return [
     'updated_in' => 'Updated In',
     'error_log' => 'Error Log',
     'actions' => 'Actions',
+    'reference_month' => 'Reference month',
+    'reference_year' => 'Reference year',
+    'destination_service' => 'Destination Service',
 
     'processing' => 'Processing',
     'processed'  => 'Processed',

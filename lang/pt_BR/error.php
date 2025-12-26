@@ -27,6 +27,7 @@ return [
     'name_max_20'   => 'O campo deve ter até 20 caracteres.',
     'company_required' => 'Empresa é obrigatório.',
     'select_company'   => 'Selecione a Empresa Topo.',
-    'company_has_active' => 'Essa empresa possui árvore ativa.'
-
+    'company_has_active' => 'Essa empresa possui árvore ativa.',
+    'min_year_2000'      => 'O ano minimo permitido é 2000.',
+    'max_year'           => 'O ano maximo permitido é 2100.',
 ];

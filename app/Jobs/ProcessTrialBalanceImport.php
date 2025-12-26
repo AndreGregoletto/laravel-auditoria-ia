@@ -39,7 +39,9 @@ class ProcessTrialBalanceImport implements ShouldQueue
 
             $importFile->update(['file_step_id' => 1]);
 
-            $relativePath = "balance/{$importFile->user_id}-{$importFile->file_name}";
+            $fileName = "{$importFile->user_id}-{$importFile->company_id}-{$importFile->reference_year}-{$importFile->reference_month}-{$importFile->file_name}";
+
+            $relativePath = "balance/{$fileName}";
 
             if (!Storage::disk('private')->exists($relativePath)) {
                 throw new \Exception(__('error.file_not_found_on_disk').": {$relativePath}");

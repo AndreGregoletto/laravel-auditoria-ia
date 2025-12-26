@@ -27,6 +27,8 @@ return [
     'name_max_20'        => 'The field must contain up to 20 characters.',
     'company_required'   => 'Top Company is required.',
     'select_company'     => 'Select top company.',
-    'company_has_active' => 'This company has an active tree.'
+    'company_has_active' => 'This company has an active tree.',
+    'min_year_2000'      => 'The minimum year allowed is 2000.',
+    'max_year'           => 'The maximum year allowed is 2100.',
 
 ];

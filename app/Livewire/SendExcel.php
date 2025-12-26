@@ -4,7 +4,9 @@ namespace App\Livewire;
 
 use App\Jobs\ProcessTrialBalanceImport;
 use App\Livewire\Forms\QueueImport\Balancete;
+use App\Models\Company;
 use App\Models\ImportFile;
+use Illuminate\Support\Collection;
 use Illuminate\Validation\ValidationException;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
@@ -18,11 +20,17 @@ class SendExcel extends Component
     use WithFileUploads;
 
     public Balancete $form;
+    public Collection $companies;
+
     private string $pathBalance;
 
-    public function __construct()
+    public function mount() :void
     {
-        // Garante a barra no final
+        $this->companies = Company::orderBy('name')->get(['id', 'name']);
+    }
+
+    public function getPath(): void
+    {
         $path = env('IMPORT_BALANCE', 'balance/');
         $this->pathBalance = str_ends_with($path, '/') ? $path : $path . '/';
     }
@@ -37,7 +45,7 @@ class SendExcel extends Component
             $originalName = $file->getClientOriginalName();
             $extension    = $file->getClientOriginalExtension();
             $size         = $file->getSize();
-            $fileName     = "{$idUser}-{$originalName}";
+            $fileName     = "{$idUser}-{$this->form->company_id}-{$this->form->reference_year}-{$this->form->reference_month}-{$originalName}";
 
             $failedImport = ImportFile::where('user_id', $idUser)
                 ->where('file_name', $originalName)
@@ -45,7 +53,9 @@ class SendExcel extends Component
                 ->where('file_status_id', 1)
                 ->whereIn('file_step_id', [3, 4])
                 ->first();
-//            dd($fileName);
+
+            $this->getPath();
+
             $finalPath = $this->pathBalance . $fileName;
 
             if ($failedImport) {
@@ -58,7 +68,6 @@ class SendExcel extends Component
                 $failedImport->update(['file_status_id' => 0]);
 
             } else {
-//                dd(Storage::disk('private')->exists($finalPath), $finalPath);
                 if (Storage::disk('private')->exists($finalPath)) {
                     throw ValidationException::withMessages([
                         'form' => __('error.you_have_already_send_this_file'),
@@ -73,13 +82,17 @@ class SendExcel extends Component
             }
 
             $importFileData = [
-                'user_id'        => $idUser,
-                'file_name'      => $originalName,
-                'file_extension' => $extension,
-                'file_service'   => 1,
-                'file_step_id'   => 5,
-                'file_size'      => $size,
-                'file_status_id' => 1,
+                'user_id'         => $idUser,
+                'company_id'      => $this->form->company_id,
+                'reference_month' => $this->form->reference_month,
+                'reference_year'  => $this->form->reference_year,
+                'file_name'       => $originalName,
+                'file_extension'  => $extension,
+                'file_service'    => 1,
+                'file_step_id'    => 5,
+                'file_size'       => $size,
+                'file_status_id'  => 1,
+//                'error_log'
             ];
 
             $importFileRecord = ImportFile::create($importFileData);
@@ -104,6 +117,8 @@ class SendExcel extends Component
 
     public function render()
     {
-        return view('excel');
+        return view('excel', [
+            'companies' => $this->companies,
+        ]);
     }
 }
