@@ -17,7 +17,7 @@
                           dark:border-gray-700 dark:bg-gray-900 dark:text-gray-100" />
         </div>
 
-         <a href="{{ route('companies_tree.create') }}"
+         <a href="{{ route('settings.companies_tree.create') }}"
            class="inline-flex items-center rounded-lg bg-indigo-600 px-4 py-2 text-sm font-semibold text-white hover:bg-indigo-700">
             {{ __('buttons.new') }}
         </a>
@@ -55,12 +55,12 @@
                 <div class="mt-3 h-px bg-gray-100 dark:bg-gray-800"></div>
 
                 <div class="mt-3 flex items-center justify-between">
-                    <a href="{{ route('companies_tree.edit', $company['id']) }}"
+                    <a href="{{ route('settings.companies_tree.edit', $company['id']) }}"
                        class="text-xs font-semibold text-indigo-600 group-hover:text-indigo-700 dark:text-indigo-400 dark:group-hover:text-indigo-300">
                         {{ __('buttons.edit') }}
                     </a>
 
-                    <a href="!#"
+                    <a href="{{ route('settings.companies_tree.organizational_chart.index', $company['id']) }}"
                        target="_blank"
                        class="text-xs font-semibold text-indigo-600 group-hover:text-indigo-700 dark:text-indigo-400 dark:group-hover:text-indigo-300">
                         {{ __('reports.open_in_new_tab') }} →

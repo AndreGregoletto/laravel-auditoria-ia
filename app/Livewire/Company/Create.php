@@ -55,7 +55,7 @@ class Create extends Component
 
         Company::create($this->form);
 
-        return redirect()->route('companies.index');
+        return redirect()->route('settings.companies.index');
     }
 
     public function render()

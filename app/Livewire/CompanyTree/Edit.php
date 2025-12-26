@@ -45,11 +45,9 @@ class Edit extends Component
         $this->childCompanyId = null;
 
         $treeCompany = CompanyTree::select('company_id', 'status')
-            ->where('status', 1)
             ->pluck('company_id');
 
         $this->availableCompanies = Company::query()
-            ->where('status', 1)
             ->whereNotIn('id', $treeCompany)
             ->orderBy('name')
             ->get(['id', 'name']);

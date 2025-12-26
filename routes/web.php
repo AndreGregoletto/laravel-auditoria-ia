@@ -10,6 +10,10 @@ use App\Livewire\CompanyTree\Index  as CompanyTreeIndex;
 use App\Livewire\CompanyTree\Create as CompanyTreeCreate;
 use App\Livewire\CompanyTree\Edit   as CompanyTreeEdit;
 
+use App\Livewire\CompanyTree\OrganizationalChart\Index  as orgChart;
+//use App\Livewire\CompanyTree\OrganizationalChart\Create as CompanyTreeOrganizationalChartCreate;
+//use App\Livewire\CompanyTree\OrganizationalChart\Edit   as CompanyTreeOrganizationalChartEdit;
+
 Route::view('/', 'welcome');
 
 Route::view('dashboard', 'dashboard')
@@ -41,16 +45,25 @@ Route::get('/audits', function () {
 });
 
 #Settings
-Route::prefix('companies')->name('companies.')->group(function () {
-    Route::get('/', CompanyIndex::class)->name('index');
-    Route::get('/create', CompanyCreate::class)->name('create');
-    Route::get('/{company}/edit', CompanyEdit::class)->name('edit');
-})->middleware(['auth', 'verified']);
+Route::prefix('settings')->name('settings.')->group(function (){
+    Route::prefix('companies')->name('companies.')->group(function () {
+        Route::get('/', CompanyIndex::class)->name('index');
+        Route::get('/create', CompanyCreate::class)->name('create');
+        Route::get('/{company}/edit', CompanyEdit::class)->name('edit');
+    })->middleware(['auth', 'verified']);
 
-Route::prefix('companies_tree')->name('companies_tree.')->group(function () {
-    Route::get('/', CompanyTreeIndex::class)->name('index');
-    Route::get('/create', CompanyTreeCreate::class)->name('create');
-    Route::get('/{company_tree}/edit', CompanyTreeEdit::class)->name('edit');
+    Route::prefix('companies_tree')->name('companies_tree.')->group(function () {
+        Route::get('/', CompanyTreeIndex::class)->name('index');
+        Route::get('/create', CompanyTreeCreate::class)->name('create');
+        Route::get('/{company_tree}/edit', CompanyTreeEdit::class)->name('edit');
+
+        Route::prefix('organizational_chart')->name('organizational_chart.')->group(function () {
+            Route::get('{company_tree}/org_chart', orgChart::class)->name('index');
+//        Route::get('/create', CompanyTreeCreate::class)->name('create');
+//        Route::get('/{company_tree}/edit', CompanyTreeEdit::class)->name('edit');
+        });
+
+    });
 })->middleware(['auth', 'verified']);
 
 require __DIR__.'/auth.php';

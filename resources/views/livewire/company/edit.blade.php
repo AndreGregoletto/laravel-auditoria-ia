@@ -53,7 +53,7 @@
                 {{ __('buttons.save_change') }}
             </button>
 
-            <a href="{{ route('companies.index') }}"
+            <a href="{{ route('settings.companies.index') }}"
                class="inline-flex items-center rounded-lg border border-gray-300 px-4 py-2 text-sm font-semibold text-gray-700 hover:bg-gray-50 dark:border-gray-700 dark:text-gray-200 dark:hover:bg-gray-800">
                 {{ __('buttons.cancel') }}
             </a>

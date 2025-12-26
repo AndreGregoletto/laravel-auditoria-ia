@@ -35,4 +35,5 @@ return [
     'select_company'   => 'Selecione a Empresa topo.',
     'open_in_new_tab'  => 'Abrir em uma nova aba',
     'tree'             => 'Árvore',
+    'org_chart'        => 'Organograma',
 ];

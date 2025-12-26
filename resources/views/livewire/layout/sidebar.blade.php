@@ -52,8 +52,8 @@
                         <span class="pc-arrow"><i class="ti ti-chevron-right"></i></span>
                     </a>
                     <ul class="pc-submenu">
-                        <li class="pc-item"><a class="pc-link" href="{{ route('companies.index') }}" data-i18n="Level 2.1">{{ __('navbar.consult') }}</a></li>
-                        <li class="pc-item"><a class="pc-link" href="{{ route('companies.create') }}" data-i18n="Level 2.1">{{ __('navbar.new') }}</a></li>
+                        <li class="pc-item"><a class="pc-link" href="{{ route('settings.companies.index') }}" data-i18n="Level 2.1">{{ __('navbar.consult') }}</a></li>
+                        <li class="pc-item"><a class="pc-link" href="{{ route('settings.companies.create') }}" data-i18n="Level 2.1">{{ __('navbar.new') }}</a></li>
                     </ul>
                 </li>
                 <li class="pc-item pc-hasmenu">
@@ -63,8 +63,8 @@
                         <span class="pc-arrow"><i class="ti ti-chevron-right"></i></span>
                     </a>
                     <ul class="pc-submenu">
-                        <li class="pc-item"><a class="pc-link" href="{{ route('companies_tree.index') }}" data-i18n="Level 2.1">{{ __('navbar.consult') }}</a></li>
-                        <li class="pc-item"><a class="pc-link" href="{{ route('companies_tree.create') }}" data-i18n="Level 2.1">{{ __('navbar.new') }}</a></li>
+                        <li class="pc-item"><a class="pc-link" href="{{ route('settings.companies_tree.index') }}" data-i18n="Level 2.1">{{ __('navbar.consult') }}</a></li>
+                        <li class="pc-item"><a class="pc-link" href="{{ route('settings.companies_tree.create') }}" data-i18n="Level 2.1">{{ __('navbar.new') }}</a></li>
                     </ul>
                 </li>
 

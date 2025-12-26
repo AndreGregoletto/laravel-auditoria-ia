@@ -33,7 +33,7 @@ class Edit extends Component
         $this->validate();
         $this->company->update($this->form);
 
-        return redirect()->route('companies.index');
+        return redirect()->route('settings.companies.index');
     }
 
     public function render()
