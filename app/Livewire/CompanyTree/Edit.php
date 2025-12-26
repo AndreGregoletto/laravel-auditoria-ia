@@ -91,7 +91,7 @@ class Edit extends Component
         $this->closeAddChild();
         $this->loadCompanies();
 
-        session()->flash('success', 'Empresa adicionada com sucesso.');
+        session()->flash('success', __('success.company_added'));
     }
 
     public function confirmToggleStatus(int $treeId): void
@@ -119,7 +119,7 @@ class Edit extends Component
         $this->closeToggleStatus();
         $this->loadCompanies();
 
-        session()->flash('success', 'Status atualizado com sucesso.');
+        session()->flash('success', __('success.updated_successfully'));
     }
 
     public function render()

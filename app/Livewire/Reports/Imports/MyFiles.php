@@ -19,7 +19,7 @@ class MyFiles extends Component
             ->firstOrFail();
 
         $file->update(['file_status_id', 0, 'file_step_id' => 4]);
-        session()->flash('success', 'Arquivo cancelado com sucesso');
+        session()->flash('success', __('success.file_cancel'));
     }
 
     public function render()

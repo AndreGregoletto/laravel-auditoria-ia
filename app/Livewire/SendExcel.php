@@ -93,7 +93,7 @@ class SendExcel extends Component
 
             $this->reset('form');
 
-            session()->flash('success', 'Arquivo enviado com sucesso!');
+            session()->flash('success', __('success.file_sent'));
 
         } catch (ValidationException $e) {
             throw $e;
