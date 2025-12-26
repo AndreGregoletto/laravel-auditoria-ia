@@ -24,21 +24,30 @@
 
 
     <div class="overflow-hidden rounded-xl border border-gray-200 bg-white shadow-sm dark:border-gray-800 dark:bg-gray-900">
-        <table class="min-w-full divide-y divide-gray-200 dark:divide-gray-800">
-            <thead class="bg-gray-50 dark:bg-gray-950">
-            <tr class="text-left text-xs font-semibold uppercase tracking-wider text-gray-600 dark:text-gray-300">
-                <th class="px-4 py-3">{{ __('reports.name') }}</th>
-                <th class="px-4 py-3">{{ __('reports.commercial_name') }}</th>
-                <th class="px-4 py-3">{{ __('reports.cnpj') }}</th>
-                <th class="px-4 py-3">{{ __('reports.publicity_trade') }}</th>
-                <th class="px-4 py-3">{{ __('reports.status') }}</th>
-                <th class="px-4 py-3 w-24">{{ __('reports.actions') }}</th>
-            </tr>
+        <table class="w-full table-fixed divide-y divide-gray-200 dark:divide-gray-800">
+            <thead class="bg-gray-50 dark:bg-gray-900/40">
+                <tr class="text-left text-xs font-semibold uppercase tracking-wider text-gray-600 dark:text-gray-300">
+                    <th class="px-4 py-3">{{ __('reports.name') }}</th>
+                    <th class="px-4 py-3">{{ __('reports.commercial_name') }}</th>
+                    <th class="px-4 py-3">{{ __('reports.cnpj') }}</th>
+                    <th class="px-4 py-3">{{ __('reports.publicity_trade') }}</th>
+                    <th class="px-4 py-3">{{ __('reports.status') }}</th>
+                    <th class="px-4 py-3 w-24">{{ __('reports.actions') }}</th>
+                </tr>
             </thead>
 
             <tbody class="divide-y divide-gray-200 dark:divide-gray-800">
             @forelse($companies as $company)
-                <tr class="text-sm text-gray-800 dark:text-gray-100">
+                <tr
+                    wire:key="company-tree-row-{{ $company->id }}"
+                    class="
+                        text-sm text-gray-800 dark:text-gray-100
+                        even:bg-gray-50 dark:even:bg-gray-900/40
+                        hover:bg-gray-100 dark:hover:bg-gray-800
+                        focus-within:bg-indigo-50 dark:focus-within:bg-indigo-950/40
+                        transition-colors
+                    "
+                >
                     <td class="px-4 py-3">{{ $company->name }}</td>
                     <td class="px-4 py-3">{{ $company->commercial_name }}</td>
                     <td class="px-4 py-3">{{ $company->cnpj }}</td>

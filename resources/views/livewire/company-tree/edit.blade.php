@@ -14,105 +14,119 @@
 
     <div class="space-y-6 py-12">
         <div class="overflow-hidden rounded-xl border border-gray-200 bg-white shadow-sm dark:border-gray-800 dark:bg-gray-900">
-            <table class="min-w-full divide-y divide-gray-200 dark:divide-gray-800">
-                <thead class="bg-gray-50 dark:bg-gray-950">
-                <tr class="text-left text-xs font-semibold uppercase tracking-wider text-gray-600 dark:text-gray-300">
-                    <th class="px-4 py-3">{{ __('company.name') }}</th>
-                    <th class="px-4 py-3">{{ __('reports.commercial_name') }}</th>
-                    <th class="px-4 py-3">{{ __('company.lvl') }}</th>
-                    <th class="px-4 py-3">{{ __('company.holding') }}</th>
-                    <th class="px-4 py-3">{{ __('reports.status') }}</th>
-                    <th class="px-4 py-3">{{ __('reports.actions') }}</th>
-                </tr>
-                </thead>
+            <div class="overflow-x-auto">
+                <table class="w-full table-fixed divide-y divide-gray-200 dark:divide-gray-800">
+                    <thead class="bg-gray-50 dark:bg-gray-900/40">
+                        <tr class="text-left text-xs font-semibold uppercase tracking-wider text-gray-600 dark:text-gray-300">
+                            <th class="px-4 py-3 w-[50%] md:w-[40%] lg:w-[34%]">{{ __('company.name') }}</th>
+                            <th class="px-4 py-3 w-[25%] md:w-[24%] lg:w-[22%]">{{ __('reports.commercial_name') }}</th>
+                            <th class="px-4 py-3 w-[60px]">{{ __('company.lvl') }}</th>
+                            <th class="px-4 py-3 w-[120px]">{{ __('company.holding') }}</th>
+                            <th class="px-4 py-3 w-[110px]">{{ __('reports.status') }}</th>
+                            <th class="px-4 py-3 w-[110px]">{{ __('reports.actions') }}</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-gray-200 dark:divide-gray-800">
+                        @forelse($companies as $company)
+                            <tr
+                                wire:key="company-tree-row-{{ $company->id }}"
+                                class="
+                                    text-sm text-gray-800 dark:text-gray-100
+                                    even:bg-gray-50 dark:even:bg-gray-900/40
+                                    hover:bg-gray-100 dark:hover:bg-gray-800
+                                    focus-within:bg-indigo-50 dark:focus-within:bg-indigo-950/40
+                                    transition-colors
+                                "
+                            >
+                                <td class="px-4 py-3">
+                                    @php
+                                        $level = (int) ($company->levels ?? 1);
+                                        $depth = max(0, $level - 1);
+                                        $indent = $depth * 24;
+                                    @endphp
 
-                <tbody class="divide-y divide-gray-200 dark:divide-gray-800">
-                @forelse($companies as $company)
-                    <tr wire:key="company-tree-row-{{ $company->id }}" class="text-sm text-gray-800 dark:text-gray-100">
-                        <td class="px-4 py-3">
-                            @php
-                                $level = (int) ($company->levels ?? 1);
-                                $depth = max(0, $level - 1);
-                                $indent = $depth * 24;
-                            @endphp
+                                    <div class="flex items-center min-w-0">
+                                        <span class="shrink-0" style="width: {{ $indent }}px;"></span>
+                                        @if($depth > 0)
+                                            <svg xmlns="http://www.w3.org/2000/svg"
+                                                 class="mr-2 h-4 w-4 text-gray-400 dark:text-gray-500 shrink-0"
+                                                 viewBox="0 0 24 24"
+                                                 fill="none"
+                                                 stroke="currentColor"
+                                                 stroke-width="2"
+                                                 stroke-linecap="round"
+                                                 stroke-linejoin="round">
+                                                <path d="M6 3v12" />
+                                                <path d="M6 15h6" />
+                                            </svg>
+                                        @endif
 
-                            <div class="flex items-center min-w-0">
-                                <span class="shrink-0" style="width: {{ $indent }}px;"></span>
-                                @if($depth > 0)
-                                    <svg xmlns="http://www.w3.org/2000/svg"
-                                         class="mr-2 h-4 w-4 text-gray-400 dark:text-gray-500 shrink-0"
-                                         viewBox="0 0 24 24"
-                                         fill="none"
-                                         stroke="currentColor"
-                                         stroke-width="2"
-                                         stroke-linecap="round"
-                                         stroke-linejoin="round">
-                                        <path d="M6 3v12" />
-                                        <path d="M6 15h6" />
-                                    </svg>
-                                @endif
+                                        <span class="truncate" title="{{ $company->company->name }}">
+                                            {{ $company->company->name }}
+                                        </span>
+                                    </div>
+                                </td>
 
-                                <span class="truncate">
-                                    {{ $company->company->name }}
+                                <td class="px-4 py-3" title="{{ $company->company->commercial_name }}">
+                                    {{ $company->company->commercial_name }}
+                                </td>
+                                <td class="px-4 py-3">{{ $company->levels }}</td>
+                                <td class="px-4 py-3">
+                                <span class="inline-flex items-center rounded-full px-2 py-1 text-xs font-semibold {{
+                                        $company->holding
+                                            ? 'bg-emerald-100 text-emerald-700 dark:bg-emerald-900/40 dark:text-emerald-200'
+                                            : 'bg-gray-100 text-gray-700 dark:bg-gray-800 dark:text-gray-200'
+                                }}">
+                                    {{ $company->holding ? __('company.controller') : __('company.controlled') }}
                                 </span>
-                            </div>
-                        </td>
+                                </td>
+                                <td class="px-4 py-3">
+                                <span class="inline-flex items-center rounded-full px-2 py-1 text-xs font-semibold
+                                    {{ $company->company->status ? 'bg-emerald-100 text-emerald-700 dark:bg-emerald-900/40 dark:text-emerald-200'
+                                                       : 'bg-red-100 text-red-700 dark:bg-red-800 dark:text-red-200' }}">
+                                    {{ $company->company->status ? __('reports.active') : __('reports.inactive') }}
+                                </span>
+                                </td>
+                                <td class="px-4 py-3">
+                                    <div class="flex items-center gap-3">
+                                        <button
+                                            type="button"
+                                            wire:click="openAddChild({{ $company->company_id }})"
+                                            class="inline-flex items-center justify-center rounded-lg p-2 text-indigo-600 hover:bg-indigo-50 hover:text-indigo-800
+                                            dark:text-indigo-400 dark:hover:bg-indigo-950/40 dark:hover:text-indigo-300"
+                                            title="{{ __('buttons.add') }}"
+                                        >
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
+                                            </svg>
+                                        </button>
 
-                        <td class="px-4 py-3">{{ $company->company->commercial_name }}</td>
-                        <td class="px-4 py-3">{{ $company->levels }}</td>
-                        <td class="px-4 py-3">
-                        <span class="inline-flex items-center rounded-full px-2 py-1 text-xs font-semibold
-                            {{ $company->holding ? 'bg-emerald-100 text-emerald-700 dark:bg-emerald-900/40 dark:text-emerald-200'
-                                               : 'bg-gray-100 text-gray-700 dark:bg-gray-800 dark:text-gray-200' }}">
-                            {{ $company->holding ? __('company.controller') : __('company.controlled') }}
-                        </span>
-                        </td>
-                        <td class="px-4 py-3">
-                        <span class="inline-flex items-center rounded-full px-2 py-1 text-xs font-semibold
-                            {{ $company->company->status ? 'bg-emerald-100 text-emerald-700 dark:bg-emerald-900/40 dark:text-emerald-200'
-                                               : 'bg-red-100 text-red-700 dark:bg-red-800 dark:text-red-200' }}">
-                            {{ $company->company->status ? __('reports.active') : __('reports.inactive') }}
-                        </span>
-                        </td>
-                        <td class="px-4 py-3">
-                            <div class="flex items-center gap-3">
-                                <button
-                                    type="button"
-                                    wire:click="openAddChild({{ $company->company_id }})"
-                                    class="inline-flex items-center justify-center rounded-lg p-2 text-indigo-600 hover:bg-indigo-50 hover:text-indigo-800
-                                    dark:text-indigo-400 dark:hover:bg-indigo-950/40 dark:hover:text-indigo-300"
-                                    title="{{ __('buttons.add') }}"
-                                >
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
-                                    </svg>
-                                </button>
-
-                                <button
-                                    wire:key="toggle-btn-{{ $company->id }}"
-                                    type="button"
-                                    wire:click="confirmToggleStatus({{ $company->id }})"
-                                    class="inline-flex items-center justify-center rounded-lg p-2
-                                    {{ $company->status ? 'text-emerald-600 hover:bg-emerald-50 hover:text-emerald-800 dark:text-emerald-400 dark:hover:bg-emerald-950/30'
-                                      : 'text-rose-600 hover:bg-rose-50 hover:text-rose-800 dark:text-rose-400 dark:hover:bg-rose-950/30' }}"
-                                    title="{{ $company->status ? __('reports.active') : __('reports.inactive') }}"
-                                >
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 24 24" fill="currentColor">
-                                        <circle cx="12" cy="12" r="9" />
-                                    </svg>
-                                </button>
-                            </div>
-                        </td>
-                    </tr>
-                @empty
-                    <tr>
-                        <td colspan="6" class="px-4 py-8 text-center text-sm text-gray-500 dark:text-gray-400">
-                            {{ __('reports.no_results_found') }}
-                        </td>
-                    </tr>
-                @endforelse
-                </tbody>
-            </table>
+                                        <button
+                                            wire:key="toggle-btn-{{ $company->id }}"
+                                            type="button"
+                                            wire:click="confirmToggleStatus({{ $company->id }})"
+                                            class="inline-flex items-center justify-center rounded-lg p-2
+                                            {{ $company->status ? 'text-emerald-600 hover:bg-emerald-50 hover:text-emerald-800 dark:text-emerald-400 dark:hover:bg-emerald-950/30'
+                                              : 'text-rose-600 hover:bg-rose-50 hover:text-rose-800 dark:text-rose-400 dark:hover:bg-rose-950/30' }}"
+                                            title="{{ $company->status ? __('reports.active') : __('reports.inactive') }}"
+                                        >
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 24 24" fill="currentColor">
+                                                <circle cx="12" cy="12" r="9" />
+                                            </svg>
+                                        </button>
+                                    </div>
+                                </td>
+                            </tr>
+                        @empty
+                            <tr>
+                                <td colspan="6" class="px-4 py-8 text-center text-sm text-gray-500 dark:text-gray-400">
+                                    {{ __('reports.no_results_found') }}
+                                </td>
+                            </tr>
+                        @endforelse
+                    </tbody>
+                </table>
+            </div>
         </div>
     </div>
 
