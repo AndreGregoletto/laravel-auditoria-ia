@@ -1,6 +1,10 @@
 ---
 name: Bug Report
 about: Report a system bug
+title: ''
+labels: ''
+assignees: ''
+
 ---
 
 ## Description
