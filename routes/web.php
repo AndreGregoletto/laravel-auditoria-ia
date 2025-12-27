@@ -11,8 +11,9 @@ use App\Livewire\CompanyTree\Create as CompanyTreeCreate;
 use App\Livewire\CompanyTree\Edit   as CompanyTreeEdit;
 
 use App\Livewire\CompanyTree\OrganizationalChart\Index  as orgChart;
-//use App\Livewire\CompanyTree\OrganizationalChart\Create as CompanyTreeOrganizationalChartCreate;
-//use App\Livewire\CompanyTree\OrganizationalChart\Edit   as CompanyTreeOrganizationalChartEdit;
+
+use App\Livewire\Reports\TreeCompany        as ReportTreeCompany;
+use App\Livewire\Reports\TreeCompany\Index  as ReportTreeCompanyIndex;
 
 Route::view('/', 'welcome');
 
@@ -44,6 +45,14 @@ Route::get('/audits', function () {
 //    return AuditLog::latest()->paginate(50);
 });
 
+#Reports
+Route::prefix('reports')->name('reports.')->group(function () {
+    Route::prefix('companies')->name('companies.')->group(function () {
+        Route::get('/tree', ReportTreeCompany::class)->name('tree');
+        Route::get('/{company_tree}/tree_company', ReportTreeCompanyIndex::class)->name('index');
+    });
+})->middleware(['auth', 'verified']);
+
 #Settings
 Route::prefix('settings')->name('settings.')->group(function (){
     Route::prefix('companies')->name('companies.')->group(function () {
@@ -59,8 +68,6 @@ Route::prefix('settings')->name('settings.')->group(function (){
 
         Route::prefix('organizational_chart')->name('organizational_chart.')->group(function () {
             Route::get('{company_tree}/org_chart', orgChart::class)->name('index');
-//        Route::get('/create', CompanyTreeCreate::class)->name('create');
-//        Route::get('/{company_tree}/edit', CompanyTreeEdit::class)->name('edit');
         });
 
     });

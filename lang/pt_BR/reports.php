@@ -39,4 +39,6 @@ return [
     'open_in_new_tab'  => 'Abrir em uma nova aba',
     'tree'             => 'Árvore',
     'org_chart'        => 'Organograma',
+    'see_report'       => 'Ver o Relatório',
+    'company_hold'     => 'Empresa Controladora',
 ];

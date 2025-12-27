@@ -25,6 +25,11 @@ class CompanyTree extends Model
         return $this->hasOne(Company::class, 'id', 'company_tree_id');
     }
 
+    function companyParent()
+    {
+        return $this->hasOne(Company::class, 'id', 'company_parent_id');
+    }
+
     public function parentTree()
     {
         return $this->belongsTo(self::class, 'company_tree_id');

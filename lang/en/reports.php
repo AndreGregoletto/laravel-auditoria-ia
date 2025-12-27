@@ -39,4 +39,6 @@ return [
     'open_in_new_tab'  => 'Open in new tab',
     'tree'             => 'Tree',
     'org_chart'        => 'Organizational Chart',
+    'see_report'       => 'See Report',
+    'company_hold'     => 'Company Holding',
 ];
