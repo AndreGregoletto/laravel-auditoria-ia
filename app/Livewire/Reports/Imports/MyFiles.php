@@ -14,7 +14,7 @@ class MyFiles extends Component
     {
         $file = ImportFile::whereId($id)
             ->whereUserId(Auth::id())
-            ->where('file_step_id', 0)
+            ->where('file_step_id', 5)
             ->where('file_status_id', 1)
             ->firstOrFail();
 
