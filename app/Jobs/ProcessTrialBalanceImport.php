@@ -76,14 +76,15 @@ class ProcessTrialBalanceImport implements ShouldQueue
 
                 $batchData[] = [
                     'file_id'          => $importFile->id,
+                    'company_id'       => $importFile->company_id,
                     'file_line'        => $line + 1,
-                    'account'          => $row[$columnMap['account']] ?? null,
-                    'description'      => $row[$columnMap['description']] ?? null,
-                    'previous_balance' => $this->toDecimal($row[$columnMap['previous_balance']] ?? null),
-                    'debit'            => $this->toDecimal($row[$columnMap['debit']] ?? null),
-                    'credit'           => $this->toDecimal($row[$columnMap['credit']] ?? null),
-                    'monthly_activity' => $this->toDecimal($row[$columnMap['monthly_activity']] ?? null),
-                    'closing_balance'  => $this->toDecimal($row[$columnMap['closing_balance']] ?? null),
+                    'account'          => $row[$columnMap['account']] ?? '',
+                    'description'      => $row[$columnMap['description']] ?? '',
+                    'previous_balance' => $this->toDecimal($row[$columnMap['previous_balance']] ?? ''),
+                    'debit'            => $this->toDecimal($row[$columnMap['debit']] ?? ''),
+                    'credit'           => $this->toDecimal($row[$columnMap['credit']] ?? ''),
+                    'monthly_activity' => $this->toDecimal($row[$columnMap['monthly_activity']] ?? ''),
+                    'closing_balance'  => $this->toDecimal($row[$columnMap['closing_balance']] ?? ''),
                     'red_flag'         => 0,
                     'status'           => 1,
                     'created_at'       => $now,
@@ -113,8 +114,7 @@ class ProcessTrialBalanceImport implements ShouldQueue
             ]);
 
             Log::error("Erro na importação ID {$this->importFileId}: " . $e->getMessage());
-//            report($e);
-//            return;
+
             throw $e;
         }
     }

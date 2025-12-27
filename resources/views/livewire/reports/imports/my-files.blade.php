@@ -72,7 +72,7 @@
 
                 @empty
                     <tr>
-                        <td colspan="4" class="text-left py-6 text-gray-400">
+                        <td colspan="4" class="text-left py-6 text-gray-400 px-4">
                             {{ __('reports.no_files_uploaded_yet') }}
                         </td>
                     </tr>
