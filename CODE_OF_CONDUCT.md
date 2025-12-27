@@ -1,22 +1,23 @@
+# ✅ CODE_OF_CONDUCT.md (corporate + neutro)
+
 # Code of Conduct
 
-This project is maintained by a private development team.
+This project is developed and maintained in a professional and collaborative environment.
 
-We expect all contributors, collaborators, and stakeholders to maintain a professional,
-respectful, and ethical behavior in all interactions related to this project.
+All contributors are expected to conduct themselves with integrity, respect, and professionalism.
 
 ## Expected Behavior
 - Respectful and constructive communication
-- Professional collaboration
-- Compliance with project guidelines and decisions
+- Professional collaboration and feedback
+- Respect for confidentiality and project boundaries
 
 ## Unacceptable Behavior
 - Harassment, discrimination, or offensive language
-- Disrespectful or disruptive conduct
-- Sharing confidential or internal information without authorization
+- Disruptive or hostile behavior
+- Unauthorized disclosure of confidential information
 
 ## Enforcement
-Any violation of this code may result in restricted access or removal from the project.
+Violations of this code may result in removal of access or other corrective actions.
 
-For questions or reports, contact:
+For concerns or reports, contact:
 📧 argregoletto@gmail.com
