@@ -33,7 +33,7 @@ class ProcessTrialBalanceImport implements ShouldQueue
 
         try {
             $importFile = ImportFile::where('id', $this->importFileId)
-                ->where('file_status_id', 1)
+                ->where('file_status_id', 2)
                 ->where('file_step_id', 5)
                 ->firstOrFail();
 
@@ -109,7 +109,7 @@ class ProcessTrialBalanceImport implements ShouldQueue
 
             ImportFile::where('id', $this->importFileId)->update([
                 'file_step_id'   => 3,
-                'file_status_id' => 0,
+                'file_status_id' => 1,
                 'error_log'      => substr($e->getMessage(), 0, 250)
             ]);
 

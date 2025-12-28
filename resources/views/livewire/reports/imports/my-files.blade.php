@@ -44,8 +44,8 @@
                                 @default <span class="text-blue-400">{{ __('reports.in_queue') }}</span>
                             @endswitch
                         </td>
-                        <td class="px-4 py-3 {{ $file->file_status_id === 1 ? 'text-green-500' : 'text-red-500' }}">
-                            {{ $file->file_status_id === 1 ? __('reports.active') : __('reports.inactive') }}
+                        <td class="px-4 py-3 {{ $file->file_status_id === 1 ? 'text-red-500' : 'text-green-500' }}">
+                            {{ $file->file_status_id === 1 ? __('reports.inactive') : __('reports.active') }}
                         </td>
 
                         <td class="px-4 py-3">{{ $file->created_at->translatedFormat('d F Y, H:i') }}</td>
