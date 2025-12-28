@@ -10,6 +10,7 @@ return [
     'my_uploaded_files' => 'Meus Arquivos Enviados',
     'settings'          => 'Configurações',
     'company'           => 'Empresa',
+    'companies'         => 'Empresas',
     'company_tree'      => 'Árvore da Empresa',
     'consult'           => 'Consultar',
     'new'               => 'Novo',

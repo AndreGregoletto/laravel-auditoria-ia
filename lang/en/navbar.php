@@ -10,6 +10,7 @@ return [
     'my_uploaded_files' => 'My Uploaded Files',
     'settings'          => 'Settings',
     'company'           => 'Company',
+    'companies'         => 'Companies',
     'company_tree'      => 'Company Tree',
     'consult'           => 'Consult',
     'new'               => 'New',

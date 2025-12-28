@@ -12,6 +12,7 @@ use App\Livewire\CompanyTree\Edit   as CompanyTreeEdit;
 
 use App\Livewire\CompanyTree\OrganizationalChart\Index  as orgChart;
 
+use App\Livewire\Reports\Companies          as ReportCompanies;
 use App\Livewire\Reports\TreeCompany        as ReportTreeCompany;
 use App\Livewire\Reports\TreeCompany\Index  as ReportTreeCompanyIndex;
 
@@ -48,6 +49,7 @@ Route::get('/audits', function () {
 #Reports
 Route::prefix('reports')->name('reports.')->group(function () {
     Route::prefix('companies')->name('companies.')->group(function () {
+        Route::get('/index', ReportCompanies::class)->name('index');
         Route::get('/tree', ReportTreeCompany::class)->name('tree');
         Route::get('/{company_tree}/tree_company', ReportTreeCompanyIndex::class)->name('index');
     });
