@@ -133,7 +133,7 @@ Currently, the model is in its 1.0 version.
 
 ## ✒️ Autores
 
-* **André Gregoletto** - *Technical Lead and Principal Developer* - [AndreGregoletto](https://github.com/AndreGregoletto)
+* **André Gregoletto** - *Technical Lead and Principal Developer* - [AndreGregoletto](https://www.linkedin.com/in/andr%C3%A9-gregoletto-aa7146240/)
 * **Isaías Teofilo** - *Consultant and Creator of Business Rules.* - [Isaias]()
 
 

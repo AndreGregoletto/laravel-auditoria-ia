@@ -49,6 +49,7 @@
                         <span class="pc-arrow"><i class="ti ti-chevron-right"></i></span>
                     </a>
                     <ul class="pc-submenu">
+                        <li class="pc-item"><a class="pc-link" href="{{ route('reports.companies.index') }}" data-i18n="Level 3.1">{{ __('navbar.companies') }}</a></li>
                         <li class="pc-item"><a class="pc-link" href="{{ route('reports.companies.tree') }}" data-i18n="Level 3.1">{{ __('navbar.company_tree') }}</a></li>
                     </ul>
                 </li>
