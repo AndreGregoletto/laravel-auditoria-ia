@@ -26,8 +26,7 @@
     </head>
     <body class="font-sans antialiased">
 
-        <div class="loader-bg fixed inset-0 bg-white dark:bg-themedark-cardbg z-[1034]">
-{{--        <div class="loader-bg fixed inset-0 bg-white dark:bg-themedark-cardbg z-[1034]" id="page-loader">--}}
+        <div class="loader-bg fixed inset-0 bg-white dark:bg-themedark-cardbg z-[1034]" id="page-loader">
             <div class="loader-track h-[5px] w-full inline-block absolute overflow-hidden top-0">
                 <div class="loader-fill w-[300px] h-[5px] bg-primary-500 absolute top-0 left-0 animate-[hitZak_0.6s_ease-in-out_infinite_alternate]"></div>
             </div>
@@ -113,16 +112,28 @@
                 if (typeof initComponents === "function") initComponents();
             }
 
-            // PRIMEIRO LOAD REAL
-            window.addEventListener('load', function () {
-                setTimeout(initThemeLayout, 50);
+            function hidePageLoader() {
+                const el = document.getElementById('page-loader');
+                if (!el) return;
+
+                // animação suave
+                el.style.transition = 'opacity 200ms ease';
+                el.style.opacity = '0';
+
+                setTimeout(() => {
+                    el.style.display = 'none';
+                }, 220);
+            }
+
+            // some quando tudo carregar
+            window.addEventListener('load', () => {
+                hidePageLoader();
             });
 
-            // TODAS AS NAVEGAÇÕES LIVEWIRE
-            document.addEventListener("livewire:navigated", function () {
-                setTimeout(initThemeLayout, 0);
-            });
-
+            // fail-safe: se por algum motivo não disparar, some mesmo assim
+            setTimeout(() => {
+                hidePageLoader();
+            }, 2500);
         </script>
 
     </body>
