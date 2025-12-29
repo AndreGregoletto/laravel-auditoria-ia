@@ -11,4 +11,5 @@ return [
     'save_change' => 'Salvar Mudanças',
     'add'         => 'Adicionar',
     'confirm'     => 'Confirmar',
+    'download'    => 'Download',
 ];

@@ -32,4 +32,14 @@ class ImportFile extends Model
     {
         return $this->hasOne(TypeFile::class, 'id', 'file_service');
     }
+
+    public function company(): HasOne
+    {
+        return $this->hasOne(Company::class, 'id', 'company_id');
+    }
+
+    public function user(): HasOne
+    {
+        return $this->hasOne(User::class, 'id', 'user_id');
+    }
 }

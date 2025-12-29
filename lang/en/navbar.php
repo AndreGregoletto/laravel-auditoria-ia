@@ -16,6 +16,8 @@ return [
     'new'               => 'New',
     'edit'              => 'Edit',
     'ask_system'        => 'Ask the System',
+    'files'             => 'Files',
+    'sent'              => 'Sent',
 
     'search_here'   => 'Search here. . .',
 

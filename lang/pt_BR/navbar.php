@@ -16,6 +16,8 @@ return [
     'new'               => 'Novo',
     'edit'              => 'Editar',
     'ask_system'        => 'Pergunte ao Sistema',
+    'files'             => 'Arquivos',
+    'sent'              => 'Enviados',
 
     'search_here'   => 'Pesquisar. . .',
 

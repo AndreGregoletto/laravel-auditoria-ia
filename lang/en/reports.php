@@ -13,7 +13,8 @@ return [
     'reference_month' => 'Reference month',
     'reference_year' => 'Reference year',
     'destination_service' => 'Destination Service',
-
+    'user' => 'User',
+    'company' => 'Company',
     'processing' => 'Processing',
     'processed'  => 'Processed',
     'error'      => 'Error',

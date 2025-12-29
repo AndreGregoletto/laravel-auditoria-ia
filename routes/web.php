@@ -15,6 +15,7 @@ use App\Livewire\CompanyTree\OrganizationalChart\Index  as orgChart;
 use App\Livewire\Reports\Companies          as ReportCompanies;
 use App\Livewire\Reports\TreeCompany        as ReportTreeCompany;
 use App\Livewire\Reports\TreeCompany\Index  as ReportTreeCompanyIndex;
+use App\Livewire\Reports\UploadedFiles      as ReportUploadedFiles;
 
 Route::view('/', 'welcome');
 
@@ -57,6 +58,8 @@ Route::prefix('reports')->name('reports.')->group(function () {
         Route::get('/tree', ReportTreeCompany::class)->name('tree');
         Route::get('/{company_tree}/tree_company', ReportTreeCompanyIndex::class)->name('index_tree_company');
     });
+
+    Route::get('uploaded_files', ReportUploadedFiles::class)->name('uploaded_files');
 })->middleware(['auth', 'verified']);
 
 #Settings

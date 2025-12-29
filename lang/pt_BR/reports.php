@@ -13,7 +13,8 @@ return [
     'reference_month' => 'Mês de referência',
     'reference_year' => 'Ano de referência',
     'destination_service' => 'Destino do Serviço',
-
+    'user' => 'Usuário',
+    'company' => 'Empresa',
     'processing' => 'Processando',
     'processed'  => 'Processado',
     'error'      => 'Erro',

@@ -61,6 +61,16 @@
                         <li class="pc-item"><a class="pc-link" href="{{ route('reports.companies.tree') }}" data-i18n="Level 3.1">{{ __('navbar.company_tree') }}</a></li>
                     </ul>
                 </li>
+                <li class="pc-item pc-hasmenu">
+                    <a href="#!" class="pc-link">
+                        <span class="pc-micon"><i class="ph ph-files"></i></span>
+                        <span class="pc-mtext">{{ __('navbar.files') }}</span>
+                        <span class="pc-arrow"><i class="ti ti-chevron-right"></i></span>
+                    </a>
+                    <ul class="pc-submenu">
+                        <li class="pc-item"><a class="pc-link" href="{{ route('reports.uploaded_files') }}" data-i18n="Level 4.1">{{ __('navbar.sent') }}</a></li>
+                    </ul>
+                </li>
                 <li class="pc-item pc-caption">
                     <label data-i18n="{{ __('navbar.settings') }}">{{ __('navbar.settings') }}</label>
                 </li>
@@ -71,8 +81,8 @@
                         <span class="pc-arrow"><i class="ti ti-chevron-right"></i></span>
                     </a>
                     <ul class="pc-submenu">
-                        <li class="pc-item"><a class="pc-link" href="{{ route('settings.companies.index') }}" data-i18n="Level 4.1">{{ __('navbar.consult') }}</a></li>
-                        <li class="pc-item"><a class="pc-link" href="{{ route('settings.companies.create') }}" data-i18n="Level 4.1">{{ __('navbar.new') }}</a></li>
+                        <li class="pc-item"><a class="pc-link" href="{{ route('settings.companies.index') }}" data-i18n="Level 5.1">{{ __('navbar.consult') }}</a></li>
+                        <li class="pc-item"><a class="pc-link" href="{{ route('settings.companies.create') }}" data-i18n="Level 5.1">{{ __('navbar.new') }}</a></li>
                     </ul>
                 </li>
                 <li class="pc-item pc-hasmenu">
@@ -82,70 +92,9 @@
                         <span class="pc-arrow"><i class="ti ti-chevron-right"></i></span>
                     </a>
                     <ul class="pc-submenu">
-                        <li class="pc-item"><a class="pc-link" href="{{ route('settings.companies_tree.index') }}" data-i18n="Level 5.1">{{ __('navbar.consult') }}</a></li>
-                        <li class="pc-item"><a class="pc-link" href="{{ route('settings.companies_tree.create') }}" data-i18n="Level 5.1">{{ __('navbar.new') }}</a></li>
+                        <li class="pc-item"><a class="pc-link" href="{{ route('settings.companies_tree.index') }}" data-i18n="Level 6.1">{{ __('navbar.consult') }}</a></li>
+                        <li class="pc-item"><a class="pc-link" href="{{ route('settings.companies_tree.create') }}" data-i18n="Level 6.1">{{ __('navbar.new') }}</a></li>
                     </ul>
-                </li>
-
-                <li class="pc-item pc-caption">
-                    <label data-i18n="Other">Other</label>
-                </li>
-                <li class="pc-item pc-hasmenu">
-                    <a href="#!" class="pc-link"
-                    ><span class="pc-micon"> <i class="ph ph-tree-structure"></i> </span><span class="pc-mtext" data-i18n="Menu levels">Menu levels</span
-                        ><span class="pc-arrow"><i class="ti ti-chevron-right"></i></span
-                        ></a>
-                    <ul class="pc-submenu">
-                        <li class="pc-item"><a class="pc-link" href="#!" data-i18n="Level 2.1">Level 2.1</a></li>
-                        <li class="pc-item pc-hasmenu">
-                            <a href="#!" class="pc-link">
-                                <span data-i18n="Level 2.2">Level 2.2</span>
-                                <span class="pc-arrow"><i class="ti ti-chevron-right"></i></span
-                                ></a>
-                            <ul class="pc-submenu">
-                                <li class="pc-item"><a class="pc-link" href="#!" data-i18n="Level 6.1">Level 3.1</a></li>
-                                <li class="pc-item"><a class="pc-link" href="#!" data-i18n="Level 6.2">Level 3.2</a></li>
-                                <li class="pc-item pc-hasmenu">
-                                    <a href="#!" class="pc-link">
-                                        <span data-i18n="Level 3.3">Level 3.3</span>
-                                        <span class="pc-arrow"><i class="ti ti-chevron-right"></i></span>
-                                    </a>
-                                    <ul class="pc-submenu">
-                                        <li class="pc-item"><a class="pc-link" href="#!" data-i18n="Level 7.1">Level 4.1</a></li>
-                                        <li class="pc-item"><a class="pc-link" href="#!" data-i18n="Level 7.2">Level 4.2</a></li>
-                                    </ul>
-                                </li>
-                            </ul>
-                        </li>
-                        <li class="pc-item pc-hasmenu">
-                            <a href="#!" class="pc-link">
-                                <span data-i18n="Level 2.3">Level 2.3</span>
-                                <span class="pc-arrow"><i class="ti ti-chevron-right"></i></span
-                                ></a>
-                            <ul class="pc-submenu">
-                                <li class="pc-item"><a class="pc-link" href="#!" data-i18n="Level 3.1">Level 3.1</a></li>
-                                <li class="pc-item"><a class="pc-link" href="#!" data-i18n="Level 3.2">Level 3.2</a></li>
-                                <li class="pc-item pc-hasmenu">
-                                    <a href="#!" class="pc-link">
-                                        <span data-i18n="Level 3.3">Level 3.3</span>
-                                        <span class="pc-arrow"><i class="ti ti-chevron-right"></i></span>
-                                    </a>
-                                    <ul class="pc-submenu">
-                                        <li class="pc-item"><a class="pc-link" href="#!" data-i18n="Level 4.1">Level 4.1</a></li>
-                                        <li class="pc-item"><a class="pc-link" href="#!" data-i18n="Level 4.2">Level 4.2</a></li>
-                                    </ul>
-                                </li>
-                            </ul>
-                        </li>
-                    </ul>
-                </li>
-                <li class="pc-item">
-                    <a href="../other/sample-page.html" class="pc-link">
-                        <span class="pc-micon">
-                          <i class="ph ph-desktop"></i>
-                        </span>
-                        <span class="pc-mtext" data-i18n="Sample Page">Sample page</span>
-                    </a>
                 </li>
             </ul>
         </div>
