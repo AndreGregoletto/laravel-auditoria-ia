@@ -2,7 +2,7 @@
 
 return [
     'dashboard'        => 'Dashboard',
-    'title_dashboard'  => 'Pergunte a inteligencia artificial sobre auditoria.',
+    'title_audit_ask'  => 'Faça sua pergunta sobre a auditoria ao sistema.',
     'processing_audit' => 'Processando auditoria. . .',
     'enter_audit_ask'  => 'Digite sua pergunta de auditoria. . .',
     'submit'           => 'Enviar',

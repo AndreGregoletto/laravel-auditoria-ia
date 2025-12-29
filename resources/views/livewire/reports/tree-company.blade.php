@@ -1,7 +1,7 @@
 <x-slot name="header">
     <div class="flex items-center justify-between">
         <h1 class="text-xl font-semibold text-gray-900 dark:text-gray-100">
-            {{ __('navbar.reports') }} / {{ __('navbar.company_tree') }}
+            {{ __('navbar.reports') }} / {{ __('company.name') }} / {{ __('navbar.company_tree') }}
         </h1>
     </div>
 </x-slot>

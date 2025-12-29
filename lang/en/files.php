@@ -2,7 +2,7 @@
 
 return [
     'dashboard'           => 'Dashboard',
-    'title_dashboard'     => 'Ask artificial intelligence about auditing.',
+    'title_audit_ask'  => 'Ask your question regarding the system audit.',
     'processing_audit'    => 'Processing audit. . .',
     'enter_audit_ask'     => 'Enter your audit question. . .',
     'submit'              => 'Send',

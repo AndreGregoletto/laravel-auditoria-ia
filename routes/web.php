@@ -22,6 +22,10 @@ Route::view('dashboard', 'dashboard')
     ->middleware(['auth', 'verified'])
     ->name('dashboard');
 
+Route::view('ask-system', 'ask-system')
+    ->middleware(['auth', 'verified'])
+    ->name('ask-system');
+
 Route::group(['prefix' => 'queue-import'], function(){
 
     Route::get('balancete', \App\Livewire\SendExcel::class)

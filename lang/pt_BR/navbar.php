@@ -15,6 +15,7 @@ return [
     'consult'           => 'Consultar',
     'new'               => 'Novo',
     'edit'              => 'Editar',
+    'ask_system'        => 'Pergunte ao Sistema',
 
     'search_here'   => 'Pesquisar. . .',
 

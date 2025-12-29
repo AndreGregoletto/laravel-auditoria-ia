@@ -1,7 +1,7 @@
 <div class="">
 
     <h3 class="text-lg font-semibold mb-4 text-center">
-        {{ __('files.title_dashboard') }}
+        {{ __('files.title_audit_ask') }}
     </h3>
 
     <!-- Histórico -->

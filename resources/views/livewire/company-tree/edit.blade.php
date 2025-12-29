@@ -3,7 +3,7 @@
         <div class="flex items-center justify-between">
             <h1 class="text-xl font-semibold text-gray-900 dark:text-gray-100">
                 {{ __('navbar.settings') }}
-                / {{ __('navbar.company_tree') }}
+                / <a href="{{ route('settings.companies_tree.index') }}" class="font-semibold text-indigo-600 group-hover:text-indigo-700 dark:text-indigo-400 dark:group-hover:text-indigo-300">{{ __('navbar.company_tree') }}</a>
                 / {{ __('navbar.edit') }}
                 @if(isset($companies[0]))
                     / {{ __('reports.tree') }} {{ $companies[0]['company']['commercial_name'] ?? $companies[0]['company']['name'] }}

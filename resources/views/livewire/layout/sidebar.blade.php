@@ -21,6 +21,14 @@
                         <span class="pc-mtext" data-i18n="Dashboard">{{ __('navbar.dashboard') }}</span>
                     </a>
                 </li>
+                <li class="pc-item">
+                    <a href="{{ route('ask-system') }}" class="pc-link">
+                        <span class="pc-micon">
+                            <i class="ph ph-sparkle"></i>
+                        </span>
+                        <span class="pc-mtext" data-i18n="Dashboard">{{ __('navbar.ask_system') }}</span>
+                    </a>
+                </li>
 
                 <li class="pc-item pc-hasmenu">
                     <a href="#!" class="pc-link">
