@@ -51,7 +51,7 @@ Route::prefix('reports')->name('reports.')->group(function () {
     Route::prefix('companies')->name('companies.')->group(function () {
         Route::get('/index', ReportCompanies::class)->name('index');
         Route::get('/tree', ReportTreeCompany::class)->name('tree');
-        Route::get('/{company_tree}/tree_company', ReportTreeCompanyIndex::class)->name('index');
+        Route::get('/{company_tree}/tree_company', ReportTreeCompanyIndex::class)->name('index_tree_company');
     });
 })->middleware(['auth', 'verified']);
 

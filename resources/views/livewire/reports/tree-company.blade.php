@@ -50,7 +50,7 @@
                 <div class="mt-3 h-px bg-gray-100 dark:bg-gray-800"></div>
 
                 <div class="mt-3 flex items-center justify-between">
-                    <a href="{{ route('reports.companies.index', $company['id']) }}"
+                    <a href="{{ route('reports.companies.index_tree_company', $company['id']) }}"
                        class="text-xs font-semibold text-indigo-600 group-hover:text-indigo-700 dark:text-indigo-400 dark:group-hover:text-indigo-300">
                         {{ __('reports.see_report') }}
                     </a>
