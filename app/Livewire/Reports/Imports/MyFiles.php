@@ -15,10 +15,10 @@ class MyFiles extends Component
         $file = ImportFile::whereId($id)
             ->whereUserId(Auth::id())
             ->where('file_step_id', 5)
-            ->where('file_status_id', 1)
+            ->where('file_status_id', 2)
             ->firstOrFail();
 
-        $file->update(['file_status_id', 0, 'file_step_id' => 4]);
+        $file->update(['file_status_id', 1, 'file_step_id' => 4]);
         session()->flash('success', __('success.file_cancel'));
     }
 
