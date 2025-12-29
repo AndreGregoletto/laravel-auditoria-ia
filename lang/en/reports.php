@@ -5,6 +5,7 @@ return [
     'extension' => 'Extension',
     'file_size' => 'File Size',
     'file_states' => 'File States',
+    'file_step' => 'File Step',
     'status' => 'Status',
     'send_in' => 'Send In',
     'updated_in' => 'Updated In',
@@ -21,6 +22,8 @@ return [
     'cancelled'  => 'Cancelled',
     'in_queue'   => 'In Queue',
     'rag_generated' => 'RAG Generated',
+    'records' => 'Records',
+    'clear_filters' => 'Clear filters',
 
     'active' => 'Active',
     'inactive' => 'Inactive',

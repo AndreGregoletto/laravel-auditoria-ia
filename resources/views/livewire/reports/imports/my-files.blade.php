@@ -11,10 +11,8 @@
                 <tr class="text-left text-xs font-semibold uppercase tracking-wider text-gray-600 dark:text-gray-300">
                     <th class="px-4 py-3">{{ __('reports.destination_service') }}</th>
                     <th class="px-4 py-3">{{ __('reports.file_name') }}</th>
-{{--                    <th class=px-4 py-3>{{ __('reports.extension') }}</th>--}}
-{{--                    <th class=px-4 py-3>{{ __('reports.file_size') }}</th>--}}
+                    <th class="px-4 py-3">{{ __('reports.file_step') }}</th>
                     <th class="px-4 py-3">{{ __('reports.file_states') }}</th>
-                    <th class="px-4 py-3">{{ __('reports.status') }}</th>
                     <th class="px-4 py-3">{{ __('reports.send_in') }}</th>
                     <th class="px-4 py-3">{{ __('reports.updated_in') }}</th>
                     <th class="px-4 py-3">{{ __('reports.actions') }}</th>
@@ -33,8 +31,6 @@
                     ">
                         <td class="px-4 py-3">{{ __("services.{$file->type_file->name}") }}</td>
                         <td class="px-4 py-3">{{ $file->file_name }}</td>
-{{--                        <td class="px-4 py-3">{{ $file->file_extension }}</td>--}}
-{{--                        <td class="px-4 py-3">{{ number_format($file->file_size / 1024, 1) }} KB</td>--}}
                         <td class="px-4 py-3">
                             @switch($file->file_step_id)
                                 @case(1) <span class="text-yellow-500">{{ __('reports.processing') }}</span> @break

@@ -2,8 +2,12 @@
 
 namespace App\Livewire\Reports;
 
+use App\Models\Company;
+use App\Models\FileStatus;
 use App\Models\FileStep;
 use App\Models\ImportFile;
+use App\Models\TypeFile;
+use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
 use Livewire\WithPagination;
@@ -12,74 +16,107 @@ class UploadedFiles extends Component
 {
     use WithPagination;
 
-//    public array $form = [
-//
-//    ];
+    public string $filterFileName = '';
+    public string $filterUser = '';
+    public string $filterCompany = '';
+    public string $filterExtension = '';
 
-    public string $search = '';
+    public string $filterService = '';
+    public string $filterStep = '';
+    public string $filterStatus = '';
+
+    public string $filterMonth = '';
+    public string $filterYear  = '';
+
+    protected $queryString = [
+        'filterFileName' => ['except' => ''],
+        'filterUser'     => ['except' => ''],
+        'filterCompany'  => ['except' => ''],
+        'filterExtension'=> ['except' => ''],
+        'filterService'  => ['except' => ''],
+        'filterStep'     => ['except' => ''],
+        'filterStatus'   => ['except' => ''],
+        'filterMonth'    => ['except' => ''],
+        'filterYear'     => ['except' => ''],
+    ];
 
     public function updatedSearch(): void
     {
         $this->resetPage();
     }
+    public function updated($name, $value): void
+    {
+        if (str_starts_with($name, 'filter')) {
+            $this->resetPage();
+        }
+    }
+
+    public function clearFilters(): void
+    {
+        $this->reset([
+            'filterFileName', 'filterUser', 'filterCompany', 'filterExtension',
+            'filterService', 'filterStep', 'filterStatus',
+            'filterMonth', 'filterYear'
+        ]);
+
+        $this->resetPage();
+    }
 
     public function render()
     {
-        $raw  = trim($this->search);
-        $term = mb_strtolower($raw);
+        $fileStatus = FileStatus::get();
+        $fileStep   = FileStep::get();
+        $typeFile   = TypeFile::get();
 
-        $activeLabel   = mb_strtolower(trim(__('reports.active')));
-        $inactiveLabel = mb_strtolower(trim(__('reports.inactive')));
+        $query = ImportFile::query()->with(['type_file', 'company', 'user']);
 
-        $files = ImportFile::query()
-            ->with(['type_file', 'company', 'user'])
-            ->when($term !== '', function ($q) use ($term, $activeLabel, $inactiveLabel) {
+        if ($t = trim($this->filterFileName)) {
+            $query->where('file_name', 'like', "%{$t}%");
+        }
 
-                $status = null;
-                if ($this->toUp($activeLabel) == $this->toUp(__('reports.active'))) {
-                    $status = 2;
-                }
-                if ($this->toUp($activeLabel) == $this->toUp( __('reports.inactive'))) {
-                    $status = 1;
-                }
+        if ($t = trim($this->filterUser)) {
+            $idUser = User::where("name", 'like', "%$t%")->pluck('id');
+            $query->whereIn('user_id', $idUser);
+        }
 
-                $fileStep = FileStep::query()
-                    ->where('name', 'like', "%{$term}%")
-                    ->pluck('id');
+        if ($t = trim($this->filterCompany)) {
+            $idCompany = Company::where("name", 'like', "%$t%")->pluck('id');
+            $query->whereIn('company_id', $idCompany);
+        }
 
-                $q->where(function ($qq) use ($term, $status, $fileStep) {
+        if (!empty($this->filterService)) {
+            $query->where('file_service', $this->filterService);
+        }
 
-                    $qq->where('file_name', 'like', "%{$term}%")
-                        ->orWhere('file_extension', 'like', "%{$term}%")
-                        ->orWhere('reference_month', 'like', "%{$term}%")
-                        ->orWhere('reference_year', 'like', "%{$term}%")
-                        ->orWhereIn('file_step_id', $fileStep);
+        if (!empty($this->filterStep)) {
+            $query->where('file_step_id', $this->filterStep);
+        }
 
-                    if (!is_null($status)) {
-                        $qq->orWhere('file_status_id', $status);
-                    }
+        if (!empty($this->filterStatus)) {
+            $query->where('file_status_id', $this->filterStatus);
+        }
 
-                    $qq->orWhereHas('company', function ($c) use ($term) {
-                        $c->where('name', 'like', "%{$term}%")
-                            ->orWhere('commercial_name', 'like', "%{$term}%")
-                            ->orWhere('cnpj', 'like', "%{$term}%");
-                    });
+        if ($t = trim($this->filterExtension)) {
+            $query->where('file_extension', 'like', "%{$t}%");
+        }
 
-                    $qq->orWhereHas('user', function ($u) use ($term) {
-                        $u->where('name', 'like', "%{$term}%")
-                            ->orWhere('email', 'like', "%{$term}%");
-                    });
+        if ($t = trim($this->filterMonth)) {
+            $query->where('reference_month', 'like', "%$t%");
+        }
 
-                    $qq->orWhereHas('type_file', function ($t) use ($term) {
-                        $t->where('name', 'like', "%{$term}%");
-                    });
-                });
-            })
+        if ($t = trim($this->filterYear)) {
+            $query->where('reference_year', 'like', "%$t%");
+        }
+
+        $files = $query
             ->latest()
             ->paginate(10);
 
         return view('livewire.reports.uploaded-files',[
-            'files' => $files
+            'files'      => $files,
+            'fileStep'   => $fileStep,
+            'typeFile'   => $typeFile,
+            'fileStatus' => $fileStatus,
         ])->layout('layouts.app');
     }
 

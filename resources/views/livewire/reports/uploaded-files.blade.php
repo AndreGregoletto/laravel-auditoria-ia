@@ -5,31 +5,111 @@
 </x-slot>
 
 <div class="space-y-6 py-12">
-    <div class="flex items-center justify-between">
-        <div class="flex items-center gap-3 w-full">
+    <div class="space-y-4">
+        <div class="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-6">
             <input type="text"
-                   wire:model.live="search"
-                   placeholder="{{ __('reports.search_here') }}"
-                   class="w-full max-w-md rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm text-gray-900
-                      focus:border-indigo-500 focus:ring-indigo-500 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-100" />
+                   wire:model.live.debounce.400ms="filterFileName"
+                   placeholder="{{ __('reports.file_name') }}"
+                   class="w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm text-gray-900
+                      focus:border-indigo-500 focus:ring-indigo-500 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-100"
+            />
+
+            <input type="text"
+                   wire:model.live.debounce.400ms="filterUser"
+                   placeholder="{{ __('reports.user') }}"
+                   class="w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm text-gray-900
+                      focus:border-indigo-500 focus:ring-indigo-500 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-100"
+            />
+
+            <input type="text"
+                   wire:model.live.debounce.400ms="filterCompany"
+                   placeholder="{{ __('reports.company') }}"
+                   class="w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm text-gray-900
+                      focus:border-indigo-500 focus:ring-indigo-500 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-100"
+            />
+
+            <select wire:model.live="filterService"
+                    class="w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm text-gray-900
+                       focus:border-indigo-500 focus:ring-indigo-500 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-100">
+                <option value="">{{ __('reports.destination_service') }}</option>
+                @foreach($typeFile as $file)
+                    <option value="{{ $file->id }}">{{ __("services.{$file->name}") }}</option>
+                @endforeach
+            </select>
+
+            <select wire:model.live="filterStep"
+                    class="w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm text-gray-900
+                       focus:border-indigo-500 focus:ring-indigo-500 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-100">
+                <option value="">{{ __('reports.file_step') }}</option>
+                @foreach($fileStep as $file)
+                    <option value="{{ $file->id }}">{{ __("reports.{$file->name_conf}") }}</option>
+                @endforeach
+            </select>
+
+            <select wire:model.live="filterStatus"
+                    class="w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm text-gray-900
+                       focus:border-indigo-500 focus:ring-indigo-500 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-100">
+                <option value="">{{ __('reports.file_states') }}</option>
+                @foreach($fileStatus as $file)
+                    <option value="{{ $file->id }}">{{ __("reports.{$file->name_conf}") }}</option>
+                @endforeach
+            </select>
         </div>
 
+        <div class="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-6">
+            <input type="number"
+                   min="1" max="12"
+                   wire:model.live.debounce.400ms="filterMonth"
+                   placeholder="{{ __('reports.reference_month') }}"
+                   class="w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm text-gray-900
+                      focus:border-indigo-500 focus:ring-indigo-500 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-100"
+            />
+
+            <input type="number"
+                   min="2000" max="2100"
+                   wire:model.live.debounce.400ms="filterYear"
+                   placeholder="{{ __('reports.reference_year') }}"
+                   class="w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm text-gray-900
+                      focus:border-indigo-500 focus:ring-indigo-500 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-100"
+            />
+
+            <input type="text"
+                   wire:model.live.debounce.400ms="filterExtension"
+                   placeholder="{{ __('reports.extension') }}"
+                   class="w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm text-gray-900
+                      focus:border-indigo-500 focus:ring-indigo-500 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-100"
+            />
+
+            <div class="sm:col-span-2 lg:col-span-3 flex gap-2">
+                <button type="button"
+                        wire:click="clearFilters"
+                        class="rounded-lg border border-gray-300 bg-white px-4 py-2 text-sm text-gray-700 hover:bg-gray-50
+                           dark:border-gray-700 dark:bg-gray-900 dark:text-gray-200 dark:hover:bg-gray-800">
+                    {{ __('reports.clear_filters') }}
+                </button>
+
+                <div class="text-sm text-gray-500 dark:text-gray-400 flex items-center">
+                    {{ $files->total() }} {{ __('reports.records') }}
+                </div>
+            </div>
+        </div>
     </div>
+
 
     <div class="relative overflow-x-auto rounded-lg border border-gray-200 dark:border-gray-800">
         <table class="min-w-[1400px] w-full table-auto divide-y divide-gray-200 dark:divide-gray-800">
             <thead class="bg-gray-50 dark:bg-gray-900/40">
                 <tr class="text-left text-xs font-semibold uppercase tracking-wider text-gray-600 dark:text-gray-300">
                     <th class="px-4 py-3 w-[120px]">{{ __('reports.destination_service') }}</th>
-                    <th class="px-4 py-3 w-[220px]">{{ __('reports.file_name') }}</th>
-                    <th class="px-4 py-3 w-[160px]">{{ __('reports.user') }}</th>
-                    <th class="px-4 py-3 w-[220px]">{{ __('reports.company') }}</th>
+                    <th class="px-4 py-3 w-[120px]">{{ __('reports.file_name') }}</th>
+                    <th class="px-4 py-3 w-[120px]">{{ __('reports.user') }}</th>
+                    <th class="px-4 py-3 w-[120px]">{{ __('reports.company') }}</th>
                     <th class="px-4 py-3 w-[80px] text-center">{{ __('reports.reference_month') }}</th>
                     <th class="px-4 py-3 w-[80px] text-center">{{ __('reports.reference_year') }}</th>
                     <th class="px-4 py-3 w-[80px] text-center">{{ __('reports.extension') }}</th>
                     <th class="px-4 py-3 w-[100px] text-right">{{ __('reports.file_size') }}</th>
-                    <th class="px-4 py-3 w-[110px] text-center">{{ __('reports.file_states') }}</th>
-                    <th class="px-4 py-3 w-[100px] text-center">{{ __('reports.status') }}</th>
+                    <th class="px-4 py-3 w-[110px] text-center">{{ __('reports.file_step') }}</th>
+                    <th class="px-4 py-3 w-[100px] text-center">{{ __('reports.file_states') }}</th>
                     <th class="px-4 py-3 w-[160px]">{{ __('reports.send_in') }}</th>
                     <th class="px-4 py-3 w-[160px]">{{ __('reports.updated_in') }}</th>
                     <th class="px-4 py-3 w-[120px] text-center">{{ __('reports.actions') }}</th>
