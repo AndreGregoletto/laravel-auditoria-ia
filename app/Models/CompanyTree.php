@@ -15,6 +15,11 @@ class CompanyTree extends Model
         'status'
     ];
 
+    protected $casts = [
+        'holding' => 'boolean',
+        'status'  => 'boolean',
+    ];
+
     public function company()
     {
         return $this->hasOne(Company::class, 'id', 'company_id');

@@ -11,4 +11,8 @@ class FileStatus extends Model
         'name_conf',
         'status'
     ];
+
+    protected $casts = [
+        'status' => 'boolean',
+    ];
 }

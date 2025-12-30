@@ -10,4 +10,8 @@ class TypeFile extends Model
         'name',
         'status'
     ];
+
+    protected $casts = [
+        'status' => 'boolean',
+    ];
 }

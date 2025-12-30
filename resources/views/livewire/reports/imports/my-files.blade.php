@@ -53,10 +53,6 @@
                                     {{ __('reports.cancel') }}
                                 </button>
 
-                                <button wire:click="$emit('replaceFile', {{ $file->id }})"
-                                        class="text-indigo-500 hover:underline">
-                                    {{ __('reports.replace') }}
-                                </button>
                             @elseif($file->file_step_id === 6 && $file->file_status_id === 1)
                                 <button wire:click="$emit('replaceFile', {{ $file->id }})"
                                         class="text-yellow-500 hover:underline">
