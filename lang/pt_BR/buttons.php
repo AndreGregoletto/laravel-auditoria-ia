@@ -7,6 +7,7 @@ return [
     'edit'        => 'Editar',
     'create'      => 'Criar',
     'cancel'      => 'Cancelar',
+    'close'       => 'Fechar',
     'save'        => 'Salvar',
     'save_change' => 'Salvar Mudanças',
     'add'         => 'Adicionar',
