@@ -18,6 +18,7 @@ return [
     'ask_system'        => 'Pergunte ao Sistema',
     'files'             => 'Arquivos',
     'sent'              => 'Enviados',
+    'register'          => 'Cadastro',
 
     'search_here'   => 'Pesquisar. . .',
 

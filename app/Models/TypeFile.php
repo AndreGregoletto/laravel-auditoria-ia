@@ -13,5 +13,7 @@ class TypeFile extends Model
 
     protected $casts = [
         'status' => 'boolean',
+        'created_at',
+        'updated_at'
     ];
 }

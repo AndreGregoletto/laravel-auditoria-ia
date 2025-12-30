@@ -9,6 +9,7 @@ return [
     'status' => 'Status',
     'send_in' => 'Enviado em',
     'updated_in' => 'Atualizado em',
+    'created_in' => 'Criado em',
     'error_log' => 'Log do Erro',
     'actions' => 'Ações',
     'reference_month' => 'Mês de referência',

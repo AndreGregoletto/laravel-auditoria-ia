@@ -18,6 +18,7 @@ return [
     'ask_system'        => 'Ask the System',
     'files'             => 'Files',
     'sent'              => 'Sent',
+    'register'          => 'Register',
 
     'search_here'   => 'Search here. . .',
 

@@ -17,6 +17,10 @@ use App\Livewire\Reports\TreeCompany        as ReportTreeCompany;
 use App\Livewire\Reports\TreeCompany\Index  as ReportTreeCompanyIndex;
 use App\Livewire\Reports\UploadedFiles      as ReportUploadedFiles;
 
+use App\Livewire\Register\DestinationService\Index  as DestinationServiceIndex;
+use App\Livewire\Register\DestinationService\Create as DestinationServiceCreate;
+use App\Livewire\Register\DestinationService\Edit   as DestinationServiceEdit;
+
 Route::view('/', 'welcome');
 
 Route::view('dashboard', 'dashboard')
@@ -79,6 +83,15 @@ Route::prefix('settings')->name('settings.')->group(function (){
             Route::get('{company_tree}/org_chart', orgChart::class)->name('index');
         });
 
+    });
+
+    Route::prefix('register')->name('register.')->group(function () {
+        Route::prefix('destination-service')->name('destination-service.')->group(function () {
+            Route::get('/', DestinationServiceIndex::class)->name('index');
+            Route::get('/create', DestinationServiceCreate::class)->name('create');
+            Route::get('/{typeFile}/edit', DestinationServiceEdit::class)->name('edit');
+
+        });
     });
 })->middleware(['auth', 'verified']);
 

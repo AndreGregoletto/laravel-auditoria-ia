@@ -96,6 +96,40 @@
                         <li class="pc-item"><a class="pc-link" href="{{ route('settings.companies_tree.create') }}" data-i18n="Level 6.1">{{ __('navbar.new') }}</a></li>
                     </ul>
                 </li>
+                <li class="pc-item pc-hasmenu">
+                    <a href="#!" class="pc-link">
+                        <span class="pc-micon">
+                            <i class="ph ph-note-pencil"></i>
+                        </span>
+                        <span class="pc-mtext">{{ __('navbar.register') }}</span>
+                        <span class="pc-arrow"><i class="ti ti-chevron-right"></i></span>
+                    </a>
+
+                    <ul class="pc-submenu">
+                        <li class="pc-item pc-hasmenu">
+                            <a href="#!" class="pc-link">
+                                <span class="pc-mtext">{{ __('reports.destination_service') }}</span>
+                                <span class="pc-arrow"><i class="ti ti-chevron-right"></i></span>
+                            </a>
+
+                            <ul class="pc-submenu">
+                                <li class="pc-item">
+                                    <a class="pc-link" href="{{ route('settings.register.destination-service.index') }}">
+                                        {{ __('navbar.consult') }}
+                                    </a>
+                                </li>
+
+                                <li class="pc-item">
+                                    <a class="pc-link" href="{{ route('settings.register.destination-service.create') }}">
+                                        {{ __('navbar.new') }}
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
+
+                    </ul>
+                </li>
+
             </ul>
         </div>
     </div>

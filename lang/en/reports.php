@@ -9,6 +9,7 @@ return [
     'status' => 'Status',
     'send_in' => 'Send In',
     'updated_in' => 'Updated In',
+    'created_in' => 'Created In',
     'error_log' => 'Error Log',
     'actions' => 'Actions',
     'reference_month' => 'Reference month',
