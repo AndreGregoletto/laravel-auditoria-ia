@@ -14,5 +14,7 @@ class FileStatus extends Model
 
     protected $casts = [
         'status' => 'boolean',
+        'created_at',
+        'updated_at',
     ];
 }

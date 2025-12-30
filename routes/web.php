@@ -21,6 +21,10 @@ use App\Livewire\Register\DestinationService\Index  as DestinationServiceIndex;
 use App\Livewire\Register\DestinationService\Create as DestinationServiceCreate;
 use App\Livewire\Register\DestinationService\Edit   as DestinationServiceEdit;
 
+use App\Livewire\Register\FileStatus\Index  as FileStatusIndex;
+use App\Livewire\Register\FileStatus\Create as FileStatusCreate;
+use App\Livewire\Register\FileStatus\Edit   as FileStatusEdit;
+
 Route::view('/', 'welcome');
 
 Route::view('dashboard', 'dashboard')
@@ -90,6 +94,13 @@ Route::prefix('settings')->name('settings.')->group(function (){
             Route::get('/', DestinationServiceIndex::class)->name('index');
             Route::get('/create', DestinationServiceCreate::class)->name('create');
             Route::get('/{typeFile}/edit', DestinationServiceEdit::class)->name('edit');
+
+        });
+
+        Route::prefix('file-status')->name('file-status.')->group(function () {
+            Route::get('/', FileStatusIndex::class)->name('index');
+            Route::get('/create', FileStatusCreate::class)->name('create');
+            Route::get('/{fileStatus}/edit', FileStatusEdit::class)->name('edit');
 
         });
     });

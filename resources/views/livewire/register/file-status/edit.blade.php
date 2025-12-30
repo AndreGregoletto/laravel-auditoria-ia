@@ -1,7 +1,7 @@
 <x-slot name="header">
     <div class="flex items-center justify-between">
         <h1 class="text-xl font-semibold text-gray-900 dark:text-gray-100">
-            {{ __('navbar.settings') }} / {{ __('navbar.register') }} / {{ __('reports.destination_service') }} / {{ __('navbar.edit') }}
+            {{ __('navbar.settings') }} / {{ __('navbar.register') }} / {{ __('reports.file_states') }} / {{ __('navbar.edit') }}
         </h1>
     </div>
 </x-slot>
@@ -14,6 +14,13 @@
                 <input type="text" wire:model="form.name"
                        class="w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm dark:border-gray-700 dark:bg-gray-900 dark:text-gray-100" />
                 @error('form.name') <p class="mt-1 text-xs text-red-600">{{ $message }}</p> @enderror
+            </div>
+
+            <div>
+                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">{{ __('reports.name_conf') }}</label>
+                <input type="text" wire:model="form.name_conf"
+                       class="w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm dark:border-gray-700 dark:bg-gray-900 dark:text-gray-100" />
+                @error('form.name_conf') <p class="mt-1 text-xs text-red-600">{{ $message }}</p> @enderror
             </div>
 
 
@@ -30,7 +37,7 @@
                 {{ __('buttons.save_change') }}
             </button>
 
-            <a href="{{ route('settings.register.destination-service.index') }}"
+            <a href="{{ route('settings.register.file-status.index') }}"
                class="inline-flex items-center rounded-lg border border-gray-300 px-4 py-2 text-sm font-semibold text-gray-700 hover:bg-gray-50 dark:border-gray-700 dark:text-gray-200 dark:hover:bg-gray-800">
                 {{ __('buttons.cancel') }}
             </a>

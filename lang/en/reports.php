@@ -34,6 +34,7 @@ return [
     'download' => 'Download RAG',
 
     'name'             => 'Name',
+    'name_conf'       => 'Configuration name',
     'commercial_name'  => 'Commercial Name',
     'cnpj'             => 'CNPJ',
     'publicity_trade'  => 'Publicity Trade',

@@ -34,6 +34,7 @@ return [
     'download' => 'Baixar RAG',
 
     'name'            => 'Nome',
+    'name_conf'       => 'Nome de configuração',
     'commercial_name' => 'Nome Comercial',
     'cnpj'            => 'CNPJ',
     'publicity_trade' => 'Comércio Público',
