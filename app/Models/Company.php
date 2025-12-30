@@ -13,4 +13,9 @@ class Company extends Model
         'publicity_trade',
         'status',
     ];
+
+    protected $casts = [
+        'status' => 'boolean',
+        'publicity_trade' => 'boolean',
+    ];
 }
