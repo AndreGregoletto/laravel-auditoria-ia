@@ -13,6 +13,7 @@ class UserNotification extends Model
         'file_id',
 //        'file_download_id', TODO create pivot table to download files generate to system
         'message',
+        'message_id',
         'status',
     ];
 
