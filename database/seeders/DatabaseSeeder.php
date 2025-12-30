@@ -27,6 +27,8 @@ class DatabaseSeeder extends Seeder
             FileStatus::class,
             TypeFiles::class,
             FileStep::class,
+            Company::class,
+            TreeCompany::class,
         ]);
     }
 }

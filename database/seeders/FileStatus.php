@@ -12,14 +12,16 @@ class FileStatus extends Seeder
      */
     public function run(): void
     {
-        \App\Models\FileStatus::insert(
+        \App\Models\FileStatus::insert([
             [
                 'name'      => 'Inactive',
                 'name_conf' => 'inactive',
+                'status'    => 1,
             ], [
                 'name'      => 'Active',
                 'name_conf' => 'active',
+                'status'    => 1,
             ],
-        );
+        ]);
     }
 }
