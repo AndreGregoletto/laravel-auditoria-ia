@@ -37,9 +37,8 @@ class HeaderNotifications extends Component
                 'message'    => $n->message,
                 'read'       => (bool) $n->read,
                 'file_id'    => $n->file_id,
-                'created_at' => optional($n->created_at)->toDateTimeString(),
+                'created_at' => optional($n->created_at)->translatedFormat('d F Y, H:i'),
             ])->toArray();
-//        dd($this->items );
     }
 
     public function markAsRead(int $id): void
