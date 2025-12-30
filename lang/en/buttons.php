@@ -13,5 +13,6 @@ return [
     'add'         => 'Add',
     'confirm'     => 'Confirm',
     'download'    => 'Download',
+    'mark_as_read'=> 'Mark as read'
 ];
 

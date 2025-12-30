@@ -50,17 +50,17 @@ new class extends Component
             <ul class="inline-flex *:min-h-header-height *:inline-flex *:items-center">
                 <li class="pc-h-item"
                     x-data="{
-        open:false,
-        top: 0,
-        left: 0,
-        place() {
-            if (!this.$refs.btn) return;
-            const r = this.$refs.btn.getBoundingClientRect();
-            this.top  = r.bottom + 10;
-            // modal um pouco maior que a do perfil
-            this.left = Math.min(window.innerWidth - 420, r.right - 400);
-        }
-    }"
+                        open:false,
+                        top: 0,
+                        left: 0,
+                        place() {
+                            if (!this.$refs.btn) return;
+                            const r = this.$refs.btn.getBoundingClientRect();
+                            this.top  = r.bottom + 10;
+                            // modal um pouco maior que a do perfil
+                            this.left = Math.min(window.innerWidth - 420, r.right - 400);
+                        }
+                    }"
                     @keydown.escape.window="open=false"
                 >
                     <!-- Botão (sino) -->
@@ -73,8 +73,8 @@ new class extends Component
 
                         <!-- badge -->
                         <span class="badge bg-success-500 text-white rounded-full z-10 absolute right-0 top-0">
-            3
-        </span>
+                            3
+                        </span>
                     </a>
 
                     <!-- Backdrop + Modal teleportados -->
@@ -121,20 +121,32 @@ new class extends Component
                                                 </p>
                                             </div>
 
-                                            <button
-                                                type="button"
-                                                class="shrink-0 inline-flex items-center gap-2 rounded-lg px-3 py-2 text-xs font-semibold
+                                            <div class="flex flex-col items-end gap-2 shrink-0">
+                                                <button
+                                                    type="button"
+                                                    class="inline-flex items-center gap-2 rounded-lg px-3 py-2 text-xs font-semibold
                                                    bg-gray-100 hover:bg-gray-200 text-gray-800
                                                    dark:bg-gray-800 dark:hover:bg-gray-700 dark:text-gray-100"
-                                            >
-                                                <i class="ph ph-download-simple"></i>
-                                                {{ __('buttons.download') }}
-                                            </button>
+                                                >
+                                                    <i class="ph ph-check-circle"></i>
+                                                    {{ __('buttons.mark_as_read') }}
+                                                </button>
+
+                                                <!-- Download -->
+                                                <button
+                                                    type="button"
+                                                    class="inline-flex items-center gap-2 rounded-lg px-3 py-2 text-xs font-semibold
+                                                   bg-gray-100 hover:bg-gray-200 text-gray-800
+                                                   dark:bg-gray-800 dark:hover:bg-gray-700 dark:text-gray-100"
+                                                >
+                                                    <i class="ph ph-download-simple"></i>
+                                                    {{ __('buttons.download') }}
+                                                </button>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
 
-                                <!-- Footer opcional -->
                                 <div class="px-4 py-3 border-t border-gray-200 dark:border-gray-800 text-center">
                                     <button
                                         type="button"

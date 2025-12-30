@@ -13,4 +13,5 @@ return [
     'add'         => 'Adicionar',
     'confirm'     => 'Confirmar',
     'download'    => 'Download',
+    'mark_as_read' => 'Marcar como lida',
 ];
