@@ -25,6 +25,10 @@ use App\Livewire\Register\FileStatus\Index  as FileStatusIndex;
 use App\Livewire\Register\FileStatus\Create as FileStatusCreate;
 use App\Livewire\Register\FileStatus\Edit   as FileStatusEdit;
 
+use App\Livewire\Register\FileStep\Index  as FileStepIndex;
+use App\Livewire\Register\FileStep\Create as FileStepCreate;
+use App\Livewire\Register\FileStep\Edit   as FileStepEdit;
+
 Route::view('/', 'welcome');
 
 Route::view('dashboard', 'dashboard')
@@ -94,14 +98,18 @@ Route::prefix('settings')->name('settings.')->group(function (){
             Route::get('/', DestinationServiceIndex::class)->name('index');
             Route::get('/create', DestinationServiceCreate::class)->name('create');
             Route::get('/{typeFile}/edit', DestinationServiceEdit::class)->name('edit');
-
         });
 
         Route::prefix('file-status')->name('file-status.')->group(function () {
             Route::get('/', FileStatusIndex::class)->name('index');
             Route::get('/create', FileStatusCreate::class)->name('create');
             Route::get('/{fileStatus}/edit', FileStatusEdit::class)->name('edit');
+        });
 
+        Route::prefix('file-step')->name('file-step.')->group(function () {
+            Route::get('/', FileStepIndex::class)->name('index');
+            Route::get('/create', FileStepCreate::class)->name('create');
+            Route::get('/{FileStep}/edit', FileStepEdit::class)->name('edit');
         });
     });
 })->middleware(['auth', 'verified']);
