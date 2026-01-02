@@ -34,7 +34,7 @@ class TreeCompany extends Component
                 });
             }
         }
-//dd($query->first());
+
         $aCompanyTree = $query->get()
             ->map(fn ($row) => [
                 'id'              => $row->company_tree_id,

@@ -4,7 +4,7 @@
             <h1 class="text-xl font-semibold text-gray-900 dark:text-gray-100">
                 {{ __('navbar.reports') }}
                 / {{ __('navbar.company') }}
-                / <a href="{{ route('reports.companies.tree') }}" class=" font-semibold text-indigo-600 group-hover:text-indigo-700 dark:text-indigo-400 dark:group-hover:text-indigo-300"> {{ __('navbar.company_tree') }} </a>
+                / {{ __('navbar.company_tree') }}
                 @if(isset($companies[0]))
                     / {{ __('reports.tree') }}:  {{ $companies[0]['company']['commercial_name'] ?? $companies[0]['company']['name'] }}
                 @endif
