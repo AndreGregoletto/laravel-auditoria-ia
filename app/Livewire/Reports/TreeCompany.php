@@ -21,7 +21,6 @@ class TreeCompany extends Component
         $false = $this->toUp( __('reports.inactive'));
 
         $query = CompanyTree::query()
-            ->select('id', 'company_tree_id', 'company_parent_id', 'levels', 'status')
             ->where('levels', 1)
             ->with(['company']);
 
@@ -35,11 +34,12 @@ class TreeCompany extends Component
                 });
             }
         }
-
+//dd($query->first());
         $aCompanyTree = $query->get()
             ->map(fn ($row) => [
                 'id'              => $row->company_tree_id,
                 'name'            => $row->companyTree?->name ?? '',
+                'cnpj'            => $row->company?->cnpj ?? '',
                 'commercial_name' => $row->companyTree?->commercial_name ?? '',
                 'status'          => (bool) $row->status,
             ])

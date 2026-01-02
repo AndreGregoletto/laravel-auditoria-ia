@@ -31,10 +31,13 @@
                             {{ $company['commercial_name'] ?? $company['name'] }}
                         </p>
                         <p class="mt-1 text-xs text-gray-500 dark:text-gray-400">
-                            Número de empresas aqui dentro
+                            <span class="font-bold">{{ __('company.name') }} -</span> {{ $company['name'] }}
                         </p>
                         <p class="mt-1 text-xs text-gray-500 dark:text-gray-400">
-                            Número de empresas aqui dentro
+                            <span class="font-bold">{{ __('reports.commercial_name') }} -</span> {{ $company['commercial_name'] }}
+                        </p>
+                        <p class="mt-1 text-xs text-gray-500 dark:text-gray-400">
+                            <span class="font-bold">{{ __('reports.cnpj') }} -</span> {{ $company['cnpj'] }}
                         </p>
                     </div>
 
