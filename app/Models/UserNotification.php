@@ -22,4 +22,14 @@ class UserNotification extends Model
         'updated_at',
         'status' => 'boolean',
     ];
+
+    public function file()
+    {
+        return $this->hasOne(ImportFile::class , 'id', 'file_id');
+    }
+
+    public function message()
+    {
+        return $this->hasOne(Message::class , 'id', 'message_id');
+    }
 }

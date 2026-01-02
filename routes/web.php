@@ -12,6 +12,9 @@ use App\Livewire\CompanyTree\Edit   as CompanyTreeEdit;
 
 use App\Livewire\CompanyTree\OrganizationalChart\Index  as orgChart;
 
+#profile
+use App\Livewire\Reports\Profile\Message\Index as ReportMessageIndex;
+
 use App\Livewire\Reports\Companies          as ReportCompanies;
 use App\Livewire\Reports\TreeCompany        as ReportTreeCompany;
 use App\Livewire\Reports\TreeCompany\Index  as ReportTreeCompanyIndex;
@@ -46,17 +49,17 @@ Route::group(['prefix' => 'queue-import'], function(){
         ->name('balancete');
 
 });
-//Se for possível abrir por card de cada empresa, razão social (nome dado a entidade na sua abertura conforme cartório),
-//nome fantasia (apelido comumente falado pelas pessoas), CNPJ (número da mesma) e se fosse o caso, empresa que controla
-//a mesma e e-mail dos responsáveis, mas essa parte de responsável deveria ser algo em que nós da auditoria/contabilidade
-//iriamos preencher, por conta da rotatividade, como nosso mercado é muito rotativo e cíclico o cara que é responsável
-//hoje não necessariamente vai ser o responsável daqui a 3 meses.
+
 
 Route::group(['prefix' => 'queue-import'], function(){
     Route::get('/my-files', \App\Livewire\Reports\Imports\MyFiles::class)
         ->middleware('auth')
         ->name('imports.my-files');
 });
+
+Route::prefix('profile')->name('profile.')->group(function () {
+        Route::get('/message', ReportMessageIndex::class)->name('message');
+})->middleware('auth');
 
 
 Route::view('profile', 'profile')

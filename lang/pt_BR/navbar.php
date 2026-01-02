@@ -27,6 +27,7 @@ return [
     'clear_all_notifications' => 'Limpar todas notificações',
 
     'my_profile'      => 'Meu Perfil',
+    'my_notification' => 'Minhas Notificações',
     'setting'         => 'Configuração',
     'share'           => 'Compartilhar',
     'change_password' => 'Alterar Senha',

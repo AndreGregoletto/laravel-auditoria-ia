@@ -27,6 +27,7 @@ return [
     'clear_all_notifications' => 'Clear all Notifications',
 
     'my_profile'      => 'My Profile',
+    'my_notification' => 'My Notifications',
     'setting'         => 'Setting',
     'share'           => 'Share',
     'change_password' => 'Change Password',

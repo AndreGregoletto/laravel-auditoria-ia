@@ -103,6 +103,12 @@ new class extends Component
                                         <span>{{ __('navbar.my_profile') }}</span>
                                     </a>
 
+                                    <a href="{{ route('profile.message') }}"
+                                       class="flex items-center gap-3 rounded-lg px-3 py-2 hover:bg-gray-100 dark:hover:bg-gray-800">
+                                        <i class="ph ph-notification"></i>
+                                        <span>{{ __('navbar.my_notification') }}</span>
+                                    </a>
+
                                     <a href="#"
                                        class="flex items-center gap-3 rounded-lg px-3 py-2 hover:bg-gray-100 dark:hover:bg-gray-800">
                                         <i class="ph ph-lock-key"></i>
