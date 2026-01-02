@@ -26,7 +26,7 @@ class SendExcel extends Component
 
     public function mount() :void
     {
-        $this->companies = Company::orderBy('name')->get(['id', 'name']);
+        $this->companies = Company::where('status', 1)->orderBy('name')->get(['id', 'name']);
     }
 
     public function getPath(): void
@@ -40,6 +40,25 @@ class SendExcel extends Component
         try {
             $this->form->validate();
             $file = $this->form->file;
+
+            if(!Company::where('id', $this->form->company_id)->where('status', 1)->exists()){
+                throw ValidationException::withMessages([
+                    'form' => __('error.company_not_found'),
+                ]);
+            }
+
+            $now = now()->year;
+            $aYear = [
+                $now, $now - 1
+            ];
+
+            $year = (int) $this->form->reference_year;
+
+            if(!in_array($year, $aYear)){
+                throw ValidationException::withMessages([
+                    'form' => __('error.year_out_of_limit'),
+                ]);
+            }
 
             $idUser       = Auth::id();
             $originalName = $file->getClientOriginalName();

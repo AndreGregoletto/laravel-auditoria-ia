@@ -67,16 +67,21 @@
                                     {{ __('reports.reference_year') }} <span class="text-red-600">*</span>
                                 </label>
 
-                                <input
-                                    type="number"
-                                    min="2000"
-                                    max="2100"
+                                <select
                                     wire:model.defer="form.reference_year"
                                     class="w-full rounded-lg border-gray-300 bg-white text-sm text-gray-700
                                        focus:border-indigo-500 focus:ring-indigo-500
                                        dark:border-gray-700 dark:bg-gray-950 dark:text-gray-200"
-                                    placeholder="2025"
-                                />
+                                    >
+                                    <option value="">{{ __('labels.select') }}</option>
+
+                                    @php
+                                        $currentYear = now()->year;
+                                    @endphp
+
+                                    <option value="{{ $currentYear }}">{{ $currentYear }}</option>
+                                    <option value="{{ $currentYear - 1 }}">{{ $currentYear - 1 }}</option>
+                                </select>
 
                                 @error('form.reference_year')
                                 <p class="mt-1 text-sm text-rose-600 dark:text-rose-400">{{ $message }}</p>

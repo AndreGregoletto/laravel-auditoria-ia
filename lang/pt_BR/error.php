@@ -18,6 +18,8 @@ return [
     'file_not_found_on_disk' => 'Arquivo nào encontrado no disco.',
     'error_importing_id' => 'Erro na importação ID: ',
     'no_results_found' => 'No results found',
+    'company_not_found' => 'Company not found.',
+    'year_out_of_limit' => 'Years out of limit.',
 
     #form
     'name_required' => 'O campo é Obrigatório.',
