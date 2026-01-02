@@ -65,7 +65,7 @@ class UploadedFiles extends Component
     public function render()
     {
         $fileStatus = FileStatus::get();
-        $fileStep   = FileStep::get();
+        $fileStep   = FileStep::whereNot('id', 4)->get();
         $typeFile   = TypeFile::get();
 
         $query = ImportFile::query()->with(['type_file', 'company', 'user']);
@@ -109,6 +109,7 @@ class UploadedFiles extends Component
         }
 
         $files = $query
+            ->whereNot('file_step_id', 4)
             ->latest()
             ->paginate(10);
 
