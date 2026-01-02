@@ -26,6 +26,7 @@ class MyFiles extends Component
     {
         return view('livewire.reports.imports.my-files', [
             'files' => ImportFile::whereUserId(Auth::id())
+                ->with('company')
                 ->with('type_file')
                 ->latest()
                 ->get()

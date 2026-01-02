@@ -11,6 +11,7 @@
                 <tr class="text-left text-xs font-semibold uppercase tracking-wider text-gray-600 dark:text-gray-300">
                     <th class="px-4 py-3">{{ __('reports.destination_service') }}</th>
                     <th class="px-4 py-3">{{ __('reports.file_name') }}</th>
+                    <th class="px-4 py-3">{{ __('company.name') }}</th>
                     <th class="px-4 py-3">{{ __('reports.file_step') }}</th>
                     <th class="px-4 py-3">{{ __('reports.file_states') }}</th>
                     <th class="px-4 py-3">{{ __('reports.send_in') }}</th>
@@ -31,6 +32,14 @@
                     ">
                         <td class="px-4 py-3">{{ __("services.{$file->type_file->name}") }}</td>
                         <td class="px-4 py-3">{{ $file->file_name }}</td>
+                        <td class="px-4 py-3">
+                            <div class="flex items-center min-w-0">
+                                <span class="shrink-0"></span>
+                                <span class="truncate" title="{{ $file->company->name }}">
+                                    {{ $file->company->name }}
+                                </span>
+                            </div>
+                        </td>
                         <td class="px-4 py-3">
                             @switch($file->file_step_id)
                                 @case(1) <span class="text-yellow-500">{{ __('reports.processing') }}</span> @break
