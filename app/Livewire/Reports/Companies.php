@@ -29,6 +29,7 @@ class Companies extends Component
                         ->orWhere('cnpj', 'like', "%{$term}%");
                 });
             })
+            ->where('status', 1)
             ->orderBy('name')
             ->paginate(10);
 
