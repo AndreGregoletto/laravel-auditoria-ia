@@ -16,7 +16,7 @@
                    class="w-full max-w-md rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm text-gray-900
                       focus:border-indigo-500 focus:ring-indigo-500 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-100" />
         </div>
-        <a href="{{ route('settings.register.file-status.create') }}"
+        <a href="{{ route('settings.register.file-step.create') }}"
            class="inline-flex items-center rounded-lg bg-indigo-600 px-4 py-2 text-sm font-semibold text-white hover:bg-indigo-700">
             {{ __('buttons.new') }}
         </a>
@@ -60,7 +60,7 @@
                     <td class="px-4 py-3">{{ optional($res->created_at)->translatedFormat('d F Y, H:i') }}</td>
                     <td class="px-4 py-3">{{ optional($res->updated_at)->translatedFormat('d F Y, H:i') }}</td>
                     <td class="px-4 py-3">
-                        <a href="{{ route('settings.register.file-status.edit', $res->id) }}"
+                        <a href="{{ route('settings.register.file-step.edit', $res->id) }}"
                            class="text-indigo-600 hover:text-indigo-800 dark:text-indigo-400 dark:hover:text-indigo-300">
                             {{ __('buttons.edit') }}
                         </a>

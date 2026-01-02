@@ -109,7 +109,7 @@ Route::prefix('settings')->name('settings.')->group(function (){
         Route::prefix('file-step')->name('file-step.')->group(function () {
             Route::get('/', FileStepIndex::class)->name('index');
             Route::get('/create', FileStepCreate::class)->name('create');
-            Route::get('/{FileStep}/edit', FileStepEdit::class)->name('edit');
+            Route::get('/{fileStep}/edit', FileStepEdit::class)->name('edit');
         });
     });
 })->middleware(['auth', 'verified']);
