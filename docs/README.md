@@ -35,6 +35,8 @@
 
 ### ⚙ Settings
 - [AUD-040 — Company / Consult](screen/Settings/AUD-040-company-consult.md)
+- [AUD-041 — Company / Edit](screen/Settings/AUD-041-company-edit.md)
+- [AUD-042 — Company / New](screen/Settings/AUD-042-company-new.md)
 
 ---
 
