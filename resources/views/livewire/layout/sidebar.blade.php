@@ -41,11 +41,22 @@
                     </ul>
                 </li>
 
+                <li class="pc-item pc-hasmenu">
+                    <a href="#!" class="pc-link">
+                        <span class="pc-micon"> <i class="ph ph-book"></i> </span>
+                        <span class="pc-mtext" data-i18n="Menu levels">{{ __('navbar.processes') }}</span>
+                        <span class="pc-arrow"><i class="ti ti-chevron-right"></i></span>
+                    </a>
+                    <ul class="pc-submenu">
+                        <li class="pc-item"><a class="pc-link" href="{{ route('processes') }}" data-i18n="Level 2.1">{{ __('navbar.generate_rag') }}</a></li>
+                    </ul>
+                </li>
+
                 <li class="pc-item pc-caption">
                     <label data-i18n="{{ __('navbar.reports') }}">{{ __('navbar.reports') }}</label>
                 </li>
                 <li class="pc-item">
-                    <a href="{{ route('imports.my-files') }}"  class="pc-link">
+                    <a href="{{ route('reports.imports.my-files') }}"  class="pc-link">
                         <span class="pc-micon"><i class="ph ph-file"></i></span>
                         <span class="pc-mtext">{{ __('navbar.my_uploaded_files') }}</span>
                     </a>
