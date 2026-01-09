@@ -20,7 +20,7 @@
 ### 🛠 Tools
 #### Import Queue
 - [AUD-003 — Balance Import](screen/Tools/ImportQueue/AUD-003-balance.md)
-- [AUD-003 — Processes / Generate RAG](screen/Tools/AUD-004-processes-generate-rag.md)
+- [AUD-004 — Processes / Generate RAG](screen/Tools/AUD-004-processes-generate-rag.md)
 
 ---
 
