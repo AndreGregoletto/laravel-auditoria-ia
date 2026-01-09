@@ -2,16 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 
-
 Route::view('/', 'welcome');
-
-
-Route::group(['prefix' => 'queue-import'], function(){
-    Route::get('/my-files', \App\Livewire\Reports\Imports\MyFiles::class)
-        ->middleware('auth')
-        ->name('imports.my-files');
-});
-
 
 Route::get('/audits', function () {
     return \App\Models\git ::get();
