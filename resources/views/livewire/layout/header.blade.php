@@ -97,7 +97,7 @@ new class extends Component
                                 </div>
 
                                 <div class="p-2">
-                                    <a href="{{ route('profile') }}"
+                                    <a href="{{ route('profile.profile') }}"
                                        class="flex items-center gap-3 rounded-lg px-3 py-2 hover:bg-gray-100 dark:hover:bg-gray-800">
                                         <i class="ph ph-user"></i>
                                         <span>{{ __('navbar.my_profile') }}</span>
