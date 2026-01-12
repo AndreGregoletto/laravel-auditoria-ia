@@ -4,6 +4,7 @@ namespace App\Livewire\Tools;
 
 use App\Models\Company;
 use App\Models\ImportFile;
+use App\Services\GenerateRAG;
 use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
 
@@ -158,4 +159,11 @@ class Processes extends Component
         return view('livewire.tools.processes', compact('companies'))
             ->layout('layouts.app');
     }
+
+    public function generateRag(): void
+    {
+        $service = new GenerateRAG();
+        $result  = $service->startProcess($this->selectedFileIds);
+    }
+
 }

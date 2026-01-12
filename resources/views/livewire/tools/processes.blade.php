@@ -240,13 +240,22 @@
 
                         </div>
                     </div>
-
+                    @php
+                        $canGenerate = count($this->selectedFileIds) >= 2;
+                    @endphp
                     <button
                         type="button"
-                        class="mt-3 w-full rounded-lg bg-gray-300 px-3 py-2 text-sm font-medium text-gray-700
-                            dark:bg-gray-800 dark:text-gray-200 cursor-not-allowed"
-                        disabled>
-                        {{ __('navbar.generate_rag') }}
+                        wire:click="generateRag"
+                        wire:loading.attr="disabled"
+                        @disabled(empty($this->selectedFileIds))
+                        class="mt-3 w-full rounded-lg px-3 py-2 text-sm font-medium
+                           {{ !$canGenerate
+                                ? 'bg-gray-300 text-gray-700 cursor-not-allowed'
+                                : 'bg-indigo-600 text-white hover:bg-indigo-700'
+                           }}"
+                    >
+                        <span wire:loading.remove>{{ __('navbar.generate_rag') }}</span>
+                        <span wire:loading>{{ __('files.wait') }}</span>
                     </button>
                 </div>
 
