@@ -52,9 +52,9 @@
                                        dark:border-gray-700 dark:bg-gray-950 dark:text-gray-200"
                                 >
                                     <option value="">{{ __('labels.select') }}</option>
-                                    @for($m = 1; $m <= 12; $m++)
-                                        <option value="{{ $m }}">{{ str_pad($m, 2, '0', STR_PAD_LEFT) }}</option>
-                                    @endfor
+                                    @foreach($months as $key => $m)
+                                        <option value="{{ $key }}">{{ $m }}</option>
+                                    @endforeach()
                                 </select>
 
                                 @error('form.reference_month')
@@ -74,13 +74,9 @@
                                        dark:border-gray-700 dark:bg-gray-950 dark:text-gray-200"
                                     >
                                     <option value="">{{ __('labels.select') }}</option>
-
-                                    @php
-                                        $currentYear = now()->year;
-                                    @endphp
-
-                                    <option value="{{ $currentYear }}">{{ $currentYear }}</option>
-                                    <option value="{{ $currentYear - 1 }}">{{ $currentYear - 1 }}</option>
+                                    @foreach($years as $y)
+                                        <option value="{{ $y }}">{{ $y }}</option>
+                                    @endforeach()
                                 </select>
 
                                 @error('form.reference_year')

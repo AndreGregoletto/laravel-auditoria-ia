@@ -7,6 +7,7 @@ use App\Livewire\Forms\QueueImport\Balancete;
 use App\Models\Company;
 use App\Models\ImportFile;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\ValidationException;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
@@ -21,12 +22,32 @@ class SendExcel extends Component
 
     public Balancete $form;
     public Collection $companies;
+    public array $months = [];
+    public array $years  = [];
 
     private string $pathBalance;
 
     public function mount() :void
     {
+        $currentYear = now()->year;
+
         $this->companies = Company::where('status', 1)->orderBy('name')->get(['id', 'name']);
+        $this->months = [
+            1 => __('labels.january'),
+            2 => __('labels.february'),
+            3 => __('labels.march'),
+            4 => __('labels.april'),
+            5 => __('labels.may'),
+            6 => __('labels.june'),
+            7 => __('labels.july'),
+            8 => __('labels.august'),
+            9 => __('labels.september'),
+            10 => __('labels.october'),
+            11 => __('labels.november'),
+            12 => __('labels.december'),
+        ];
+
+        $this->years = [$currentYear, $currentYear - 1 ];
     }
 
     public function getPath(): void
@@ -38,8 +59,11 @@ class SendExcel extends Component
     public function save()
     {
         try {
+            DB::beginTransaction();
+
             $this->form->validate();
             $file = $this->form->file;
+            $now  = now()->year;
 
             if(!Company::where('id', $this->form->company_id)->where('status', 1)->exists()){
                 throw ValidationException::withMessages([
@@ -47,14 +71,9 @@ class SendExcel extends Component
                 ]);
             }
 
-            $now = now()->year;
-            $aYear = [
-                $now, $now - 1
-            ];
-
             $year = (int) $this->form->reference_year;
 
-            if(!in_array($year, $aYear)){
+            if(!in_array($year, [$now, $now - 1])){
                 throw ValidationException::withMessages([
                     'form' => __('error.year_out_of_limit'),
                 ]);
@@ -64,41 +83,6 @@ class SendExcel extends Component
             $originalName = $file->getClientOriginalName();
             $extension    = $file->getClientOriginalExtension();
             $size         = $file->getSize();
-            $fileName     = "{$idUser}-{$this->form->company_id}-{$this->form->reference_year}-{$this->form->reference_month}-{$originalName}";
-
-            $failedImport = ImportFile::where('user_id', $idUser)
-                ->where('file_name', $originalName)
-                ->where('file_service', 1)
-                ->where('file_status_id', 2)
-                ->whereIn('file_step_id', [3, 4])
-                ->first();
-
-            $this->getPath();
-
-            $finalPath = $this->pathBalance . $fileName;
-
-            if ($failedImport) {
-                if (Storage::disk('private')->exists($finalPath)) {
-                    $errorPath = "error/{$this->pathBalance}{$fileName}";
-//                        Storage::disk('private')->makeDirectory("error/{$this->pathBalance}");
-                    Storage::disk('private')->move($finalPath, $errorPath);
-                }
-
-                $failedImport->update(['file_status_id' => 1]);
-
-            } else {
-                if (Storage::disk('private')->exists($finalPath)) {
-                    throw ValidationException::withMessages([
-                        'form' => __('error.you_have_already_send_this_file'),
-                    ]);
-                }
-            }
-
-            $storePath = $file->storeAs($this->pathBalance, $fileName, 'private');
-
-            if (!$storePath) {
-                throw new \Exception(__('error.failed_to_save_the_file'));
-            }
 
             $importFileData = [
                 'user_id'         => $idUser,
@@ -111,13 +95,20 @@ class SendExcel extends Component
                 'file_step_id'    => 5,
                 'file_size'       => $size,
                 'file_status_id'  => 2,
-//                'error_log'
             ];
 
-            $importFileRecord = ImportFile::create($importFileData);
+            if(!$importFileRecord = ImportFile::create($importFileData)){
+                DB::rollBack();
+                throw ValidationException::withMessages([
+                    'form' => __('error.error_importing_id'),
+                ]);
+            }
 
-            if (!$importFileRecord) {
-                Storage::disk('private')->delete($storePath);
+            $this->getPath();
+            $storePath = $file->storeAs($this->pathBalance, "{$importFileRecord->id}.{$extension}", 'private');
+
+            if (!$storePath) {
+                DB::rollBack();
                 throw new \Exception(__('error.failed_to_save_the_file'));
             }
 
@@ -127,7 +118,9 @@ class SendExcel extends Component
 
             session()->flash('success', __('success.file_sent'));
 
+            DB::commit();
         } catch (ValidationException $e) {
+            DB::rollBack();
             throw $e;
         } catch (\Exception $e) {
             $this->addError('form', $e->getMessage());

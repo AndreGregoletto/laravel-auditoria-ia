@@ -125,3 +125,4 @@
 
 ## Changelog
 - **2025-12-18:** page created — AndreGregoletto
+- **2026-01-14:** page updated — AndreGregoletto

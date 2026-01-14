@@ -39,7 +39,7 @@ class ProcessTrialBalanceImport implements ShouldQueue
 
             $importFile->update(['file_step_id' => 1]);
 
-            $fileName = "{$importFile->user_id}-{$importFile->company_id}-{$importFile->reference_year}-{$importFile->reference_month}-{$importFile->file_name}";
+            $fileName = "{$importFile->id}.{$importFile->file_extension}";
 
             $relativePath = "balance/{$fileName}";
 
