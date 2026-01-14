@@ -65,17 +65,16 @@ class GenerateRAG
                 throw new \Exception(__('error.invalid_file'));
             }
 
-            $response = (array) [];
-            $ragName  = (string) "RAG " . __('files.period') . ":";
+            $idCompany = reset($this->fileOrder)['company_id'];
+            $company   = Company::find($idCompany);
+            $response  = (array) [];
+            $ragName   = (string) "RAG - {$company->name} | " . __('files.period') . ":";
 
             foreach ($this->fileOrder as $id => $f){
                 $ragName .= " {$f['reference_month']}/{$f['reference_year']}";
                 $response[$id] = $this->getDataFile($id);
             }
 
-            $idCompany = reset($this->fileOrder)['company_id'];
-            $company   = Company::find($idCompany);
-            $ragName  .= " - {$company->name}";
 
             dd($ragName);
 
