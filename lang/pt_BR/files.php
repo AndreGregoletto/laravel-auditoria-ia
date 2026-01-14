@@ -10,4 +10,5 @@ return [
     'selected_file_excel' => 'Selecione o Arquivo (Excel)',
     'loading_file'        => 'Carregando o Arquivo, aguarde. . .',
     'wait'                => 'Aguarde . . .',
+    'period'              => 'Período',
 ];

@@ -165,7 +165,7 @@
                             @forelse($this->availableFiles as $f)
                                 <option value="{{ $f->id }}">
                                     {{ sprintf('%02d/%04d', $f->reference_month, $f->reference_year) }}
-                                    — {{ $f->file_name }}.{{ $f->file_extension }}
+                                    — {{ $f->file_name }}
                                 </option>
                             @empty
                                 <option disabled>{{__('labels.no_files_were_found_using_the_current_filters')}}</option>
@@ -212,7 +212,7 @@
                                     <div class="min-w-0">
                                         <div class="truncate text-sm font-medium text-gray-800 dark:text-gray-100">
                                             {{ sprintf('%02d/%04d', $f->reference_month, $f->reference_year) }}
-                                            — {{ $f->file_name }}.{{ $f->file_extension }}
+                                            — {{ $f->file_name }}
                                         </div>
 
                                         @if(!empty($f->error_log))

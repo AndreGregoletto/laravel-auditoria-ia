@@ -20,6 +20,7 @@ return [
     'no_results_found' => 'No results found',
     'company_not_found' => 'Company not found.',
     'year_out_of_limit' => 'Years out of limit.',
+    'invalid_file' => 'Invalid File.',
 
     #form
     'name_required' => 'O campo é Obrigatório.',

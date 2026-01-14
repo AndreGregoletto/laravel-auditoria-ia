@@ -13,7 +13,6 @@ class ImportFile extends Model
         'company_id',
         'reference_month',
         'reference_year',
-        'company_id',
         'file_name',
         'file_extension',
         'file_service',

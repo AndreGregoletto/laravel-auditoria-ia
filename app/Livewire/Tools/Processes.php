@@ -96,7 +96,6 @@ class Processes extends Component
 
     public function addSelected(): void
     {
-        // aqui é a seleção do select da esquerda
         if (empty($this->availableSelectedIds)) {
             return;
         }
