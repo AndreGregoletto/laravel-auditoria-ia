@@ -7,6 +7,7 @@ return [
     'import_queue'      => 'Import Queue',
     'processes'         => 'Processes',
     'generate_rag'      => 'Generate RAG',
+    'validate_bal'      => 'Validate trial Balance',
     'only_my_files'     => 'Only my files',
     'balance'           => 'Balance',
     'reports'           => 'Reports',

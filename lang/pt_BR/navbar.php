@@ -7,6 +7,7 @@ return [
     'import_queue'      => 'Fila de Importação',
     'processes'         => 'Processos',
     'generate_rag'      => 'Gerar RAG',
+    'validate_bal'      => 'Validar Balancete',
     'only_my_files'     => 'Somente meus arquivos',
     'balance'           => 'Balancete',
     'reports'           => 'Relatórios',
