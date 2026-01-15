@@ -57,21 +57,23 @@
         </div>
 
         <div class="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-6">
-            <input type="number"
-                   min="1" max="12"
-                   wire:model.live.debounce.400ms="filterMonth"
-                   placeholder="{{ __('reports.reference_month') }}"
-                   class="w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm text-gray-900
-                      focus:border-indigo-500 focus:ring-indigo-500 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-100"
-            />
+            <select wire:model.live="filterMonth"
+                    class="w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm text-gray-900
+                       focus:border-indigo-500 focus:ring-indigo-500 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-100">
+                <option value="">{{ __('reports.reference_month') }}</option>
+                @foreach($months as $key => $m)
+                    <option value="{{ $key }}">{{ $m }}</option>
+                @endforeach()
+            </select>
 
-            <input type="number"
-                   min="2000" max="2100"
-                   wire:model.live.debounce.400ms="filterYear"
-                   placeholder="{{ __('reports.reference_year') }}"
-                   class="w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm text-gray-900
-                      focus:border-indigo-500 focus:ring-indigo-500 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-100"
-            />
+            <select wire:model.live="filterYear"
+                    class="w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm text-gray-900
+                       focus:border-indigo-500 focus:ring-indigo-500 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-100">
+                <option value="">{{ __('reports.reference_year') }}</option>
+                @foreach($years as $y)
+                    <option value="{{ $y }}">{{ $y }}</option>
+                @endforeach()
+            </select>
 
             <input type="text"
                    wire:model.live.debounce.400ms="filterExtension"
@@ -135,7 +137,7 @@
                         {{ $file->company->name }}
                     </td>
 
-                    <td class="px-4 py-3 text-center">{{ $file->reference_month }}</td>
+                    <td class="px-4 py-3 text-center">{{ __("labels.{$file->reference_month}") }}</td>
                     <td class="px-4 py-3 text-center">{{ $file->reference_year }}</td>
 
                     <td class="px-4 py-3 text-center uppercase">
