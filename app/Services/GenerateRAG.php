@@ -71,8 +71,9 @@ class GenerateRAG
             $ragName   = (string) "RAG - {$company->name} | " . __('files.period') . ":";
 
             foreach ($this->fileOrder as $id => $f){
-                $ragName .= " {$f['reference_month']}/{$f['reference_year']}";
-                $response[$id] = $this->getDataFile($id);
+                $monthYear = "{$f['reference_month']}/{$f['reference_year']}";
+                $ragName  .= " {$monthYear}";
+                $response["{$id}-{$monthYear}"] = $this->getDataFile($id);
             }
 
 
