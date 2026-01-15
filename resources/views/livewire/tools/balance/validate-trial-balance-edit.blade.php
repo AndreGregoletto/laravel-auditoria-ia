@@ -138,19 +138,66 @@
         </div>
     </div>
 
+    @php
+        $sortField     = $this->sortField     ?? 'file_line';
+        $sortDirection = $this->sortDirection ?? 'asc';
+
+        $arrow = function(string $field) use ($sortField, $sortDirection) {
+            if ($sortField !== $field) return '';
+            return $sortDirection === 'asc' ? '▲' : '▼';
+        };
+    @endphp
+
     <div class="rounded-xl border border-gray-200 bg-white dark:border-gray-800 dark:bg-gray-900">
         <div class="max-h-[calc(100vh-260px)] overflow-auto">
             <table class="min-w-full text-sm">
                 <thead class="sticky top-0 z-10 bg-gray-50 dark:bg-gray-950">
                 <tr class="text-left text-xs font-semibold text-gray-600 dark:text-gray-300">
-                    <th class="px-3 py-2">{{ __('labels.line') }}</th>
+                    <th class="px-3 py-2 text-right">
+                        <button type="button" wire:click="sortBy('file_line')"
+                                class="inline-flex items-center gap-1 hover:text-indigo-600 dark:hover:text-indigo-300">
+                            {{ __('labels.line') }} <span class="text-[10px]">{{ $arrow('file_line') }}</span>
+                        </button>
+                    </th>
+
                     <th class="px-3 py-2">{{ __('labels.account') }}</th>
                     <th class="px-3 py-2">{{ __('labels.description') }}</th>
-                    <th class="px-3 py-2 text-right">{{ __('labels.previous_balance') }}</th>
-                    <th class="px-3 py-2 text-right">{{ __('labels.debit') }}</th>
-                    <th class="px-3 py-2 text-right">{{ __('labels.credit') }}</th>
-                    <th class="px-3 py-2 text-right">{{ __('labels.monthly_activity') }}</th>
-                    <th class="px-3 py-2 text-right">{{ __('labels.closing_balance') }}</th>
+
+                    <th class="px-3 py-2 text-right">
+                        <button type="button" wire:click="sortBy('previous_balance')"
+                                class="inline-flex items-center gap-1 hover:text-indigo-600 dark:hover:text-indigo-300">
+                            {{ __('labels.previous_balance') }} <span class="text-[10px]">{{ $arrow('previous_balance') }}</span>
+                        </button>
+                    </th>
+
+                    <th class="px-3 py-2 text-right">
+                        <button type="button" wire:click="sortBy('debit')"
+                                class="inline-flex items-center gap-1 hover:text-indigo-600 dark:hover:text-indigo-300">
+                            {{ __('labels.debit') }} <span class="text-[10px]">{{ $arrow('debit') }}</span>
+                        </button>
+                    </th>
+
+                    <th class="px-3 py-2 text-right">
+                        <button type="button" wire:click="sortBy('credit')"
+                                class="inline-flex items-center gap-1 hover:text-indigo-600 dark:hover:text-indigo-300">
+                            {{ __('labels.credit') }} <span class="text-[10px]">{{ $arrow('credit') }}</span>
+                        </button>
+                    </th>
+
+                    <th class="px-3 py-2 text-right">
+                        <button type="button" wire:click="sortBy('monthly_activity')"
+                                class="inline-flex items-center gap-1 hover:text-indigo-600 dark:hover:text-indigo-300">
+                            {{ __('labels.monthly_activity') }} <span class="text-[10px]">{{ $arrow('monthly_activity') }}</span>
+                        </button>
+                    </th>
+
+                    <th class="px-3 py-2 text-right">
+                        <button type="button" wire:click="sortBy('closing_balance')"
+                                class="inline-flex items-center gap-1 hover:text-indigo-600 dark:hover:text-indigo-300">
+                            {{ __('labels.closing_balance') }} <span class="text-[10px]">{{ $arrow('closing_balance') }}</span>
+                        </button>
+                    </th>
+
                     <th class="px-3 py-2 text-center">{{ __('labels.included') }}</th>
                     <th class="px-3 py-2 text-center">{{ __('labels.flag') }}</th>
                     <th class="px-3 py-2 text-center">{{ __('reports.actions') }}</th>
@@ -197,16 +244,16 @@
                         <td class="px-3 py-2 text-center">
                             @if(is_null($r->balance_included))
                                 <span class="inline-flex rounded-full bg-gray-100 px-2 py-1 text-xs font-semibold text-gray-700 dark:bg-gray-800 dark:text-gray-200">
-                                        —
-                                    </span>
+                                    —
+                                </span>
                             @elseif($r->balance_included)
                                 <span class="inline-flex rounded-full bg-emerald-100 px-2 py-1 text-xs font-semibold text-emerald-700 dark:bg-emerald-900/40 dark:text-emerald-200">
-                                        {{ __('labels.yes') }}
-                                    </span>
+                                    {{ __('labels.yes') }}
+                                </span>
                             @else
                                 <span class="inline-flex rounded-full bg-rose-100 px-2 py-1 text-xs font-semibold text-rose-700 dark:bg-rose-900/40 dark:text-rose-200">
-                                        {{ __('labels.no') }}
-                                    </span>
+                                    {{ __('labels.no') }}
+                                </span>
                             @endif
                         </td>
 
@@ -214,8 +261,8 @@
                         <td class="px-3 py-2 text-center">
                             @if($r->red_flag)
                                 <span class="inline-flex rounded-full bg-amber-100 px-2 py-1 text-xs font-semibold text-amber-800 dark:bg-amber-900/40 dark:text-amber-200">
-                                        !
-                                    </span>
+                                    !
+                                </span>
                             @else
                                 <span class="text-xs text-gray-400">—</span>
                             @endif

@@ -26,6 +26,9 @@ class ValidateTrialBalanceEdit extends Component
     public string $bulkAction = 'include'; // include|exclude
     public string $bulkReason = '';
 
+    public string $sortField = 'file_line';
+    public string $sortDirection = 'asc';
+
     public function mount(ImportFile $file): void
     {
         $this->file = $file;
@@ -51,7 +54,8 @@ class ValidateTrialBalanceEdit extends Component
                     default      => $q,
                 };
             })
-            ->orderBy('file_line')
+            ->orderBy($this->sortField, $this->sortDirection)
+            ->orderBy('file_line', 'asc')
             ->get();
 
         $totalClosingBalance = $rows->sum(function ($r) {
@@ -157,4 +161,28 @@ class ValidateTrialBalanceEdit extends Component
 
         $this->dispatch('toast', message: "Ação em massa aplicada (batch {$batchId}).");
     }
+
+    public function sortBy(string $field): void
+    {
+        $allowed = [
+            'file_line',
+            'previous_balance',
+            'debit',
+            'credit',
+            'monthly_activity',
+            'closing_balance',
+        ];
+
+        if (!in_array($field, $allowed, true)) {
+            return;
+        }
+
+        if ($this->sortField === $field) {
+            $this->sortDirection = $this->sortDirection === 'asc' ? 'desc' : 'asc';
+        } else {
+            $this->sortField = $field;
+            $this->sortDirection = 'desc';
+        }
+    }
+
 }
