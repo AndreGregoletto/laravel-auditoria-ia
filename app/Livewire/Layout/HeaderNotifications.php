@@ -27,6 +27,7 @@ class HeaderNotifications extends Component
             ->count();
 
         $this->items = UserNotification::query()
+            ->with('file')
             ->where('user_id', 1)
             ->where('status', 1)
             ->where('read', 0)
@@ -37,6 +38,7 @@ class HeaderNotifications extends Component
                 'message'    => $n->message,
                 'read'       => (bool) $n->read,
                 'file_id'    => $n->file_id,
+                'file_name'  => $n->file->file_name,
                 'created_at' => optional($n->created_at)->translatedFormat('d F Y, H:i'),
             ])->toArray();
     }

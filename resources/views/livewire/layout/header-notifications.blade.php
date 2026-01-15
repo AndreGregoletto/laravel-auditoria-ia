@@ -64,8 +64,14 @@
                                     </p>
 
                                     <p class="mt-1 text-xs text-gray-600 dark:text-gray-300">
-                                        {{ $n['message'] }}
+                                        {{ __("notifications.{$n['message']}") ?? $n['message'] }}
                                     </p>
+
+                                    @if(!empty($n['file_id']))
+                                        <p class="mt-1 text-xs text-gray-600 dark:text-gray-300">
+                                            {{ __('reports.file_name') }} : <span class="text-black/50 hover:text-black/70"> {{ $n['file_name'] }}</span>
+                                        </p>
+                                    @endif
 
                                     <p class="mt-2 text-[11px] text-gray-500 dark:text-gray-400">
                                         {{ $n['created_at'] }}
