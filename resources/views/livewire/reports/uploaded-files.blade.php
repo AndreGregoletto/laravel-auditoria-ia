@@ -51,7 +51,7 @@
                        focus:border-indigo-500 focus:ring-indigo-500 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-100">
                 <option value="">{{ __('reports.file_states') }}</option>
                 @foreach($fileStatus as $file)
-                    <option value="{{ $file->id }}">{{ __("reports.{$file->name_conf}") }}</option>
+                    <option value="{{ $file->id }}">{{ __("status.{$file->name_conf}") }}</option>
                 @endforeach
             </select>
         </div>
@@ -158,8 +158,21 @@
                         @endswitch
                     </td>
 
-                    <td class="px-4 py-3 text-center {{ $file->file_status_id === 1 ? 'text-red-500' : 'text-green-500' }}">
-                        {{ $file->file_status_id === 1 ? __('reports.inactive') : __('reports.active') }}
+                    @php
+                        $color = match ($file->file_status_id) {
+                            1 => 'text-red-500',
+                            2 => 'text-green-500',
+                            3 => 'text-yellow-900',
+                        };
+
+                        $conf = match ($file->file_status_id) {
+                            1 => 'inactive',
+                            2 => 'active',
+                            3 => 'file_generated',
+                        };
+                    @endphp
+                    <td class="px-4 py-3 text-center {{ $color }}">
+                        {{ __("status.{$conf}") }}
                     </td>
 
                     <td class="px-4 py-3">
@@ -171,10 +184,12 @@
                     </td>
 
                     <td class="px-4 py-3 text-center">
-                        <button wire:click="download({{ $file->id }})"
-                                class="text-indigo-600 hover:underline">
-                            {{ __('buttons.download') }}
-                        </button>
+                        @if($file->file_status_id === 3)
+                            <button wire:click="download({{ $file->id }})"
+                                    class="text-indigo-600 hover:underline">
+                                {{ __('buttons.download') }}
+                            </button>
+                        @endif
                     </td>
                 </tr>
             @empty

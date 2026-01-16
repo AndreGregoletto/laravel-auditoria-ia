@@ -22,6 +22,12 @@ return [
     'year_out_of_limit' => 'Ano fora do limite.',
     'invalid_file' => 'Arquivo inválido.',
 
+    'justification_is_required' => 'Justification is required.',
+    'decision_registered' => 'Decision registered.',
+    'provide_a_valid_size' => 'Please provide a valid size.',
+    'justification_required_mass_action' => 'Justification is required for mass action.',
+    'mass_action_applied' => 'Mass action applied',
+
     #form
     'name_required'      => 'This field is required.',
     'name_string'        => 'The field must be Text.',

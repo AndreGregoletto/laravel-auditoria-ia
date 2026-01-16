@@ -54,6 +54,7 @@ return [
     'balanced' => 'Balanced',
     'not_balanced' => 'Not balanced',
     'manual' => "Manual action",
+    'download_available' => 'Download available',
 
     'no_selected_files' => 'No files selected',
     'items' => 'Items',

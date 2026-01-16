@@ -54,6 +54,7 @@ return [
     'balanced' => 'Equilibrado',
     'not_balanced' => 'Desequilibrado',
     'manual' => "Ação manual",
+    'download_available' => 'Download disponível',
 
     'no_selected_files' => 'Nenhum arquivo selecionado',
     'items' => 'Items',

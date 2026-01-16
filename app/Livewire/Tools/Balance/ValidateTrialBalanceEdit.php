@@ -83,7 +83,7 @@ class ValidateTrialBalanceEdit extends Component
         }
 
         if (blank($this->reason)) {
-            $this->addError('reason', 'Justificativa é obrigatória.');
+            $this->addError('reason', __("error.justification_is_required"));
             return;
         }
 
@@ -110,20 +110,20 @@ class ValidateTrialBalanceEdit extends Component
                 'balance_decided_at'       => $decision->decided_at,
             ])->save();
         });
-
+        $this->syncFileStatus();
         $this->dispatch('close-modal', id: 'decision-modal');
         $this->reset(['editingRowId', 'editingValue', 'reason']);
-        $this->dispatch('toast', message: 'Decisão registrada.');
+        $this->dispatch('toast', message: __("error.decision_registered"));
     }
 
     public function applyBulkLength(): void
     {
         if (!$this->bulkLength || $this->bulkLength <= 0) {
-            $this->addError('bulkLength', 'Informe um tamanho válido.');
+            $this->addError('bulkLength', __("error.provide_a_valid_size"));
             return;
         }
         if (blank($this->bulkReason)) {
-            $this->addError('bulkReason', 'Justificativa é obrigatória para ação em massa.');
+            $this->addError('bulkReason', __("error.justification_required_mass_action"));
             return;
         }
 
@@ -159,7 +159,8 @@ class ValidateTrialBalanceEdit extends Component
             }
         });
 
-        $this->dispatch('toast', message: "Ação em massa aplicada (batch {$batchId}).");
+        $this->syncFileStatus();
+        $this->dispatch('toast', message: __("error.mass_action_applied") ." (batch {$batchId}).");
     }
 
     public function sortBy(string $field): void
@@ -184,5 +185,20 @@ class ValidateTrialBalanceEdit extends Component
             $this->sortDirection = 'desc';
         }
     }
+
+    private function syncFileStatus(): void
+    {
+        $hasIncluded = TrialBalanceData::query()
+            ->where('file_id', $this->file->id)
+            ->where('balance_included', true)
+            ->exists();
+
+        $newStatus = $hasIncluded ? 3 : 2;
+
+        if ($this->file->file_status_id !== $newStatus) {
+            $this->file->forceFill(['file_status_id' => $newStatus])->save();
+        }
+    }
+
 
 }

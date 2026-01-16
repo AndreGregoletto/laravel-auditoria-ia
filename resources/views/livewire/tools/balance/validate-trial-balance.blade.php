@@ -173,14 +173,18 @@
 
                                             <div class="mt-1 space-y-1">
                                                 <p class="text-xs text-gray-500 dark:text-gray-400">
-                                                    <span class="font-semibold">{{ __('labels.reference_date') }}:</span>
-                                                    {{ sprintf('%02d/%04d', $f->reference_month, $f->reference_year) }}
+                                                    <span class="font-semibold">{{ __('labels.reference_date') }}:</span> {{ sprintf('%02d/%04d', $f->reference_month, $f->reference_year) }}
                                                 </p>
 
                                                 <p class="text-xs text-gray-500 dark:text-gray-400">
-                                                    <span class="font-semibold">{{ __('labels.sent_in') }}:</span>
-                                                    {{ optional($f->created_at)->translatedFormat('d F Y, H:i') }}
+                                                    <span class="font-semibold">{{ __('labels.sent_in') }}:</span> {{ optional($f->created_at)->translatedFormat('d F Y, H:i') }}
                                                 </p>
+
+                                                @if($f->file_status_id === 3)
+                                                    <p class="text-xs text-gray-500 dark:text-gray-400">
+                                                        <span class="font-semibold">{{ __("status.file_generated") }}: </span> {{ __("labels.download_available") }}
+                                                    </p>
+                                                @endif
                                             </div>
                                         </div>
 
@@ -201,7 +205,7 @@
                                             {{ __('labels.validate') }}
                                         </a>
 
-                                        <a href="{{ route('validate-ai', $f->id) }}"
+                                        <a href="{{ route('validate.ai-preview', $f->id) }}"
                                            class="text-xs font-semibold text-indigo-600 group-hover:text-indigo-700
                                                 dark:text-indigo-400 dark:group-hover:text-indigo-300"
                                         >
