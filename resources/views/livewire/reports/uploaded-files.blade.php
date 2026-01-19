@@ -185,10 +185,20 @@
 
                     <td class="px-4 py-3 text-center">
                         @if($file->file_status_id === 3)
-                            <button wire:click="download({{ $file->id }})"
-                                    class="text-indigo-600 hover:underline">
+                            <a
+                                href="{{ route('balance.download.xlsx', ['file' => $file->id]) }}"
+                                class="inline-flex items-center gap-2 rounded-lg bg-emerald-600 px-3 py-2 text-sm
+                                font-semibold text-white shadow-sm hover:bg-emerald-700 focus:outline-none focus:ring-2
+                                focus:ring-emerald-500/40 dark:focus:ring-emerald-400/40"
+                            >
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 24 24" fill="none">
+                                    <path d="M12 3v10" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                                    <path d="M8 11l4 4 4-4" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                          stroke-linejoin="round"/>
+                                    <path d="M5 21h14" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                                </svg>
                                 {{ __('buttons.download') }}
-                            </button>
+                            </a>
                         @endif
                     </td>
                 </tr>

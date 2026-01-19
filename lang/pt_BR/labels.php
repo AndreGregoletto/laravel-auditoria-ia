@@ -106,5 +106,8 @@ return [
     '11' => 'Novembro',
     '12' => 'Dezembro',
     'validated_trial_balance' => 'Balancete validado',
-    'clean_account' => 'Conta limpa'
+    'clean_account' => 'Conta limpa',
+    'file_not_generated' => 'Arquivo não foi gerado',
+    'unavailable' => 'Indisponível',
+    'only_included_accounts' => 'Balancete - Somente das incluídas',
 ];

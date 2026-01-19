@@ -3,6 +3,11 @@
         <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
             {{ $result['name'] }}
         </h2>
+
+        <a
+            href="{{ route('rag.download', ['files' => $files]) }}"
+            class="rounded-lg bg-emerald-600 px-3 py-2 text-sm font-medium text-white hover:bg-emerald-700"
+        >{{ __('buttons.download') }}</a>
     </div>
 </x-slot>
 

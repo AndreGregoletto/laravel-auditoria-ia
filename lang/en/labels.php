@@ -106,5 +106,8 @@ return [
     '11' => 'November',
     '12' => 'December',
     'validated_trial_balance' => 'Validated trial balance',
-    'clean_account' => 'Clean account'
+    'clean_account' => 'Clean account',
+    'file_not_generated' => 'File not generated',
+    'unavailable' => 'Unavailable',
+    'only_included_accounts' => 'Balance - Only included accounts',
 ];
