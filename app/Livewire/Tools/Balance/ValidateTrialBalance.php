@@ -93,8 +93,8 @@ class ValidateTrialBalance extends Component
                     $w->where('file_name', 'like', "%{$term}%");
                 });
             })
-            ->orderByDesc('reference_year')
-            ->orderByDesc('reference_month')
+            ->orderBy('reference_year', 'asc')
+            ->orderBy('reference_month', 'asc')
             ->orderByDesc('id');
         return $q;
     }
