@@ -21,6 +21,10 @@ class FileStatus extends Seeder
                 'name'      => 'Active',
                 'name_conf' => 'active',
                 'status'    => 1,
+            ], [
+                'name'      => 'File generated',
+                'name_conf' => 'file_generated',
+                'status'    => 1,
             ],
         ]);
     }

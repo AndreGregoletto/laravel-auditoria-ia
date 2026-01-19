@@ -51,7 +51,7 @@
                        focus:border-indigo-500 focus:ring-indigo-500 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-100">
                 <option value="">{{ __('reports.file_states') }}</option>
                 @foreach($fileStatus as $file)
-                    <option value="{{ $file->id }}">{{ __("status.{$file->name_conf}") }}</option>
+                    <option value="{{ $file->id }}">{{ __("status.{$file->name_conf}") ?? $file->name }}</option>
                 @endforeach
             </select>
         </div>

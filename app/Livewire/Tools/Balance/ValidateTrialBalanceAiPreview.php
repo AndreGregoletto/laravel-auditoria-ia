@@ -87,7 +87,7 @@ class ValidateTrialBalanceAiPreview extends Component
     public function clearOverrides(): void
     {
         $this->overrides = [];
-        $this->dispatch('toast', message: __('labels.changes_discarded') ?? 'Alterações descartadas (prévia).');
+        $this->dispatch('toast', message: __('labels.changes_discarded'));
     }
 
     public function applyPreview(): void
@@ -122,8 +122,8 @@ class ValidateTrialBalanceAiPreview extends Component
                     'balance_included'      => (bool) $finalIncluded,
                     'source'                => $source,
                     'reason'                => $source === 'ai_approved'
-                        ? 'Aprovada sugestão automática.'
-                        : 'Ajuste realizado pelo auditor sobre sugestão automática.',
+                        ? __('labels.automatic_suggestion_approved')
+                        : __('labels.adjustement_made_auditor'),
                     'ai_confidence'         => $confidence,
                     'ai_model'              => 'ai-preview',
                     'ai_rationale'          => $rationale,
@@ -153,7 +153,7 @@ class ValidateTrialBalanceAiPreview extends Component
 
         app(TrialBalanceAiPreviewStore::class)->forget($this->file->id, auth()->id());
 
-        $this->dispatch('toast', message: __('labels.decisions_applied') ?? 'Decisões aplicadas com sucesso.');
+        $this->dispatch('toast', message: __('labels.decisions_applied'));
         // return redirect()->route('processes.validate.edit', $this->file->id);
     }
 

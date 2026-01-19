@@ -50,9 +50,22 @@
                             @endswitch
                         </td>
 
+                        @php
+                            $color = match ($file->file_status_id) {
+                                1 => 'text-red-500',
+                                2 => 'text-green-500',
+                                3 => 'text-yellow-900',
+                            };
 
-                        <td class="px-4 py-3 {{ $file->file_status_id === 1 ? 'text-red-500' : 'text-green-500' }}">
-                            {{ $file->file_status_id === 1 ? __('reports.inactive') : __('reports.active') }}
+                            $conf = match ($file->file_status_id) {
+                                1 => 'inactive',
+                                2 => 'active',
+                                3 => 'file_generated',
+                            };
+                        @endphp
+
+                        <td class="px-4 py-3 {{ $color }}">
+                            {{ __("status.{$conf}") }}
                         </td>
 
                         <td class="px-4 py-3">{{ $file->created_at->translatedFormat('d F Y, H:i') }}</td>
