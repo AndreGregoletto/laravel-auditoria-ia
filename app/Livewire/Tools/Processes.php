@@ -2,9 +2,11 @@
 
 namespace App\Livewire\Tools;
 
+use App\Livewire\Tools\Rag\View;
 use App\Models\Company;
 use App\Models\ImportFile;
 use App\Services\GenerateRAG;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
 
@@ -159,10 +161,12 @@ class Processes extends Component
             ->layout('layouts.app');
     }
 
-    public function generateRag(): void
+    public function generateRag()
     {
-        $service = new GenerateRAG();
-        $result  = $service->startProcess($this->selectedFileIds);
+//        $service = new GenerateRAG();
+//        $result  = $service->startProcess($this->selectedFileIds)
+        $files = implode('|',$this->selectedFileIds);
+        return redirect()->route('rag.view', ['files' => $files]);
     }
 
 }

@@ -16,7 +16,7 @@ class GenerateRAG
     {
         $this->importFile = ImportFile::whereIn('id', $aFiles)
             ->where('file_step_id', 2)
-            ->where('file_status_id', 2)
+            ->where('file_status_id', 3)
             ->orderBy('reference_year', 'ASC')
             ->orderBy('reference_month', 'ASC')
             ->get();
@@ -68,22 +68,64 @@ class GenerateRAG
             $idCompany = reset($this->fileOrder)['company_id'];
             $company   = Company::find($idCompany);
             $response  = (array) [];
+            $aClosing  = (array) [];
+            $iClosing  = (int) 0;
+            $idFile    = (int) null;
+            $file      = null;
             $ragName   = (string) "RAG - {$company->name} | " . __('files.period') . ":";
 
             foreach ($this->fileOrder as $id => $f){
                 $monthYear = "{$f['reference_month']}/{$f['reference_year']}";
-                $ragName  .= " {$monthYear}";
-                $response["{$id}-{$monthYear}"] = $this->getDataFile($id);
+                $ragName  .= "  _{$monthYear}";
             }
 
+            $trialBalance = TrialBalanceData::query()
+                ->whereIn('file_id', array_keys($this->fileOrder))
+                ->where('balance_included', 1)
+                ->where('status', 1)
+                ->orderBy('file_id')
+                ->orderBy('file_line')
+                ->get([
+                    'account', 'description', 'closing_balance', 'file_id',
+                    'balance_last_decision_id', 'balance_decision_source'
+                ]);
 
-            dd($ragName);
+            foreach ($trialBalance as $key => $tb){
+                if($idFile !== $tb->file_id){
+                    $idFile = $tb->file_id;
+                    $file   = ImportFile::where('id', $idFile)->first();
 
+                    $iClosing = (float) TrialBalanceData::query()
+                        ->where('file_id', $idFile)
+                        ->where('balance_included', 1)
+                        ->sum('closing_balance');
+                }
+
+                $ref            = "{$file->reference_month}/{$file->reference_year}";
+                $tb->file_id    = $file;
+                $aClosing[$ref] = $iClosing;
+
+                $account = trim((string) $tb->account);
+
+                if (!isset($response[$account])) {
+                    $response[$account] = [
+                        'clear_account' => str_replace('.', '', $account),
+                        'description'   => (string) $tb->description,
+                        'balance'       => [],
+                    ];
+                }
+                $response[$account]['balance'][$ref] = ($response[$account]['balance'][$ref] ?? 0) + (float) $tb->closing_balance;
+            }
+
+            return [
+                'name' => $ragName,
+                'aClosing' => $aClosing,
+                'response' => $response,
+            ];
 
         } catch (\Exception $e){
             dd($e);
         }
 
-        return [];
     }
 }

@@ -6,6 +6,7 @@ use \App\Livewire\Tools\Balance\ValidateTrialBalance         AS ValidateTrialBal
 use App\Livewire\Tools\Balance\ValidateTrialBalanceEdit      AS ValidateTrialBalanceEdit;
 use App\Livewire\Tools\Balance\ValidateTrialBalanceAI        AS ValidateTrialBalanceAI;
 use App\Livewire\Tools\Balance\ValidateTrialBalanceAiPreview AS ValidateTrialBalanceAiPreview;
+use App\Livewire\Tools\Rag\View                              as RagView;
 
 Route::middleware(['auth', 'verified'])->group(function () {
     Route::view('dashboard', 'dashboard')->name('dashboard');
@@ -26,6 +27,9 @@ Route::middleware(['auth', 'verified'])->group(function () {
             Route::get('/{file}/ai-preview', ValidateTrialBalanceAiPreview::class)->name('validate.ai-preview');
         });
 
+        Route::group(['prefix' => 'rag'], function (){
+           Route::get('/view/{files}', RagView::class)->name('rag.view');
+        });
     });
 
 });
