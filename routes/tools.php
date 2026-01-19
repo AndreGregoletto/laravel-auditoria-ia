@@ -7,6 +7,8 @@ use App\Livewire\Tools\Balance\ValidateTrialBalanceEdit      AS ValidateTrialBal
 use App\Livewire\Tools\Balance\ValidateTrialBalanceAI        AS ValidateTrialBalanceAI;
 use App\Livewire\Tools\Balance\ValidateTrialBalanceAiPreview AS ValidateTrialBalanceAiPreview;
 use App\Livewire\Tools\Rag\View                              as RagView;
+use App\Http\Controllers\Download\RagDownloadController;
+use App\Http\Controllers\Download\TrialBalanceDownloadController;
 
 Route::middleware(['auth', 'verified'])->group(function () {
     Route::view('dashboard', 'dashboard')->name('dashboard');
@@ -25,10 +27,13 @@ Route::middleware(['auth', 'verified'])->group(function () {
             Route::get('/{file}/edit', ValidateTrialBalanceEdit::class)->name('validate-edit');
             Route::get('/{file}/ai', ValidateTrialBalanceAi::class)->name('validate-ai');
             Route::get('/{file}/ai-preview', ValidateTrialBalanceAiPreview::class)->name('validate.ai-preview');
+            Route::get('/download/{file}', [TrialBalanceDownloadController::class, 'xlsx'])->name('balance.download.xlsx');
+            Route::get('/download/{file}/included', [TrialBalanceDownloadController::class, 'xlsxIncluded'])->name('balance.download.xlsx_included');
         });
 
         Route::group(['prefix' => 'rag'], function (){
            Route::get('/view/{files}', RagView::class)->name('rag.view');
+           Route::get('/download/{files}', [RagDownloadController::class, 'xlsx'])->name('rag.download');
         });
     });
 

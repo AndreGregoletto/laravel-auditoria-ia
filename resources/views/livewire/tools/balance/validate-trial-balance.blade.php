@@ -150,17 +150,46 @@
                                  style="clip-path: polygon(100% 0, 0 0, 100% 100%);"></div>
 
                             <div class="flex items-start gap-3">
+                                @php
+                                    $status = (int) ($f->file_status_id);
+                                    $isValidated = $status === 3;
+                                @endphp
+
+
                                 <div class="shrink-0">
                                     <div class="flex h-10 w-10 items-center justify-center rounded-lg
-                                        bg-indigo-50 text-indigo-600
-                                        dark:bg-indigo-900/30 dark:text-indigo-300">
-
-                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 24 24" fill="none">
+                                        {{ $isValidated
+                                            ? 'bg-emerald-50 text-emerald-600 dark:bg-emerald-900/30 dark:text-emerald-300'
+                                            : 'bg-indigo-50 text-indigo-600 dark:bg-indigo-900/30 dark:text-indigo-300 transition-transform duration-200 hover:scale-105'
+                                        }}"
+                                    >
+                                        @if($isValidated)
+                                            <a
+                                                href="{{ route('balance.download.xlsx_included', ['file' => $f->id]) }}"
+                                                class="inline-flex items-center gap-1 text-emerald-600 hover:text-emerald-700"
+                                                title="{{ __('labels.download_file') }}"
+                                            >
+                                        @endif
+                                        <svg xmlns="http://www.w3.org/2000/svg"
+                                             class="h-5 w-5"
+                                             viewBox="0 0 24 24"
+                                             fill="none">
                                             <path d="M7 3h7l4 4v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2z"
-                                                  stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
-                                            <path d="M14 3v5h5" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
-                                            <path d="M8 12h8M8 16h8" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                                                  stroke="currentColor"
+                                                  stroke-width="2"
+                                                  stroke-linejoin="round"/>
+                                            <path d="M14 3v5h5"
+                                                  stroke="currentColor"
+                                                  stroke-width="2"
+                                                  stroke-linejoin="round"/>
+                                            <path d="M8 12h8M8 16h8"
+                                                  stroke="currentColor"
+                                                  stroke-width="2"
+                                                  stroke-linecap="round"/>
                                         </svg>
+                                        @if($isValidated)
+                                            </a>
+                                        @endif
                                     </div>
                                 </div>
 
@@ -227,7 +256,7 @@
                         </div>
                     @empty
                         <div class="col-span-full rounded-xl border border-gray-200 bg-white p-8 text-center text-sm text-gray-500 dark:border-gray-800 dark:bg-gray-900 dark:text-gray-400">
-                            {{ __('labels.no_files_were_found_using_the_current_filters') ?? 'Nenhum arquivo encontrado com os filtros atuais.' }}
+                            {{ __('labels.no_files_were_found_using_the_current_filters') }}
                         </div>
                     @endforelse
                 @endif
