@@ -43,7 +43,7 @@ the following command to download the project:
 ```
 git clone https://github.com/AndreGregoletto/laravel-auditoria-ia.git
 
-cd [name-of-work-space]
+cd laravel-auditoria-ia
 ```
 
 Build the container:
