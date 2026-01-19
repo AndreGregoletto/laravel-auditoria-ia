@@ -2,6 +2,7 @@
 
 namespace App\Livewire\Tools\Balance;
 
+use App\Models\Company;
 use App\Models\ImportFile;
 use App\Models\TrialBalanceDecision;
 use App\Models\Queue\TrialBalanceData;
@@ -31,6 +32,9 @@ class ValidateTrialBalanceEdit extends Component
 
     public function mount(ImportFile $file): void
     {
+        $id            = $file->company_id ?? null;
+        $file->company = Company::whereId($id)->first(['name', 'commercial_name']);
+
         $this->file = $file;
     }
 

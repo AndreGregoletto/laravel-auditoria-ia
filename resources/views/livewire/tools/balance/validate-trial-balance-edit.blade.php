@@ -5,7 +5,8 @@
         </h2>
 
         <div class="text-md text-gray-500 dark:text-gray-400 hover:text-black/70">
-            {{ $file->file_name }} — {{ sprintf('%02d/%04d', $file->reference_month, $file->reference_year) }}
+            <span class="text-black">{{ $file->company->comercial_name ?? $file->company->name }}
+            </span> | {{ $file->file_name }} — {{ sprintf('%02d/%04d', $file->reference_month, $file->reference_year) }}
         </div>
     </div>
 </x-slot>

@@ -105,4 +105,5 @@ return [
     '10' => 'Outubro',
     '11' => 'Novembro',
     '12' => 'Dezembro',
+    'validated_trial_balance' => 'Balancete validado',
 ];

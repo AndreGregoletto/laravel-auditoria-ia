@@ -188,9 +188,17 @@
                                             </div>
                                         </div>
 
-                                        <span class="shrink-0 inline-flex items-center rounded-full px-2 py-1 text-xs font-semibold {{ $f->file_status_id === 1 ? 'text-red-500' : 'text-green-500' }}
-                                            bg-emerald-100 text-emerald-700 dark:bg-emerald-900/40 dark:text-emerald-200">
-                                                {{ $f->file_status_id === 1 ? __('reports.inactive') : __('reports.active') }}
+                                        @php
+                                            $status = match($f->file_status_id){
+                                                1 => __('status.inactive'),
+                                                2 => __('status.active'),
+                                                3 => __('labels.validated_trial_balance'),
+                                            }
+                                        @endphp
+                                        <span class="shrink-0 inline-flex items-center rounded-full px-2 py-1
+                                            text-xs font-semibold {{ $f->file_status_id === 1 ? 'text-red-500' : 'text-green-500' }}
+                                            bg-emerald-100 text-emerald-700 dark:bg-emerald-900/40 dark:text-emerald-200"
+                                        >{{ $status }}
                                         </span>
 
                                     </div>
@@ -199,6 +207,7 @@
 
                                     <div class="mt-3 flex items-center justify-between">
                                         <a href="{{ route('validate-edit', $f->id) }}"
+                                           target="_blank"
                                            class="text-xs font-semibold text-indigo-600 group-hover:text-indigo-700
                                                 dark:text-indigo-400 dark:group-hover:text-indigo-300"
                                         >
@@ -206,6 +215,7 @@
                                         </a>
 
                                         <a href="{{ route('validate.ai-preview', $f->id) }}"
+                                           target="_blank"
                                            class="text-xs font-semibold text-indigo-600 group-hover:text-indigo-700
                                                 dark:text-indigo-400 dark:group-hover:text-indigo-300"
                                         >
