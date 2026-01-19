@@ -2,6 +2,7 @@
 
 namespace App\Models\Queue;
 
+use App\Models\ImportFile;
 use App\Models\TrialBalanceDecision;
 use Illuminate\Database\Eloquent\Model;
 
@@ -42,6 +43,11 @@ class TrialBalanceData extends Model
     public function decidedUser()
     {
         return $this->belongsTo(\App\Models\User::class, 'decided_user_id');
+    }
+
+    public function file()
+    {
+        return $this->hasOne(ImportFile::class, 'id', 'file_id');
     }
 
 }

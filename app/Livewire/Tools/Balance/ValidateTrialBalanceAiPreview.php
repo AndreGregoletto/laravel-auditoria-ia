@@ -32,6 +32,7 @@ class ValidateTrialBalanceAiPreview extends Component
 
         $userId = auth()->id();
         $cached = $store->get($file->id, $userId);
+        $cached = false;
 
         if (!$cached) {
             $suggestions = $suggester->suggestForFile($file->id);

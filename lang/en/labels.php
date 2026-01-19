@@ -106,4 +106,5 @@ return [
     '11' => 'November',
     '12' => 'December',
     'validated_trial_balance' => 'Validated trial balance',
+    'clean_account' => 'Clean account'
 ];
