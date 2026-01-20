@@ -56,6 +56,7 @@ class Processes extends Component
 
         $q = ImportFile::query()
             ->where('file_step_id', 2)
+            ->where('file_status_id', 3)
             ->where('company_id', $this->companyId)
             ->when($this->onlyMyFiles, fn ($qq) => $qq->where('user_id', Auth::id()))
             ->whereRaw('(reference_year * 100 + reference_month) BETWEEN ? AND ?', [$from, $to])
