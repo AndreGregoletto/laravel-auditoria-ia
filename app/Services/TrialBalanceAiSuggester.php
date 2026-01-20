@@ -17,7 +17,7 @@ class TrialBalanceAiSuggester
         $max = 0;
         foreach ($rows as $r) {
             $included = false;
-            $redflag  = 0.0;
+            $redflag  = 0.10;
             $eps      = 0.05;
             $debit    = (float) $r->debit;
             $credit   = (float) $r->credit;
@@ -26,15 +26,15 @@ class TrialBalanceAiSuggester
             $closing  = (float) $r->closing_balance;
 
             if (abs(($debit - $credit) - $monthly) > $eps) {
-                $redflag += 0.33;
+                $redflag += 0.30;
             }
 
             if (abs(($previous + $monthly) - $closing) > $eps) {
-                $redflag += 0.33;
+                $redflag += 0.30;
             }
 
             if (blank($r->account) || blank($r->description)) {
-                $redflag += 0.34;
+                $redflag += 0.30;
             }
 
             $len = null;
@@ -51,7 +51,7 @@ class TrialBalanceAiSuggester
 
             $confidence = null;
             if ($len !== null) {
-                $base = $included ? 70 : 55;
+                $base = $included ? 80 : 50;
                 $confidence = (int) max(0, min(100, round($base - ($redflag * 40))));
             }
 

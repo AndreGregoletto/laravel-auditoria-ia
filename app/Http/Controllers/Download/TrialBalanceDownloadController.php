@@ -9,27 +9,31 @@ use App\Http\Controllers\Controller;
 
 class TrialBalanceDownloadController extends Controller
 {
+    public string $fileName;
+
+    public function fileName($file, $include): void
+    {
+        $concat = $include ? __("labels.included") : "";
+
+        $filename = "Balancete {$concat} | " .
+            preg_replace('/[^A-Za-z0-9_\-]+/', ' ', $file->company->name) . ' - ' .
+            sprintf('%02d-%04d', $file->reference_month, $file->reference_year) . '.xlsx';
+
+        $this->fileName = $filename;
+    }
     public function xlsx(ImportFile $file)
     {
-        // (Opcional) autorização
-        // $this->authorize('view', $file);
-
-        $filename = 'Balancete_' .
-            preg_replace('/[^A-Za-z0-9_\-]+/', '_', $file->company->name ?? 'Empresa') . '_' .
-            sprintf('%02d_%04d', $file->reference_month, $file->reference_year) . '.xlsx';
-
-        return Excel::download(new TrialBalanceExport($file->id), $filename);
+        $this->fileName($file, false);
+        return Excel::download(new TrialBalanceExport($file->id), $this->fileName);
     }
 
     public function xlsxIncluded(\App\Models\ImportFile $file)
     {
-        $filename = 'Balancete_INCLUIDAS_' .
-            preg_replace('/[^A-Za-z0-9_\-]+/', '_', $file->company->name ?? 'Empresa') . '_' .
-            sprintf('%02d_%04d', $file->reference_month, $file->reference_year) . '.xlsx';
+        $this->fileName($file, true);
 
         return \Maatwebsite\Excel\Facades\Excel::download(
             new \App\Exports\TrialBalanceIncludeExport($file->id, true),
-            $filename
+            $this->fileName
         );
     }
 
