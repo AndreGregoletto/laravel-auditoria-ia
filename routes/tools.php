@@ -18,9 +18,9 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::get('balancete', SendExcel::class)->name('balancete');
     });
 
-    Route::get('processes', Processes::class)->name('processes');
 
     Route::group(['prefix' => 'processes'], function(){
+        Route::get('', Processes::class)->name('processes');
 
         Route::group(['prefix' => 'validate'], function(){
             Route::get('/balance', ValidateTrialBalance::class)->name('validate-balance');
