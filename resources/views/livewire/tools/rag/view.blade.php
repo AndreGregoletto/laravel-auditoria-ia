@@ -15,14 +15,16 @@
     $rows = [];
     foreach ($result['response'] as $account => $value) {
         $rows[] = [
-            'account' => $account,
+            'account'       => $account,
             'clean_account' => $value['clear_account'],
-            'description' => $value['description'],
-            'balance' => $value['balance'] ?? [],
+            'description'   => $value['description'],
+            'balance'       => $value['balance'] ?? [],
         ];
     }
 
-    $periods = array_keys($result['aClosing'] ?? []);
+    foreach ($result['fileOrder'] as $item) {
+        $periods[] = "{$item['reference_month']}/{$item['reference_year']}";
+    }
 @endphp
 
 <div
@@ -34,7 +36,7 @@
             <input
                 x-model.debounce.250ms="q"
                 type="text"
-                placeholder="Buscar por conta, descrição, valor..."
+                placeholder="{{ __('labels.search_by_account_description') }}"
                 class="w-full rounded-lg border border-gray-200 bg-white px-3 py-2 text-sm text-gray-900 shadow-sm
                        focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/30
                        dark:border-gray-800 dark:bg-gray-950 dark:text-gray-100"
@@ -42,7 +44,7 @@
         </div>
 
         <div class="text-sm text-gray-500 dark:text-gray-400">
-            <span x-text="filtered.length"></span> linhas
+            <span x-text="filtered.length"></span> {{ __('labels.line') }}
         </div>
     </div>
 
@@ -69,15 +71,26 @@
                                 </span>
                         </div>
                     </th>
-
                     @foreach($result['aClosing'] as $period => $sum)
                         @php $isZero = abs((float)$sum) < 0.05; @endphp
                         <th class="px-3 py-2 text-right">
-                                <span class="font-mono font-semibold {{ $isZero ? 'text-emerald-600 dark:text-emerald-400' : 'text-rose-600 dark:text-rose-400' }}">
-                                    {{ number_format((float)$sum, 2, ',', '.') }}
-                                </span>
+                            <span class="font-mono font-semibold {{ $isZero ? 'text-emerald-600 dark:text-emerald-400' : 'text-rose-600 dark:text-rose-400' }}">
+                                {{ number_format((float)$sum, 2, ',', '.') }}
+                            </span>
                         </th>
                     @endforeach
+{{--                    @foreach($result['fileOrder'] as $k => $a)--}}
+{{--                        @php--}}
+{{--                            $key    = "{$a['reference_month']}/{$a['reference_year']}";--}}
+{{--                            $sum    = $result['aClosing']["{$key}"];--}}
+{{--                            $isZero = abs((float)$sum) < 0.05;--}}
+{{--                        @endphp--}}
+{{--                        <th class="px-3 py-2 text-right">--}}
+{{--                            <span class="font-mono font-semibold {{ $isZero ? 'text-emerald-600 dark:text-emerald-400' : 'text-rose-600 dark:text-rose-400' }}">--}}
+{{--                                {{ number_format((float)$sum, 2, ',', '.') }}--}}
+{{--                            </span>--}}
+{{--                        </th>--}}
+{{--                    @endforeach--}}
                 </tr>
 
                 <tr class="text-left text-xs font-semibold text-gray-600 dark:text-gray-300 border-t border-gray-200 dark:border-gray-800">

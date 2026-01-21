@@ -30,7 +30,7 @@ class Companies extends Component
                 });
             })
             ->where('status', 1)
-            ->orderBy('name')
+            ->orderByRaw("COALESCE(commercial_name, name)")
             ->paginate(10);
 
         return view('livewire.reports.companies', compact('companies'))

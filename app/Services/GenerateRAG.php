@@ -115,9 +115,10 @@ class GenerateRAG
             }
 
             return [
-                'name' => $ragName,
-                'aClosing' => $aClosing,
-                'response' => $response,
+                'name'      => $ragName,
+                'aClosing'  => $aClosing,
+                'response'  => $response,
+                'fileOrder' => $this->fileOrder,
             ];
 
         } catch (\Exception $e){

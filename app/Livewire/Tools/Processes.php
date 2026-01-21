@@ -155,7 +155,7 @@ class Processes extends Component
     {
         $companies = Company::query()
             ->where('status', 1)
-            ->orderBy('name')
+            ->orderByRaw("COALESCE(commercial_name, name)")
             ->get(['id', 'name', 'commercial_name']);
 
         return view('livewire.tools.processes', compact('companies'))

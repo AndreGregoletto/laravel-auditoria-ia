@@ -31,7 +31,7 @@ class SendExcel extends Component
     {
         $currentYear = now()->year;
 
-        $this->companies = Company::where('status', 1)->orderBy('name')->get(['id', 'name']);
+        $this->companies = Company::select(['id', 'name', 'commercial_name'])->where('status', 1)->orderByRaw("COALESCE(commercial_name, name)")->get();
         $this->months = [
             1 => __('labels.january'),
             2 => __('labels.february'),

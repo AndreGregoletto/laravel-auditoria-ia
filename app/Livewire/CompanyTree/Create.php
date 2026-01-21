@@ -68,7 +68,7 @@ class Create extends Component
     public function render()
     {
         return view('livewire.company-tree.create', [
-            'companies' => Company::orderBy('name')->get()
+            'companies' => Company::orderByRaw("COALESCE(commercial_name, name)")->get()
         ])->layout('layouts.app');
     }
 }

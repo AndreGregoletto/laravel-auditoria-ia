@@ -73,10 +73,10 @@ class TrialBalanceAiSuggester
         }
 
         if($max >= 1){
-            $min = $max - 0.05;
-            $max = $max + 0.05;
+            $minVal = $max - 0.02;
+            $maxVal = $max + 0.02;
             foreach ($out as $key => $o){
-                if($o['closing'] >= $min && $o['closing'] <= $max && $o['included']){
+                if($o['closing'] >= $minVal && $o['closing'] <= $maxVal && $o['included']){
                     $out[$key]['included'] = false;
                     $out[$key]['confidence'] = max(0, min(100, round(50 - (0.5 * 40))));;
                     $out[$key]['rationale'] = "Removido pois o valor exato divergia com o Balancete";

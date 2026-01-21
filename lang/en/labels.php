@@ -110,4 +110,5 @@ return [
     'file_not_generated' => 'File not generated',
     'unavailable' => 'Unavailable',
     'only_included_accounts' => 'Balance - Only included accounts',
+    'search_by_account_description' => 'Search by account or description',
 ];
