@@ -98,6 +98,7 @@
         <script src="{{ asset('assets/js/script.js') }}"></script>
 
         @livewireScripts
+        @stack('scripts')
 
         <script>
             function initThemeLayout() {

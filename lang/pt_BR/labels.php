@@ -111,4 +111,16 @@ return [
     'unavailable' => 'Indisponível',
     'only_included_accounts' => 'Balancete - Somente das incluídas',
     'search_by_account_description' => 'Buscar por conta ou descrição. . .',
+    'archives_today' => 'Arquivos (Hoje)',
+    'summary_imports_generation' => 'Resumo de importações e geração',
+    'total' => 'Total',
+    'success' => 'Sucesso',
+    'error' => 'Erro',
+    'balance' => 'Balancete',
+    'balance_generated' => 'Balancete gerados',
+    'generated_total' => 'Gerados (Total)',
+    'registrations_today' => 'Cadastros (Hoje)',
+    'registrations_of_the_day' => 'Cadastros do dia',
+    'registered_companies' => 'Empresas cadastradas',
+    'trees_created_top' => 'Árvores criadas'
 ];

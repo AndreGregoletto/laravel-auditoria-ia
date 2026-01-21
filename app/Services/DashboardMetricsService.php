@@ -19,7 +19,7 @@ class DashboardMetricsService
 
         $processed = (clone $imports)
             ->whereIn('file_status_id', [2,3])
-            ->where('file_step_id', '>', 1)
+            ->where('file_step_id',  1)
             ->count();
 
         $error = (clone $imports)
