@@ -29,6 +29,17 @@ class RagViewExport extends DefaultValueBinder implements
         private readonly array $result
     ) {}
 
+    public function orderColumns(): array
+    {
+        $periods = [];
+
+        foreach ($this->result['fileOrder'] as $file) {
+            $periods[] = "{$file['reference_month']}/{$file['reference_year']}";
+        }
+
+        return $periods;
+    }
+
     public function title(): string
     {
         return 'RAG';
@@ -59,18 +70,16 @@ class RagViewExport extends DefaultValueBinder implements
 
     public function headings(): array
     {
-        $periods = array_keys($this->result['aClosing'] ?? []);
-
         return array_merge(
             [__('labels.account'), __('labels.clean_account'), __('labels.description')],
-            $periods
+            $this->orderColumns()
         );
     }
 
     public function array(): array
     {
-        $periods = array_keys($this->result['aClosing'] ?? []);
-        $rows = [];
+        $periods = $this->orderColumns();
+        $rows    = [];
 
         foreach (($this->result['response'] ?? []) as $account => $value) {
             $line = [
@@ -79,19 +88,20 @@ class RagViewExport extends DefaultValueBinder implements
                 (string) ($value['description'] ?? ''),
             ];
 
-            foreach ($periods as $p) {
-                $v = $value['balance'][$p] ?? null;
+            foreach ($this->result['fileOrder'] as $file) {
+                $v = $value['balance']["{$file['reference_month']}/{$file['reference_year']}"] ?? null;
                 $line[] = is_null($v) ? null : (float) $v;
             }
 
             $rows[] = $line;
         }
 
-        // Linha TOTAL (soma saldo final por período)
         $totals = ['', '', __('labels.final_balance_sum')];
+
         foreach ($periods as $p) {
             $totals[] = isset($this->result['aClosing'][$p]) ? (float) $this->result['aClosing'][$p] : null;
         }
+
         $rows[] = $totals;
 
         return $rows;
