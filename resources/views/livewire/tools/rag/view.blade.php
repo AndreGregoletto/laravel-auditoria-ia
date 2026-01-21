@@ -75,7 +75,7 @@
                         @php $isZero = abs((float)$sum) < 0.05; @endphp
                         <th class="px-3 py-2 text-right">
                             <span class="font-mono font-semibold {{ $isZero ? 'text-emerald-600 dark:text-emerald-400' : 'text-rose-600 dark:text-rose-400' }}">
-                                {{ number_format((float)$sum, 2, ',', '.') }}
+                                {{ number_format((float) $sum, 2, ',', '.') }}
                             </span>
                         </th>
                     @endforeach

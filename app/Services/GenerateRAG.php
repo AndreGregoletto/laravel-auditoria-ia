@@ -106,12 +106,12 @@ class GenerateRAG
 
                 if (!isset($response[$account])) {
                     $response[$account] = [
-                        'clear_account' => str_replace('.', '', $account),
+                        'clear_account' => (string) str_replace('.', '', $account),
                         'description'   => (string) $tb->description,
-                        'balance'       => [],
+                        'balance'       => (array) [],
                     ];
                 }
-                $response[$account]['balance'][$ref] = ($response[$account]['balance'][$ref] ?? 0) + (float) $tb->closing_balance;
+                $response[$account]['balance'][$ref] = (float) ($response[$account]['balance'][$ref] ?? 0.0) + (float) $tb->closing_balance;
             }
 
             return [
