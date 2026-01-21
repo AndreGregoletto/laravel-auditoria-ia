@@ -110,4 +110,5 @@ return [
     'file_not_generated' => 'Arquivo não foi gerado',
     'unavailable' => 'Indisponível',
     'only_included_accounts' => 'Balancete - Somente das incluídas',
+    'search_by_account_description' => 'Buscar por conta ou descrição. . .',
 ];

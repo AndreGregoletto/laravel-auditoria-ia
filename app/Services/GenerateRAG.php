@@ -73,11 +73,8 @@ class GenerateRAG
             $idFile    = (int) null;
             $file      = null;
             $ragName   = (string) "RAG - {$company->name} | " . __('files.period') . ":";
-
-            foreach ($this->fileOrder as $id => $f){
-                $monthYear = "{$f['reference_month']}/{$f['reference_year']}";
-                $ragName  .= "  _{$monthYear}";
-            }
+            $endFile   = end($this->fileOrder);
+            $ragName  .= "{$endFile['reference_month']}/{$endFile['reference_year']}";
 
             $trialBalance = TrialBalanceData::query()
                 ->whereIn('file_id', array_keys($this->fileOrder))
@@ -118,9 +115,10 @@ class GenerateRAG
             }
 
             return [
-                'name' => $ragName,
-                'aClosing' => $aClosing,
-                'response' => $response,
+                'name'      => $ragName,
+                'aClosing'  => $aClosing,
+                'response'  => $response,
+                'fileOrder' => $this->fileOrder,
             ];
 
         } catch (\Exception $e){

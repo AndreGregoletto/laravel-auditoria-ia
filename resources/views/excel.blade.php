@@ -31,7 +31,7 @@
                                 >
                                     <option value="">{{ __('labels.select') }}</option>
                                     @foreach($companies as $c)
-                                        <option value="{{ $c->id }}">{{ $c->name }}</option>
+                                        <option value="{{ $c->id }}">{{ $c->commercial_name ?? $c->name }}</option>
                                     @endforeach
                                 </select>
 

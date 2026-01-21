@@ -57,6 +57,7 @@ class TrialBalanceIncludeExport extends DefaultValueBinder implements
         return [
             __('labels.line'),
             __('labels.account'),
+            __('labels.description'),
             __('labels.previous_balance'),
             __('labels.debit'),
             __('labels.credit'),

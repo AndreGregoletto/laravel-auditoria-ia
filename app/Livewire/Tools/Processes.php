@@ -56,6 +56,7 @@ class Processes extends Component
 
         $q = ImportFile::query()
             ->where('file_step_id', 2)
+            ->where('file_status_id', 3)
             ->where('company_id', $this->companyId)
             ->when($this->onlyMyFiles, fn ($qq) => $qq->where('user_id', Auth::id()))
             ->whereRaw('(reference_year * 100 + reference_month) BETWEEN ? AND ?', [$from, $to])
@@ -154,7 +155,7 @@ class Processes extends Component
     {
         $companies = Company::query()
             ->where('status', 1)
-            ->orderBy('name')
+            ->orderByRaw("COALESCE(commercial_name, name)")
             ->get(['id', 'name', 'commercial_name']);
 
         return view('livewire.tools.processes', compact('companies'))

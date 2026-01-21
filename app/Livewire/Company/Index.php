@@ -29,7 +29,7 @@ class Index extends Component
                         ->orWhere('cnpj', 'like', "%{$term}%");
                 });
             })
-            ->orderBy('name')
+            ->orderByRaw("COALESCE(commercial_name, name)")
             ->paginate(10);
 
         return view('livewire.company.index', compact('companies'))
