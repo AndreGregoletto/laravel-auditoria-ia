@@ -128,4 +128,5 @@ return [
     'consider_absolute_value' => 'Consider absolute value',
     'consider_percentage_variation' => 'Consider percentage variation',
     'non_standard_relevant_variation' => 'Non-standard + relevant variation (typical basis',
+    'my_actions' => 'My actions'
 ];

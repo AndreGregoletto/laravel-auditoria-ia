@@ -18,17 +18,17 @@ class HeaderNotifications extends Component
 
     public function refreshNotifications(): void
     {
-        $iUser = Auth::id();
+        $myId = Auth::id();
 
         $this->unreadCount = UserNotification::query()
-            ->where('user_id', 1)
+            ->where('user_id', $myId)
             ->where('status', 1)
             ->where('read', 0)
             ->count();
 
         $this->items = UserNotification::query()
             ->with('file')
-            ->where('user_id', 1)
+            ->where('user_id', $myId)
             ->where('status', 1)
             ->where('read', 0)
             ->limit(5)

@@ -128,4 +128,5 @@ return [
     'consider_absolute_value' => 'Considerar valor absoluto',
     'consider_percentage_variation' => 'Considerar variação percentual',
     'non_standard_relevant_variation' => 'Variação fora do padrão + relevante (base típica',
+    'my_actions' => 'Minhas ações'
 ];

@@ -20,15 +20,38 @@
 
 
         <div class="mt-4 grid grid-cols-2 gap-3 sm:grid-cols-6">
-            <x-dashboard.kpi label="{{ __('labels.total') }}" :value="$today['all_file_import']" type="info" />
-            <x-dashboard.kpi label="{{ __('labels.success') }}" :value="$today['file_import_success']" type="success" />
-            <x-dashboard.kpi label="{{ __('labels.error') }}" :value="$today['file_import_error']" type="error" />
-            <x-dashboard.kpi label="{{ __('labels.balance') }}" :value="$today['file_import_balance']" type="info" />
-            <x-dashboard.kpi label="{{ __('labels.balance_generated') }}" :value="$today['file_import_balance_generate']" type="success" />
-            <x-dashboard.kpi label="{{ __('labels.generated_total') }}" :value="$today['all_file_import_generate']" type="success" />
+            <x-dashboard.kpi label="{{ __('labels.total') }}"
+                             :value="$today['all_file_import']"
+                             :my="$today['my_all_file_import'] ?? null"
+                             type="info" />
+
+            <x-dashboard.kpi label="{{ __('labels.success') }}"
+                             :value="$today['file_import_success']"
+                             :my="$today['my_file_import_success'] ?? null"
+                             type="success" />
+
+            <x-dashboard.kpi label="{{ __('labels.error') }}"
+                             :value="$today['file_import_error']"
+                             :my="$today['my_file_import_error'] ?? null"
+                             type="error" />
+
+            <x-dashboard.kpi label="{{ __('labels.balance') }}"
+                             :value="$today['file_import_balance']"
+                             :my="$today['my_file_import_balance'] ?? null"
+                             type="info" />
+
+            <x-dashboard.kpi label="{{ __('labels.balance_generated') }}"
+                             :value="$today['file_import_balance_generate']"
+                             :my="$today['my_file_import_balance_generate'] ?? null"
+                             type="success" />
+
+            <x-dashboard.kpi label="{{ __('labels.generated_total') }}"
+                             :value="$today['all_file_import_generate']"
+                             :my="$today['my_all_file_import_generate'] ?? null"
+                             type="success" />
         </div>
     </div>
-
+<!--
     <div class="grid grid-cols-1 gap-5 lg:grid-cols-2">
         <div class="rounded-xl border border-gray-200 bg-white p-4 dark:border-gray-800 dark:bg-gray-900">
             <div class="flex items-center justify-between">
@@ -73,7 +96,7 @@
         </div>
     </div>
 </div>
-
+-->
 @push('scripts')
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script>
