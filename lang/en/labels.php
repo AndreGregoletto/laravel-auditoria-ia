@@ -123,4 +123,9 @@ return [
     'registrations_of_the_day' => 'Registrations of the day',
     'registered_companies' => 'Registered companies',
     'trees_created_top' => 'Trees created (top)',
+    'highlight_variations' => 'Highlight variations',
+    'show_only_suspicions' => 'Show only suspicions',
+    'consider_absolute_value' => 'Consider absolute value',
+    'consider_percentage_variation' => 'Consider percentage variation',
+    'non_standard_relevant_variation' => 'Non-standard + relevant variation (typical basis',
 ];

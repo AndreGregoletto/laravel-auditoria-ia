@@ -122,5 +122,10 @@ return [
     'registrations_today' => 'Cadastros (Hoje)',
     'registrations_of_the_day' => 'Cadastros do dia',
     'registered_companies' => 'Empresas cadastradas',
-    'trees_created_top' => 'Árvores criadas'
+    'trees_created_top' => 'Árvores criadas',
+    'highlight_variations' => 'Destacar variações',
+    'show_only_suspicions' => 'Mostrar apenas suspeitas',
+    'consider_absolute_value' => 'Considerar valor absoluto',
+    'consider_percentage_variation' => 'Considerar variação percentual',
+    'non_standard_relevant_variation' => 'Variação fora do padrão + relevante (base típica',
 ];
