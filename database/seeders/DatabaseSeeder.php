@@ -23,6 +23,13 @@ class DatabaseSeeder extends Seeder
             'password' => 'padrao123',
         ]);
 
+        User::factory()->create([
+            'name' => 'User Test',
+            'email' => 'test@email.com',
+            'password' => 'default123',
+        ]);
+
+
         $this->call([
             FileStatus::class,
             TypeFiles::class,

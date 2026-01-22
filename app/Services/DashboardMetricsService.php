@@ -8,49 +8,55 @@ use App\Models\ImportFile;
 
 class DashboardMetricsService
 {
-    public function getBasicStats(?int $fileService = null): array
+    public function getStats(): array
     {
-        $companies  = Company::all();
-        $trees      = CompanyTree::query()
-            ->select('id', 'company_tree_id', 'company_parent_id', 'levels', 'status')
-            ->where('levels', 1)
-            ->with(['company'])->get();
+        $imports = ImportFile::query();
 
-        $imports    = ImportFile::query();
-
-        if(!is_null($fileService)){
-            $imports->where('file_service', $fileService);
-        }
-
-        $pendingCount = (clone $imports)
-            ->where('file_status_id', 2)
-            ->where('file_step_id', 5)
-            ->count();
-
-        $processingCount = (clone $imports)
+        $processing = (clone $imports)
             ->where('file_status_id', 2)
             ->where('file_step_id', 1)
             ->count();
 
-        $doneCount = (clone $imports)
-            ->where('file_step_id', 2)
+        $processed = (clone $imports)
+            ->whereIn('file_status_id', [2,3])
+            ->where('file_step_id',  1)
             ->count();
 
-        $failedCount = (clone $imports)
+        $error = (clone $imports)
             ->where('file_step_id', 3)
             ->count();
 
+        $cancelled = (clone $imports)
+            ->where('file_step_id', 4)
+            ->count();
+
+        $in_queue = (clone $imports)
+            ->where('file_status_id', 2)
+            ->where('file_step_id', 5)
+            ->count();
+
+        $balance_import = (clone $imports)
+            ->where('file_status_id', 2)
+            ->where('file_service', 1)
+            ->where('file_step_id', 4)
+            ->count();
+
+        $balance_validated = (clone $imports)
+            ->where('file_status_id', 3)
+            ->where('file_service', 1)
+            ->where('file_step_id', 2)
+            ->count();
+
         return [
-            'companies_total'     => $companies->count(),
-            'companies'           => $companies,
-            'trees_total'         => $trees->count(),
-            'trees'               => $trees,
-            'queue_pending'       => $pendingCount,
-            'queue_processing'    => $processingCount,
-            'queue_total_open'    => $pendingCount + $processingCount,
-            'imports_done'        => $doneCount,
-            'imports_failed'      => $failedCount,
-            'file_service_filter' => $fileService,
+            'queue' => [
+                __('reports.processing')             => $processing,
+                __('reports.processed')              => $processed,
+                __('reports.error')                  => $error,
+                __('reports.cancelled')              => $cancelled,
+                __('reports.in_queue')               => $in_queue,
+                __('services.balance')               => $balance_import,
+                __('labels.validated_trial_balance') => $balance_validated,
+            ],
         ];
     }
 }
