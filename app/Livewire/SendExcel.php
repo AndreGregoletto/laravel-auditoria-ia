@@ -114,7 +114,7 @@ class SendExcel extends Component
 
             ProcessTrialBalanceImport::dispatch($importFileRecord->id);
 
-            $this->reset('form');
+//            $this->reset('form');
 
             session()->flash('success', __('success.file_sent'));
 
