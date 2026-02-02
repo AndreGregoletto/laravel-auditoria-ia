@@ -75,6 +75,13 @@ class GenerateRAG
             $ragName   = (string) "RAG - {$company->name} | " . __('files.period') . ":";
             $startFile = reset($this->fileOrder);
             $endFile   = end($this->fileOrder);
+            $startFile = reset($this->fileOrder);
+            $endFile   = end($this->fileOrder);
+
+            $startPeriodStr = sprintf('%02d/%d', $startFile['reference_month'], $startFile['reference_year']);
+            $endPeriodStr   = sprintf('%02d/%d', $endFile['reference_month'], $endFile['reference_year']);
+
+            $periodRange = "{$startPeriodStr} a {$endPeriodStr}";
 
             $initialPeriod = "{$startFile['reference_month']}/{$startFile['reference_year']}";
             $finalPeriod   = "{$endFile['reference_month']}/{$endFile['reference_year']}";
@@ -185,6 +192,8 @@ class GenerateRAG
 
             return [
                 'name'      => $ragName,
+                'companyName' => $company->name,
+                'periodRange' => $periodRange,
                 'aClosing'  => $aClosing,
                 'response'  => $response,
                 'fileOrder' => $this->fileOrder,

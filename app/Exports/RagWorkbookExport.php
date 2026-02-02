@@ -13,7 +13,7 @@ class RagWorkbookExport implements WithMultipleSheets
     public function sheets(): array
     {
         return [
-//            new RagCoverSheetExport($this->result), // CAPA
+            new RagCoverSheetExport($this->result['companyName'], $this->result['periodRange']), // CAPA
             new RagBpSheetExport($this->result),    // BP
 //            new RagDreSheetExport($this->result),   // DRE
             new RagViewExport($this->result),       // BALANCETE
