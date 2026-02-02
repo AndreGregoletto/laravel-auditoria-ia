@@ -17,12 +17,15 @@ class View extends Component
         $this->files = $files;
 
         $service = new GenerateRAG();
-        $this->result = $service->startProcess(explode('|', $this->files));
+        $this->result = $service->startProcess(explode('|', $this->files), 0);
     }
 
 
     public function downloadXlsx()
     {
+        $service = new GenerateRAG();
+        $result = $service->startProcess(explode('|', $this->files), 1);
+
         $companySafe = preg_replace('/[^A-Za-z0-9_\- ]+/', '', (string)($this->result['name']));
         $filename = trim($companySafe) !== '' ? $companySafe : 'RAG';
         $filename = str_replace(' ', '_', $filename) . '.xlsx';

@@ -58,7 +58,7 @@ class GenerateRAG
         return true;
     }
 
-    public function startProcess(array $aFiles): array
+    public function startProcess(array $aFiles, bool $download): array
     {
         try {
             if(!$this->validatorFiles($aFiles)){
@@ -73,8 +73,12 @@ class GenerateRAG
             $idFile    = (int) null;
             $file      = null;
             $ragName   = (string) "RAG - {$company->name} | " . __('files.period') . ":";
+            $startFile = reset($this->fileOrder);
             $endFile   = end($this->fileOrder);
-            $ragName  .= "{$endFile['reference_month']}/{$endFile['reference_year']}";
+
+            $initialPeriod = "{$startFile['reference_month']}/{$startFile['reference_year']}";
+            $finalPeriod   = "{$endFile['reference_month']}/{$endFile['reference_year']}";
+            $ragName      .= "{$endFile['reference_month']}/{$endFile['reference_year']}";
 
             $trialBalance = TrialBalanceData::query()
                 ->whereIn('file_id', array_keys($this->fileOrder))
@@ -87,7 +91,26 @@ class GenerateRAG
                     'balance_last_decision_id', 'balance_decision_source'
                 ]);
 
-            foreach ($trialBalance as $key => $tb){
+            $aDre = (array) [];
+            $aBp  = (array) [
+                'assets' => [
+                    $initialPeriod => [ 'sum' => 0.0 ],
+                    $finalPeriod   => [ 'sum' => 0.0 ],
+                ],
+                'currentAssets'         => [],
+                'nomCurrentAssets'      => [],
+                'liabilities'           => [
+                    $initialPeriod => [ 'sum' => 0.0 ],
+                    $finalPeriod   => [ 'sum' => 0.0 ],
+                ],
+                'currentLiabilities'    => [],
+                'nomCurrentLiabilities' => [],
+                'freeHeritage'          => [],
+            ];
+
+            foreach ($trialBalance as $tb){
+                /** Start Process Balances */
+
                 if($idFile !== $tb->file_id){
                     $idFile = $tb->file_id;
                     $file   = ImportFile::where('id', $idFile)->first();
@@ -112,6 +135,52 @@ class GenerateRAG
                     ];
                 }
                 $response[$account]['balance'][$ref] = (float) ($response[$account]['balance'][$ref] ?? 0.0) + (float) $tb->closing_balance;
+
+                if ($download) {
+                    if (in_array($ref, [$initialPeriod, $finalPeriod])) {
+                        $fourNumber = substr($tb->account, 0, 4);
+                        $balance    = (float) $tb->closing_balance;
+
+                        $addToSection = function($section) use (&$aBp, $ref, $account, $balance) {
+                            if (!isset($aBp[$section][$ref]['sum'])) {
+                                $aBp[$section][$ref]['sum'] = 0.0;
+                            }
+                            if (!isset($aBp[$section][$ref][$account])) {
+                                $aBp[$section][$ref][$account] = 0.0;
+                            }
+
+                            $aBp[$section][$ref][$account] += $balance;
+                            $aBp[$section][$ref]['sum']    += $balance;
+                        };
+
+                        switch ($fourNumber) {
+                            case '1.1.':
+                                $addToSection('currentAssets');
+                                $aBp['assets'][$ref]['sum'] += $balance;
+                                break;
+
+                            case '1.2.':
+                                $addToSection('nomCurrentAssets');
+                                $aBp['assets'][$ref]['sum'] += $balance;
+                                break;
+
+                            case '2.1.':
+                                $addToSection('currentLiabilities');
+                                $aBp['liabilities'][$ref]['sum'] += $balance;
+                                break;
+
+                            case '2.2.':
+                                $addToSection('nomCurrentLiabilities');
+                                $aBp['liabilities'][$ref]['sum'] += $balance;
+                                break;
+
+                            case '2.4.':
+                                $addToSection('freeHeritage');
+                                $aBp['liabilities'][$ref]['sum'] += $balance;
+                                break;
+                        }
+                    }
+                }
             }
 
             return [
@@ -119,10 +188,12 @@ class GenerateRAG
                 'aClosing'  => $aClosing,
                 'response'  => $response,
                 'fileOrder' => $this->fileOrder,
+                'BP'        => $aBp,
+                'DRE'       => $aDre,
             ];
 
         } catch (\Exception $e){
-            dd($e);
+            dd($e->getMessage());
         }
 
     }
