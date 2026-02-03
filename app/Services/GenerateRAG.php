@@ -148,7 +148,9 @@ class GenerateRAG
                         $fourNumber = substr($tb->account, 0, 4);
                         $balance    = (float) $tb->closing_balance;
 
-                        $addToSection = function($section) use (&$aBp, $ref, $account, $balance) {
+                        $addToSection = function($section, bool $dre = false) use (&$aBp, $ref, $account, $balance) {
+                            $account = $dre ? 'DRE' : $account;
+
                             if (!isset($aBp[$section][$ref]['sum'])) {
                                 $aBp[$section][$ref]['sum'] = 0.0;
                             }
@@ -183,6 +185,11 @@ class GenerateRAG
 
                             case '2.4.':
                                 $addToSection('freeHeritage');
+                                $aBp['liabilities'][$ref]['sum'] += $balance;
+                                break;
+
+                            default:
+                                $addToSection('freeHeritage', true);
                                 $aBp['liabilities'][$ref]['sum'] += $balance;
                                 break;
                         }
