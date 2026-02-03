@@ -2,8 +2,11 @@
 
 namespace App\Livewire\Tools;
 
+use App\Livewire\Tools\Rag\View;
 use App\Models\Company;
 use App\Models\ImportFile;
+use App\Services\GenerateRAG;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
 
@@ -53,6 +56,7 @@ class Processes extends Component
 
         $q = ImportFile::query()
             ->where('file_step_id', 2)
+            ->where('file_status_id', 3)
             ->where('company_id', $this->companyId)
             ->when($this->onlyMyFiles, fn ($qq) => $qq->where('user_id', Auth::id()))
             ->whereRaw('(reference_year * 100 + reference_month) BETWEEN ? AND ?', [$from, $to])
@@ -95,7 +99,6 @@ class Processes extends Component
 
     public function addSelected(): void
     {
-        // aqui é a seleção do select da esquerda
         if (empty($this->availableSelectedIds)) {
             return;
         }
@@ -152,10 +155,19 @@ class Processes extends Component
     {
         $companies = Company::query()
             ->where('status', 1)
-            ->orderBy('name')
+            ->orderByRaw("COALESCE(commercial_name, name)")
             ->get(['id', 'name', 'commercial_name']);
 
         return view('livewire.tools.processes', compact('companies'))
             ->layout('layouts.app');
     }
+
+    public function generateRag()
+    {
+//        $service = new GenerateRAG();
+//        $result  = $service->startProcess($this->selectedFileIds)
+        $files = implode('|',$this->selectedFileIds);
+        return redirect()->route('rag.view', ['files' => $files]);
+    }
+
 }

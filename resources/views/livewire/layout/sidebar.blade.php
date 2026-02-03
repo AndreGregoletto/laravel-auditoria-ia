@@ -48,6 +48,7 @@
                         <span class="pc-arrow"><i class="ti ti-chevron-right"></i></span>
                     </a>
                     <ul class="pc-submenu">
+                        <li class="pc-item"><a class="pc-link" href="{{ route('validate-balance') }}" data-i18n="Level 2.1">{{ __('navbar.validate_bal') }}</a></li>
                         <li class="pc-item"><a class="pc-link" href="{{ route('processes') }}" data-i18n="Level 2.1">{{ __('navbar.generate_rag') }}</a></li>
                     </ul>
                 </li>

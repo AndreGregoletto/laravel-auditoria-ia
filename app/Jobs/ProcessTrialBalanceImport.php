@@ -5,6 +5,7 @@ namespace App\Jobs;
 use App\Models\ImportFile;
 use App\Models\Queue\TrialBalanceData;
 use App\Services\AIService;
+use App\Services\NotificationsService;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
@@ -21,15 +22,16 @@ class ProcessTrialBalanceImport implements ShouldQueue
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
     public int $importFileId;
+    public NotificationsService $notifications;
 
     public function __construct(int $importFileId)
     {
         $this->importFileId = $importFileId;
+        $this->notifications = new NotificationsService();
     }
 
     public function handle(AIService $aiService): void
     {
-        DB::beginTransaction();
 
         try {
             $importFile = ImportFile::where('id', $this->importFileId)
@@ -37,9 +39,18 @@ class ProcessTrialBalanceImport implements ShouldQueue
                 ->where('file_step_id', 5)
                 ->firstOrFail();
 
+            $this->notifications->sendByProcess(
+                'file_is_processed',
+                0,
+                $importFile->id,
+                $importFile->user_id,
+            );
+
+            DB::beginTransaction();
+
             $importFile->update(['file_step_id' => 1]);
 
-            $fileName = "{$importFile->user_id}-{$importFile->company_id}-{$importFile->reference_year}-{$importFile->reference_month}-{$importFile->file_name}";
+            $fileName = "{$importFile->id}.{$importFile->file_extension}";
 
             $relativePath = "balance/{$fileName}";
 
@@ -103,6 +114,13 @@ class ProcessTrialBalanceImport implements ShouldQueue
 
             $importFile->update(['file_step_id' => 2]);
             DB::commit();
+
+            $this->notifications->sendByProcess(
+                'fie_has_successfully',
+                0,
+                $importFile->id,
+                $importFile->user_id,
+            );
 
         } catch (\Exception $e) {
             DB::rollBack();

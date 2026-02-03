@@ -20,6 +20,13 @@ return [
     'no_results_found' => 'No results found',
     'company_not_found' => 'Company not found.',
     'year_out_of_limit' => 'Years out of limit.',
+    'invalid_file' => 'Invalid File.',
+
+    'justification_is_required' => 'Justificativa é obrigatória.',
+    'decision_registered' => 'Decisão registrada.',
+    'provide_a_valid_size' => 'Informe um tamanho válido.',
+    'justification_required_mass_action' => 'Justificativa é obrigatória para ação em massa.',
+    'mass_action_applied' => 'Ação em massa aplicada',
 
     #form
     'name_required' => 'O campo é Obrigatório.',

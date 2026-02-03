@@ -39,7 +39,8 @@
                                     <div class="flex items-center min-w-0">
                                         <span class="shrink-0"></span>
                                         @php
-                                            $default =  $m['message'] ?? $m['msg_system'];
+                                            $default =  __("notifications.{$m['message']}") ?? $m['message'];
+                                            $default = $default ?? $m['msg_system'];
                                         @endphp
                                         <span class="truncate" title="{{ $default }}">
                                             {{ $default }}

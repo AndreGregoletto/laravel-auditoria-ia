@@ -78,6 +78,8 @@
             </div>
         </footer>
 
+{{--        Toast--}}
+        <x-ui.toast />
 
 {{--        <script src="{{ asset('assets/js/plugins/apexcharts.min.js') }}"></script>--}}
 {{--        <script src="{{ asset('assets/js/plugins/jsvectormap.min.js') }}"></script>--}}
@@ -96,6 +98,7 @@
         <script src="{{ asset('assets/js/script.js') }}"></script>
 
         @livewireScripts
+        @stack('scripts')
 
         <script>
             function initThemeLayout() {

@@ -165,7 +165,7 @@
                             @forelse($this->availableFiles as $f)
                                 <option value="{{ $f->id }}">
                                     {{ sprintf('%02d/%04d', $f->reference_month, $f->reference_year) }}
-                                    — {{ $f->file_name }}.{{ $f->file_extension }}
+                                    — {{ $f->file_name }}
                                 </option>
                             @empty
                                 <option disabled>{{__('labels.no_files_were_found_using_the_current_filters')}}</option>
@@ -212,7 +212,7 @@
                                     <div class="min-w-0">
                                         <div class="truncate text-sm font-medium text-gray-800 dark:text-gray-100">
                                             {{ sprintf('%02d/%04d', $f->reference_month, $f->reference_year) }}
-                                            — {{ $f->file_name }}.{{ $f->file_extension }}
+                                            — {{ $f->file_name }}
                                         </div>
 
                                         @if(!empty($f->error_log))
@@ -240,13 +240,22 @@
 
                         </div>
                     </div>
-
+                    @php
+                        $canGenerate = count($this->selectedFileIds) >= 2;
+                    @endphp
                     <button
                         type="button"
-                        class="mt-3 w-full rounded-lg bg-gray-300 px-3 py-2 text-sm font-medium text-gray-700
-                            dark:bg-gray-800 dark:text-gray-200 cursor-not-allowed"
-                        disabled>
-                        {{ __('navbar.generate_rag') }}
+                        wire:click="generateRag"
+                        wire:loading.attr="disabled"
+                        @disabled(empty($this->selectedFileIds))
+                        class="mt-3 w-full rounded-lg px-3 py-2 text-sm font-medium
+                           {{ !$canGenerate
+                                ? 'bg-gray-300 text-gray-700 cursor-not-allowed'
+                                : 'bg-indigo-600 text-white hover:bg-indigo-700'
+                           }}"
+                    >
+                        <span wire:loading.remove>{{ __('navbar.generate_rag') }}</span>
+                        <span wire:loading>{{ __('files.wait') }}</span>
                     </button>
                 </div>
 

@@ -1,5 +1,3 @@
-# ✅ CODE_OF_CONDUCT.md (corporate + neutro)
-
 # Code of Conduct
 
 This project is developed and maintained in a professional and collaborative environment.

@@ -28,6 +28,9 @@ class UploadedFiles extends Component
     public string $filterMonth = '';
     public string $filterYear  = '';
 
+    public array $months = [];
+    public array $years  = [];
+
     protected $queryString = [
         'filterFileName' => ['except' => ''],
         'filterUser'     => ['except' => ''],
@@ -39,6 +42,27 @@ class UploadedFiles extends Component
         'filterMonth'    => ['except' => ''],
         'filterYear'     => ['except' => ''],
     ];
+
+    public function mount() :void
+    {
+        $currentYear  = now()->year;
+        $this->months = [
+            1 => __('labels.january'),
+            2 => __('labels.february'),
+            3 => __('labels.march'),
+            4 => __('labels.april'),
+            5 => __('labels.may'),
+            6 => __('labels.june'),
+            7 => __('labels.july'),
+            8 => __('labels.august'),
+            9 => __('labels.september'),
+            10 => __('labels.october'),
+            11 => __('labels.november'),
+            12 => __('labels.december'),
+        ];
+
+        $this->years = [$currentYear, $currentYear - 1 ];
+    }
 
     public function updatedSearch(): void
     {
@@ -101,7 +125,7 @@ class UploadedFiles extends Component
         }
 
         if ($t = trim($this->filterMonth)) {
-            $query->where('reference_month', 'like', "%$t%");
+            $query->where('reference_month',  "$t");
         }
 
         if ($t = trim($this->filterYear)) {

@@ -51,27 +51,29 @@
                        focus:border-indigo-500 focus:ring-indigo-500 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-100">
                 <option value="">{{ __('reports.file_states') }}</option>
                 @foreach($fileStatus as $file)
-                    <option value="{{ $file->id }}">{{ __("reports.{$file->name_conf}") }}</option>
+                    <option value="{{ $file->id }}">{{ __("status.{$file->name_conf}") ?? $file->name }}</option>
                 @endforeach
             </select>
         </div>
 
         <div class="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-6">
-            <input type="number"
-                   min="1" max="12"
-                   wire:model.live.debounce.400ms="filterMonth"
-                   placeholder="{{ __('reports.reference_month') }}"
-                   class="w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm text-gray-900
-                      focus:border-indigo-500 focus:ring-indigo-500 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-100"
-            />
+            <select wire:model.live="filterMonth"
+                    class="w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm text-gray-900
+                       focus:border-indigo-500 focus:ring-indigo-500 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-100">
+                <option value="">{{ __('reports.reference_month') }}</option>
+                @foreach($months as $key => $m)
+                    <option value="{{ $key }}">{{ $m }}</option>
+                @endforeach()
+            </select>
 
-            <input type="number"
-                   min="2000" max="2100"
-                   wire:model.live.debounce.400ms="filterYear"
-                   placeholder="{{ __('reports.reference_year') }}"
-                   class="w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm text-gray-900
-                      focus:border-indigo-500 focus:ring-indigo-500 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-100"
-            />
+            <select wire:model.live="filterYear"
+                    class="w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm text-gray-900
+                       focus:border-indigo-500 focus:ring-indigo-500 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-100">
+                <option value="">{{ __('reports.reference_year') }}</option>
+                @foreach($years as $y)
+                    <option value="{{ $y }}">{{ $y }}</option>
+                @endforeach()
+            </select>
 
             <input type="text"
                    wire:model.live.debounce.400ms="filterExtension"
@@ -135,7 +137,7 @@
                         {{ $file->company->name }}
                     </td>
 
-                    <td class="px-4 py-3 text-center">{{ $file->reference_month }}</td>
+                    <td class="px-4 py-3 text-center">{{ __("labels.{$file->reference_month}") }}</td>
                     <td class="px-4 py-3 text-center">{{ $file->reference_year }}</td>
 
                     <td class="px-4 py-3 text-center uppercase">
@@ -156,8 +158,21 @@
                         @endswitch
                     </td>
 
-                    <td class="px-4 py-3 text-center {{ $file->file_status_id === 1 ? 'text-red-500' : 'text-green-500' }}">
-                        {{ $file->file_status_id === 1 ? __('reports.inactive') : __('reports.active') }}
+                    @php
+                        $color = match ($file->file_status_id) {
+                            1 => 'text-red-500',
+                            2 => 'text-green-500',
+                            3 => 'text-yellow-900',
+                        };
+
+                        $conf = match ($file->file_status_id) {
+                            1 => 'inactive',
+                            2 => 'active',
+                            3 => 'file_generated',
+                        };
+                    @endphp
+                    <td class="px-4 py-3 text-center {{ $color }}">
+                        {{ __("status.{$conf}") }}
                     </td>
 
                     <td class="px-4 py-3">
@@ -169,10 +184,22 @@
                     </td>
 
                     <td class="px-4 py-3 text-center">
-                        <button wire:click="download({{ $file->id }})"
-                                class="text-indigo-600 hover:underline">
-                            {{ __('buttons.download') }}
-                        </button>
+                        @if($file->file_status_id === 3)
+                            <a
+                                href="{{ route('balance.download.xlsx', ['file' => $file->id]) }}"
+                                class="inline-flex items-center gap-2 rounded-lg bg-emerald-600 px-3 py-2 text-sm
+                                font-semibold text-white shadow-sm hover:bg-emerald-700 focus:outline-none focus:ring-2
+                                focus:ring-emerald-500/40 dark:focus:ring-emerald-400/40"
+                            >
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 24 24" fill="none">
+                                    <path d="M12 3v10" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                                    <path d="M8 11l4 4 4-4" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                          stroke-linejoin="round"/>
+                                    <path d="M5 21h14" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                                </svg>
+                                {{ __('buttons.download') }}
+                            </a>
+                        @endif
                     </td>
                 </tr>
             @empty

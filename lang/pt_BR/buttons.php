@@ -14,4 +14,7 @@ return [
     'confirm'     => 'Confirmar',
     'download'    => 'Download',
     'mark_as_read' => 'Marcar como lida',
+    'save_decision' => 'Salvar Decisão',
+    'apply' => 'Aplicar',
+    'confirm_audit' => 'Confirmar Auditoria'
 ];

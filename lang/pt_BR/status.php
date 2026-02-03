@@ -1,6 +1,7 @@
 <?php
 
 return [
-    'inativo' => 'Inativo',
-    'ativo' => 'Ativo',
+    'inactive' => 'Inativo',
+    'active' => 'Ativo',
+    'file_generated' => 'Arquivo gerado'
 ];

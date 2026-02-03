@@ -13,6 +13,10 @@ return [
     'add'         => 'Add',
     'confirm'     => 'Confirm',
     'download'    => 'Download',
-    'mark_as_read'=> 'Mark as read'
+    'mark_as_read'=> 'Mark as read',
+    'save_decision' => 'Save Decision',
+    'apply' => 'Apply',
+    'confirm_audit' => 'Confirm Audit',
+
 ];
 
