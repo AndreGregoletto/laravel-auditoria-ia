@@ -21,6 +21,9 @@ class TrialBalanceDecision extends Model
         'batch_id', //Identificador de lote (UUID)/ Usado para agrupar decisões realizadas em massa
         'decided_user_id', // Usuário (auditor) que tomou ou aprovou a decisão.
         'decided_at', //Data e hora em que a decisão foi efetivamente tomada.
+        'balance_sheet_id',
+        'income_statement_id',
+        'decision_type', // Incluido || Classificacao_bp || Classificacao_dre || Classificacao_both
     ];
 
     protected $casts = [

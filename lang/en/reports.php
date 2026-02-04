@@ -25,6 +25,7 @@ return [
     'rag_generated' => 'RAG Generated',
     'records' => 'Records',
     'clear_filters' => 'Clear filters',
+    'bp_classification' => 'BP Classification',
 
     'active' => 'Active',
     'inactive' => 'Inactive',
@@ -34,7 +35,13 @@ return [
     'download' => 'Download RAG',
 
     'name'             => 'Name',
-    'name_conf'       => 'Configuration name',
+    'code'             => 'Code',
+    'parent_code'      => 'Parent code',
+    'sort_order'       => 'Sort order',
+    'side'             => 'Side',
+    'section'          => 'Section',
+    'name_conf'        => 'Configuration name',
+    'config_name'      => 'Configuration name',
     'commercial_name'  => 'Commercial Name',
     'cnpj'             => 'CNPJ',
     'publicity_trade'  => 'Publicity Trade',

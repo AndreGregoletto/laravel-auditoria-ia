@@ -11,7 +11,9 @@ class IncomeStatement extends Model
         'name',
         'company_tree_id',
         'company_id',
-        'prefix',
         'status',
+        'parent_code',
+        'sort_order',
+        'config_name',
     ];
 }

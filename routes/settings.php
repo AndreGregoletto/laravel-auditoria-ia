@@ -22,6 +22,10 @@ use App\Livewire\Register\FileStep\Index  as FileStepIndex;
 use App\Livewire\Register\FileStep\Create as FileStepCreate;
 use App\Livewire\Register\FileStep\Edit   as FileStepEdit;
 
+use App\Livewire\Register\BalanceSheet\Index  as BalanceSheetIndex;
+use App\Livewire\Register\BalanceSheet\Create as BalanceSheetCreate;
+use App\Livewire\Register\BalanceSheet\Edit   as BalanceSheetEdit;
+
 
 Route::prefix('settings')->name('settings.')->group(function (){
     Route::prefix('companies')->name('companies.')->group(function () {
@@ -58,6 +62,12 @@ Route::prefix('settings')->name('settings.')->group(function (){
             Route::get('/', FileStepIndex::class)->name('index');
             Route::get('/create', FileStepCreate::class)->name('create');
             Route::get('/{fileStep}/edit', FileStepEdit::class)->name('edit');
+        });
+
+        Route::prefix('balance-sheet-classification')->name('asset-base-classification.')->group(function () {
+            Route::get('/', BalanceSheetIndex::class)->name('index');
+            Route::get('/create', BalanceSheetCreate::class)->name('create');
+            Route::get('/{balanceSheet}/edit', BalanceSheetEdit::class)->name('edit');
         });
     });
 })->middleware(['auth', 'verified']);

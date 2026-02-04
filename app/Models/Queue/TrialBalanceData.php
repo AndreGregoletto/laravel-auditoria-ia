@@ -21,6 +21,8 @@ class TrialBalanceData extends Model
         'closing_balance',  // Saldo final / Atual
         'red_flag',
         'status',
+        'balance_sheet_id',
+        'income_statement_id',
 
 //        Snapshot
 //        'balance_included',

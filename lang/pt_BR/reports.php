@@ -25,6 +25,7 @@ return [
     'rag_generated' => 'RAG Gerada',
     'records' => 'Registros',
     'clear_filters' => 'Limpar filtros',
+    'bp_classification' => 'Classificação de BP',
 
     'active' => 'Ativo',
     'inactive' => 'Inativo',
@@ -33,7 +34,13 @@ return [
     'no_files_uploaded_yet' => 'Nenhum arquivo enviado ainda.',
     'download' => 'Baixar RAG',
 
-    'name'            => 'Nome',
+    'name'             => 'Nome',
+    'code'             => 'Código',
+    'parent_code'      => 'Grupo',
+    'sort_order'       => 'Ordenação',
+    'side'             => 'Lado',
+    'section'          => 'Seção',
+    'config_name'      => 'Configuration name',
     'name_conf'       => 'Nome de configuração',
     'commercial_name' => 'Nome Comercial',
     'cnpj'            => 'CNPJ',

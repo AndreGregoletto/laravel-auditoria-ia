@@ -36,6 +36,7 @@ class DatabaseSeeder extends Seeder
             FileStep::class,
             Company::class,
             TreeCompany::class,
+            ClassificationCatalogSeeder::class,
         ]);
     }
 }
