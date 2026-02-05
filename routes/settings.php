@@ -26,6 +26,10 @@ use App\Livewire\Register\BalanceSheet\Index  as BalanceSheetIndex;
 use App\Livewire\Register\BalanceSheet\Create as BalanceSheetCreate;
 use App\Livewire\Register\BalanceSheet\Edit   as BalanceSheetEdit;
 
+use App\Livewire\Register\IncomeStatement\Index  as IncomeStatementIndex;
+use App\Livewire\Register\IncomeStatement\Create as IncomeStatementCreate;
+use App\Livewire\Register\IncomeStatement\Edit   as IncomeStatementEdit;
+
 
 Route::prefix('settings')->name('settings.')->group(function (){
     Route::prefix('companies')->name('companies.')->group(function () {
@@ -68,6 +72,12 @@ Route::prefix('settings')->name('settings.')->group(function (){
             Route::get('/', BalanceSheetIndex::class)->name('index');
             Route::get('/create', BalanceSheetCreate::class)->name('create');
             Route::get('/{balanceSheet}/edit', BalanceSheetEdit::class)->name('edit');
+        });
+
+        Route::prefix('income-statement-classification')->name('income-statement-classification.')->group(function () {
+            Route::get('/', IncomeStatementIndex::class)->name('index');
+            Route::get('/create', IncomeStatementCreate::class)->name('create');
+            Route::get('/{incomeStatement}/edit', IncomeStatementEdit::class)->name('edit');
         });
     });
 })->middleware(['auth', 'verified']);

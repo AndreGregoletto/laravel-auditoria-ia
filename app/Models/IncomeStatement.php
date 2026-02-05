@@ -16,4 +16,10 @@ class IncomeStatement extends Model
         'sort_order',
         'config_name',
     ];
+
+    protected $casts = [
+        'status' => 'boolean',
+        'created_at',
+        'updated_at',
+    ];
 }

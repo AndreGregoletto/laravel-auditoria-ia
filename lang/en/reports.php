@@ -26,6 +26,7 @@ return [
     'records' => 'Records',
     'clear_filters' => 'Clear filters',
     'bp_classification' => 'BP Classification',
+    'dre_classification' => 'DRE Classification',
 
     'active' => 'Active',
     'inactive' => 'Inactive',

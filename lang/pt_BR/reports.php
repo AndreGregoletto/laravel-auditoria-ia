@@ -26,6 +26,7 @@ return [
     'records' => 'Registros',
     'clear_filters' => 'Limpar filtros',
     'bp_classification' => 'Classificação de BP',
+    'dre_classification' => 'Classificação de DRE',
 
     'active' => 'Ativo',
     'inactive' => 'Inativo',

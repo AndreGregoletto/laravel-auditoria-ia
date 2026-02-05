@@ -198,6 +198,26 @@
                                 </li>
                             </ul>
                         </li>
+                        <li class="pc-item pc-hasmenu">
+                            <a href="#!" class="pc-link">
+                                <span class="pc-mtext">{{ __('reports.dre_classification') }}</span>
+                                <span class="pc-arrow"><i class="ti ti-chevron-right"></i></span>
+                            </a>
+
+                            <ul class="pc-submenu">
+                                <li class="pc-item">
+                                    <a class="pc-link" href="{{ route('settings.register.income-statement-classification.index') }}">
+                                        {{ __('navbar.consult') }}
+                                    </a>
+                                </li>
+
+                                <li class="pc-item">
+                                    <a class="pc-link" href="{{ route('settings.register.income-statement-classification.create') }}">
+                                        {{ __('navbar.new') }}
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
 
                     </ul>
                 </li>

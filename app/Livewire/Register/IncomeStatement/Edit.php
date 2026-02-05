@@ -1,31 +1,30 @@
 <?php
 
-namespace App\Livewire\Register\BalanceSheet;
+namespace App\Livewire\Register\IncomeStatement;
 
-use App\Models\BalanceSheet;
+use App\Models\IncomeStatement;
 use Illuminate\Validation\Rule;
 use Livewire\Component;
 
-class Create extends Component
+class Edit extends Component
 {
-    public array $form = [];
+    public IncomeStatement $incomeStatement;
+
+    public array $form  = [];
     public array $group = [];
 
-    public function mount(): void
+    public function mount(IncomeStatement $incomeStatement): void
     {
-        $this->form = [
-            'code'            => '',
-            'name'            => '',
-            'company_tree_id' => null,
-            'company_id'      => null,
-            'parent_code'     => null,
-            'sort_order'      => null,
-            'side'            => null,
-            'section'         => null,
-            'status'          => true,
-        ];
+        $this->incomeStatement = $incomeStatement;
 
-        $this->group = BalanceSheet::query()
+        $this->form = $incomeStatement->only([
+            'code', 'name', 'company_tree_id',
+            'company_id', 'status', 'parent_code',
+            'sort_order', 'config_name',
+        ]);
+
+        $this->form['status'] = (bool) ($this->form['status'] ?? true);
+        $this->group = IncomeStatement::query()
             ->whereNull('company_tree_id')
             ->whereNull('company_id')
             ->orderByRaw('COALESCE(sort_order, 999999) ASC')
@@ -40,7 +39,7 @@ class Create extends Component
                 'required',
                 'string',
                 'max:10',
-                Rule::unique('balance_sheets', 'code'),
+                Rule::unique('income_statements', 'code')->ignore($this->incomeStatement->id),
             ],
             'form.name' => ['required', 'string', 'max:255'],
 
@@ -51,13 +50,10 @@ class Create extends Component
                 'nullable',
                 'string',
                 'max:10',
-                Rule::exists('balance_sheets', 'code'),
+                Rule::exists('income_statements', 'code'),
             ],
 
             'form.sort_order' => ['nullable', 'integer', 'min:1', 'max:999999'],
-
-            'form.side' => ['required', Rule::in(['assets', 'liabilities', 'equity'])],
-            'form.section' => ['required', Rule::in(['current', 'non_current', 'equity'])],
 
             'form.status' => ['boolean'],
         ];
@@ -65,7 +61,7 @@ class Create extends Component
 
     public function save()
     {
-        $this->validate();
+        $data = $this->validate();
 
         $parent = $this->form['parent_code'] ?? null;
         $code   = $this->form['code'] ?? null;
@@ -82,21 +78,15 @@ class Create extends Component
         if (empty($this->form['parent_code'])) {
             $this->form['parent_code'] = null;
         }
-        if (empty($this->form['company_tree_id'])) {
-            $this->form['company_tree_id'] = null;
-        }
-        if (empty($this->form['company_id'])) {
-            $this->form['company_id'] = null;
-        }
 
-        BalanceSheet::create($this->form);
+        $this->incomeStatement->update($this->form);
 
-        return redirect()->route('settings.register.asset-base-classification.index');
+        return redirect()->route('settings.register.income-statement-classification.index');
     }
 
     public function render()
     {
-        return view('livewire.register.balance-sheet.create', [
+        return view('livewire.register.income-statement.edit', [
             'group' => $this->group,
         ])->layout('layouts.app');
     }
