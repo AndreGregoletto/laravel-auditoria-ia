@@ -12,16 +12,13 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('trial_balance_data', function (Blueprint $table) {
-            $table->dropForeign(['balance_sheet_id']);
-            $table->dropForeign(['income_statement_id']);
+            $table->foreignId('balance_sheet_id')
+                ->nullable()
+                ->constrained('balance_sheets');
 
-            $table->foreign('balance_sheet_id')
-                ->references('id')->on('balance_sheets')
-                ->nullOnDelete();
-
-            $table->foreign('income_statement_id')
-                ->references('id')->on('income_statements')
-                ->nullOnDelete();
+            $table->foreignId('income_statement_id')
+                ->nullable()
+                ->constrained('income_statements');
         });
     }
 
@@ -31,14 +28,8 @@ return new class extends Migration
     public function down(): void
     {
         Schema::table('trial_balance_data', function (Blueprint $table) {
-            $table->dropForeign(['balance_sheet_id']);
-            $table->dropForeign(['income_statement_id']);
-
-            $table->foreign('balance_sheet_id')
-                ->references('id')->on('balance_sheets');
-
-            $table->foreign('income_statement_id')
-                ->references('id')->on('income_statements');
+            $table->dropColumn('balance_sheet_id');
+            $table->dropColumn('income_statement_id');
         });
     }
 };

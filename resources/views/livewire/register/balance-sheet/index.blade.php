@@ -57,7 +57,7 @@
                 >
                     <td class="px-4 py-3">{{ $res->code }}</td>
                     <td class="px-4 py-3">{{ $res->parent_code }}</td>
-                    <td class="px-4 py-3">{{ __("classification.{$res->config_name}") ?? $res->name }}</td>
+                    <td class="px-4 py-3">{{ $res->config_name ? __("classification.{$res->config_name}") : $res->name }}</td>
                     <td class="px-4 py-3">{{ $res->config_name }}</td>
                     <td class="px-4 py-3">{{ $res->tree }}</td>
                     <td class="px-4 py-3">{{ $res->company }}</td>

@@ -18,4 +18,10 @@ class BalanceSheet extends Model
         'section',
         'config_name',
     ];
+
+    protected $casts = [
+        'status' => 'boolean',
+        'created_at',
+        'updated_at',
+    ];
 }
