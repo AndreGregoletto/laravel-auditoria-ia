@@ -48,7 +48,7 @@
                         transition-colors
                     "
                 >
-                    <td class="px-4 py-3">{{ $res->name }}</td>
+                    <td class="px-4 py-3">{{ __("reports.$res->name_conf") ?? $res->name }}</td>
                     <td class="px-4 py-3">{{ $res->name_conf }}</td>
                     <td class="px-4 py-3">
                         <span class="inline-flex items-center rounded-full px-2 py-1 text-xs font-semibold

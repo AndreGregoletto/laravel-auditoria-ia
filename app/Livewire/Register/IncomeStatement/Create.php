@@ -3,6 +3,7 @@
 namespace App\Livewire\Register\IncomeStatement;
 
 use App\Models\IncomeStatement;
+use Illuminate\Validation\Rule;
 use Livewire\Component;
 
 class Create extends Component
@@ -29,6 +30,29 @@ class Create extends Component
             ->orderByRaw('COALESCE(sort_order, 999999) ASC')
             ->pluck('code', 'code')
             ->toArray();
+    }
+
+    protected function rules(): array
+    {
+        return [
+            'form.code' => [
+                'required',
+                'string',
+                'max:10',
+                Rule::unique('balance_sheets', 'code'),
+            ],
+            'form.name' => ['required', 'string', 'max:255'],
+            'form.company_tree_id' => ['nullable', 'integer'],
+            'form.company_id'      => ['nullable', 'integer'],
+            'form.parent_code' => [
+                'nullable',
+                'string',
+                'max:10',
+                Rule::exists('balance_sheets', 'code'),
+            ],
+            'form.sort_order' => ['nullable', 'integer', 'min:1', 'max:999999'],
+            'form.status' => ['boolean'],
+        ];
     }
 
     public function save()
