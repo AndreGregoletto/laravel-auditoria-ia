@@ -25,6 +25,7 @@ use App\Livewire\Register\FileStep\Edit   as FileStepEdit;
 use App\Livewire\Register\BalanceSheet\Index  as BalanceSheetIndex;
 use App\Livewire\Register\BalanceSheet\Create as BalanceSheetCreate;
 use App\Livewire\Register\BalanceSheet\Edit   as BalanceSheetEdit;
+use App\Livewire\Register\BalanceSheet\Relater\Index as BalanceSheetRelatorIndex;
 
 use App\Livewire\Register\IncomeStatement\Index  as IncomeStatementIndex;
 use App\Livewire\Register\IncomeStatement\Create as IncomeStatementCreate;
@@ -72,6 +73,10 @@ Route::prefix('settings')->name('settings.')->group(function (){
             Route::get('/', BalanceSheetIndex::class)->name('index');
             Route::get('/create', BalanceSheetCreate::class)->name('create');
             Route::get('/{balanceSheet}/edit', BalanceSheetEdit::class)->name('edit');
+
+            Route::prefix('relator')->name('relator.')->group(function () {
+                Route::get('/', BalanceSheetRelatorIndex::class)->name('index');
+            });
         });
 
         Route::prefix('income-statement-classification')->name('income-statement-classification.')->group(function () {

@@ -37,6 +37,7 @@ class DatabaseSeeder extends Seeder
             Company::class,
             TreeCompany::class,
             ClassificationCatalogSeeder::class,
+            ClassificationRelaterSeeder::class,
         ]);
     }
 }

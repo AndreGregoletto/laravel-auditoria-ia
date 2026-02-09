@@ -201,7 +201,8 @@ class ValidateTrialBalanceAiPreview extends Component
                 default => true,
             };
         });
-
+        dd($this->suggestions);
+        dd($filtered[0]);
         return view('livewire.tools.balance.validate-trial-balance-ai-preview', [
             'rows' => $filtered,
             'totalFileClosing' => $totalFileClosing,

@@ -24,6 +24,8 @@ class TrialBalanceAiSuggester
             $monthly  = (float) $r->monthly_activity;
             $previous = (float) $r->previous_balance;
             $closing  = (float) $r->closing_balance;
+            $balance_sheet    = '';
+            $income_statement = '';
 
             if (abs(($debit - $credit) - $monthly) > $eps) {
                 $redflag += 0.30;
@@ -63,12 +65,26 @@ class TrialBalanceAiSuggester
                     : "Sugestão baseada em padrão do plano: último nível com {$len} caracteres indica conta sintética/controle.";
             }
 
+            if($included){
+                $fourNumber = substr($r->account, 0, 4);
+                $aBp        = ['1.1.', '1.2.', '2.2.', '2.4.'];
+
+                if(in_array($fourNumber, $aBp)){
+//                   $balance_sheet = match ($)
+                }
+            }
+            /*
+             * Classification BP & DRE
+             */
+
             $out[$r->id] = [
-                'included'   => $included,
-                'confidence' => $confidence,
-                'rationale'  => $rationale,
-                'redflag'    => $redflag,
-                'closing'    => $closing,
+                'included'            => $included,
+                'confidence'          => $confidence,
+                'rationale'           => $rationale,
+                'redflag'             => $redflag,
+                'closing'             => $closing,
+                'balance_sheet_id'    => $balance_sheet,
+                'income_statement_id' => $income_statement,
             ];
         }
 
@@ -89,4 +105,8 @@ class TrialBalanceAiSuggester
         return $out;
     }
 
+    public function classificationByAccount(string $account): string
+    {
+            return '';
+    }
 }
