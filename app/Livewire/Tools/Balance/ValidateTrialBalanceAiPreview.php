@@ -154,7 +154,6 @@ class ValidateTrialBalanceAiPreview extends Component
         app(TrialBalanceAiPreviewStore::class)->forget($this->file->id, auth()->id());
 
         $this->dispatch('toast', message: __('labels.decisions_applied'));
-        // return redirect()->route('processes.validate.edit', $this->file->id);
     }
 
     public function render()
@@ -187,7 +186,7 @@ class ValidateTrialBalanceAiPreview extends Component
         // filtro por included/excluded/changed/low_confidence em memória (após carregar)
         $filtered = $rows->filter(function ($r) {
             $inc = $this->effectiveIncluded($r->id);
-
+//            dd($this->filter);
             return match ($this->filter) {
                 'included' => $inc === true,
                 'excluded' => $inc === false,

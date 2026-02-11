@@ -2,12 +2,18 @@
 
 namespace App\Services;
 
+use App\Models\ImportFile;
+use App\Models\PivotBalanceSheetReference;
+use App\Models\PivotIncomeStatementReference;
 use App\Models\Queue\TrialBalanceData;
 
 class TrialBalanceAiSuggester
 {
     public function suggestForFile(int $fileId): array
     {
+        $classification = $this->getClassification($fileId);
+        dd($classification);
+
         $rows = TrialBalanceData::query()
             ->where('file_id', $fileId)
             ->orderBy('file_line')
@@ -105,8 +111,32 @@ class TrialBalanceAiSuggester
         return $out;
     }
 
-    public function classificationByAccount(string $account): string
+    public function getClassification($idFile): array
     {
-            return '';
+        $companyId = ImportFile::where('id', $idFile)->value('company_id');
+
+        if (!$companyId) return [];
+
+        $priority = function ($modelClass, $type) use ($companyId) {
+            $value = match ($type){
+                'bp'  => 'balance_sheet_id',
+                'dre' => 'income_statement_id',
+            };
+
+            $result = $modelClass::where('company_id', $companyId)->get()->pluck('value', $value);
+            if ($result->isNotEmpty()) return $result->toArray();
+
+            $result = $modelClass::where('company_tree_id', $companyId)->get()->pluck('value', $value);
+            if ($result->isNotEmpty()) return $result->toArray();
+
+            return $modelClass::whereNull('company_id')->whereNull('company_tree_id')->get()->pluck('value', $value)->toArray();
+        };
+
+        return [
+            'bp'  => array_filter($priority(PivotBalanceSheetReference::class, 'bp')),
+            'dre' => array_filter($priority(PivotIncomeStatementReference::class, 'dre')),
+        ];
+
     }
+
 }
