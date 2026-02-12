@@ -103,6 +103,7 @@
                     <th class="px-3 py-2">{{ __('labels.line') }}</th>
                     <th class="px-3 py-2">{{ __('labels.account') }}</th>
                     <th class="px-3 py-2">{{ __('labels.description') }}</th>
+                    <th class="px-3 py-2">Classificação da Conta</th>
                     <th class="px-3 py-2 text-right">{{ __('labels.closing_balance') }}</th>
                     <th class="px-3 py-2 text-center">{{ __('labels.ai_suggestion') }}</th>
                     <th class="px-3 py-2">{{ __('labels.rational') }}</th>
@@ -122,6 +123,19 @@
                         <td class="px-3 py-2 font-mono text-xs text-gray-800 dark:text-gray-200">{{ $r->account }}</td>
                         <td class="px-3 py-2 text-gray-800 dark:text-gray-200">
                             <div class="max-w-[420px] truncate">{{ $r->description }}</div>
+                        </td>
+                        <td class="px-3 py-2 text-gray-800 dark:text-gray-200">
+                            @php
+                                $classify = '';
+                                if(!empty($s['balance_sheet_id'])){
+                                    $classify = $this->classify['bp'][$s['balance_sheet_id']];
+                                }
+
+                                if(!empty($s['income_statement_id'])){
+                                    $classify = $this->classify['dre'][$s['income_statement_id']];
+                                }
+                            @endphp
+                            <div class="max-w-[420px] truncate">{{ $classify }}</div>
                         </td>
                         <td class="px-3 py-2 text-right font-semibold text-gray-800 dark:text-gray-200">
                             {{ number_format((float)$r->closing_balance, 2, ',', '.') }}

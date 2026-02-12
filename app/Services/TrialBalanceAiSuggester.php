@@ -2,7 +2,9 @@
 
 namespace App\Services;
 
+use App\Models\BalanceSheet;
 use App\Models\ImportFile;
+use App\Models\IncomeStatement;
 use App\Models\PivotBalanceSheetReference;
 use App\Models\PivotIncomeStatementReference;
 use App\Models\Queue\TrialBalanceData;
@@ -12,7 +14,10 @@ class TrialBalanceAiSuggester
     public function suggestForFile(int $fileId): array
     {
         $classification = $this->getClassification($fileId);
-        dd($classification);
+
+        uasort($classification['bp'], function($a, $b) {
+            return strlen($b) - strlen($a);
+        });
 
         $rows = TrialBalanceData::query()
             ->where('file_id', $fileId)
@@ -71,17 +76,28 @@ class TrialBalanceAiSuggester
                     : "Sugestão baseada em padrão do plano: último nível com {$len} caracteres indica conta sintética/controle.";
             }
 
-            if($included){
-                $fourNumber = substr($r->account, 0, 4);
-                $aBp        = ['1.1.', '1.2.', '2.2.', '2.4.'];
-
-                if(in_array($fourNumber, $aBp)){
-//                   $balance_sheet = match ($)
-                }
-            }
             /*
              * Classification BP & DRE
              */
+            if($included){
+                $fourNumber = substr($r->account, 0, 4);
+                $aBp        = ['1.1.', '1.2.', '2.1.', '2.2.', '2.4.'];
+
+                $priority = function ($type) use ($classification, $r) {
+                    foreach ($classification[$type] as $id => $acc){
+                        if(str_contains($r->account, $acc)){
+                            return $id;
+                        }
+                    }
+                    return '';
+                };
+
+                if(in_array($fourNumber, $aBp)){
+                    $balance_sheet    = $priority('bp');
+                }else{
+                    $income_statement = $priority('dre');
+                }
+            }
 
             $out[$r->id] = [
                 'included'            => $included,
@@ -135,6 +151,22 @@ class TrialBalanceAiSuggester
         return [
             'bp'  => array_filter($priority(PivotBalanceSheetReference::class, 'bp')),
             'dre' => array_filter($priority(PivotIncomeStatementReference::class, 'dre')),
+        ];
+
+    }
+
+    public function getClassificationDesc($idFile): array
+    {
+        $aClassify = $this->getClassification($idFile);
+
+        $classify = function ($modelClass, $type) use ($aClassify) {
+            $aIds = array_keys($aClassify[$type]);
+            return $modelClass::whereIn('id', $aIds)->get()->pluck('name', 'id')->toArray();
+        };
+
+        return [
+            'bp'  => array_filter($classify(BalanceSheet::class, 'bp')),
+            'dre' => array_filter($classify(IncomeStatement::class, 'dre')),
         ];
 
     }

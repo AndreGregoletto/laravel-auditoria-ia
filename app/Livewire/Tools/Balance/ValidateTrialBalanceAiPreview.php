@@ -21,6 +21,7 @@ class ValidateTrialBalanceAiPreview extends Component
 
     public array $suggestions = [];
     public array $overrides = [];
+    public array $classify = [];
     public int $minConfidence = 16;
 
     public string $sortField = 'file_line';
@@ -35,7 +36,8 @@ class ValidateTrialBalanceAiPreview extends Component
         $cached = false;
 
         if (!$cached) {
-            $suggestions = $suggester->suggestForFile($file->id);
+            $suggestions    = $suggester->suggestForFile($file->id);
+            $this->classify = $suggester->getClassificationDesc($file->id);
 
             $cached = [
                 'meta' => [
@@ -200,8 +202,7 @@ class ValidateTrialBalanceAiPreview extends Component
                 default => true,
             };
         });
-        dd($this->suggestions);
-        dd($filtered[0]);
+
         return view('livewire.tools.balance.validate-trial-balance-ai-preview', [
             'rows' => $filtered,
             'totalFileClosing' => $totalFileClosing,
