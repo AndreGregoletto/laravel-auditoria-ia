@@ -23,7 +23,7 @@ class ClassificationRelaterSeeder extends Seeder
          * =========================================================
          */
         $balanceSheets = [
-            ['balance' => 1,  'value'  => '1.1.0.12.0'],
+            ['balance' => 1,  'value'  => '1.1.0.'],
             ['balance' => 2,  'value'  => '1.1.0.3'],
             ['balance' => 3,  'value'  => '1.1.0.11.02'],
             ['balance' => 4,  'value'  => ''],
@@ -93,8 +93,8 @@ class ClassificationRelaterSeeder extends Seeder
          * =========================================================
          */
         $incomeStatements = [
-            ['income' => 1,  'value'  => '6.1.0.11.0103'],
-            ['income' => 2,  'value'  => '6.1.0.11.3001'],
+            ['income' => 1,  'value'  => '6.1.0.11.01'],
+            ['income' => 2,  'value'  => '6.1.0.11.3'],
             ['income' => 3,  'value'  => '6.1.0.51.'],
             ['income' => 4,  'value'  => '6.1.0.54.'],
             ['income' => 5,  'value'  => '6.1.1.11.'],
