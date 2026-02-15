@@ -23,14 +23,14 @@ class ClassificationRelaterSeeder extends Seeder
          * =========================================================
          */
         $balanceSheets = [
-            ['balance' => 1,  'value'  => '1.1.0.'],
+            ['balance' => 1,  'value'  => '1.1.0.1'],
             ['balance' => 2,  'value'  => '1.1.0.3'],
-            ['balance' => 3,  'value'  => '1.1.0.11.02'],
+            ['balance' => 3,  'value'  => '1.1.0.11.02026'],
             ['balance' => 4,  'value'  => ''],
             ['balance' => 5,  'value'  => '1.1.0.7'],
             ['balance' => 6,  'value'  => '1.1.0.51.03'],
             ['balance' => 7,  'value'  => '1.1.1.91.'],
-            ['balance' => 8,  'value'  => '1.1.1.22.0101'],
+            ['balance' => 8,  'value'  => '1.1.1.22'],
             ['balance' => 9,  'value'  => ''],
             ['balance' => 10, 'value'  => ''],
             ['balance' => 11, 'value'  => ''],
@@ -41,15 +41,15 @@ class ClassificationRelaterSeeder extends Seeder
             ['balance' => 16, 'value'  => ''],
             ['balance' => 17, 'value'  => ''],
             ['balance' => 18, 'value'  => ''],
-            ['balance' => 19, 'value'  => '1.2.3.21.0'],
+            ['balance' => 19, 'value'  => '1.2.3.21'],
             ['balance' => 20, 'value'  => ''],
             ['balance' => 21, 'value'  => '2.1.0.1'],
-            ['balance' => 22, 'value'  => '2.1.0.31.0'],
+            ['balance' => 22, 'value'  => '2.1.0.31'],
             ['balance' => 23, 'value'  => '2.1.0.5'],
             ['balance' => 24, 'value'  => ''],
-            ['balance' => 25, 'value'  => '2.1.0.21.010'],
+            ['balance' => 25, 'value'  => '2.1.0.21'],
             ['balance' => 26, 'value'  => ''],
-            ['balance' => 27, 'value'  => '2.1.0.'],
+            ['balance' => 27, 'value'  => '2.1.0.'], #GG aparece com 71 e 86
             ['balance' => 28, 'value'  => ''],
             ['balance' => 29, 'value'  => ''],
             ['balance' => 30, 'value'  => ''],
@@ -59,17 +59,20 @@ class ClassificationRelaterSeeder extends Seeder
             ['balance' => 34, 'value'  => '2.2.0.21.'],
             ['balance' => 35, 'value'  => ''],
             ['balance' => 36, 'value'  => ''],
-            ['balance' => 37, 'value'  => '2.2.0.62.'],
+            ['balance' => 37, 'value'  => '2.2.0.62'],
             ['balance' => 38, 'value'  => ''],
             ['balance' => 39, 'value'  => ''],
-            ['balance' => 40, 'value'  => '2.2.0.25.010'],
+            ['balance' => 40, 'value'  => '2.2.0.25'],
             ['balance' => 41, 'value'  => ''],
-            ['balance' => 42, 'value'  => '2.2.1.95.'],
-            ['balance' => 43, 'value'  => '2.4.0.11.'],
+            ['balance' => 42, 'value'  => '2.2.1.95'],
+            ['balance' => 43, 'value'  => '2.4.0.11'],
             ['balance' => 44, 'value'  => ''],
             ['balance' => 45, 'value'  => ''],
-            ['balance' => 46, 'value'  => '2.4.0.4'],
+            ['balance' => 46, 'value'  => '2.4.0.'],
             ['balance' => 47, 'value'  => 'DRE'],
+
+            #excptions
+            // ['balance' => 6, 'value'  => '1.1.0.11.2006'],
         ];
 
         foreach ($balanceSheets as $row) {
@@ -93,13 +96,13 @@ class ClassificationRelaterSeeder extends Seeder
          * =========================================================
          */
         $incomeStatements = [
-            ['income' => 1,  'value'  => '6.1.0.11.01'],
+            ['income' => 1,  'value'  => '6.1.0.11.0'],
             ['income' => 2,  'value'  => '6.1.0.11.3'],
             ['income' => 3,  'value'  => '6.1.0.51.'],
             ['income' => 4,  'value'  => '6.1.0.54.'],
             ['income' => 5,  'value'  => '6.1.1.11.'],
             ['income' => 6,  'value'  => ''],
-            ['income' => 7,  'value'  => '6.3.0.1'],
+            ['income' => 7,  'value'  => '6.3.0.14'],
             ['income' => 8,  'value'  => '6.3.0.54.'],
             ['income' => 9,  'value'  => '7.5.0.11.'],
             ['income' => 10, 'value'  => ''],

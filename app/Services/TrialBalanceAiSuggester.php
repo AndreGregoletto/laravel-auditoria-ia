@@ -159,9 +159,22 @@ class TrialBalanceAiSuggester
     {
         $aClassify = $this->getClassification($idFile);
 
+        uasort($aClassify['bp'], function($a, $b) {
+            return strlen($b) <=> strlen($a);
+        });
+
         $classify = function ($modelClass, $type) use ($aClassify) {
+            if (empty($aClassify[$type])) return [];
+
             $aIds = array_keys($aClassify[$type]);
-            return $modelClass::whereIn('id', $aIds)->get()->pluck('name', 'id')->toArray();
+            
+            return $modelClass::whereIn('id', $aIds)
+                ->get()
+                ->sortBy(function ($model) use ($aIds) {
+                    return array_search($model->id, $aIds);
+                })
+                ->pluck('name', 'id')
+                ->toArray();
         };
 
         return [
