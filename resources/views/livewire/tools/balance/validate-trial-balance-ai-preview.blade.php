@@ -12,7 +12,6 @@
 
 <div class="py-6 space-y-5">
 
-    {{-- Filtros --}}
     <div class="rounded-xl border border-gray-200 bg-white p-4 dark:border-gray-800 dark:bg-gray-900">
         <div class="grid grid-cols-1 gap-4 lg:grid-cols-12">
 
@@ -36,6 +35,7 @@
                     <option value="excluded">{{ __('labels.suggestions_excluded') }}</option>
                     <option value="changed">{{ __('labels.changed_by_the_auditor') }}</option>
                     <option value="low_confidence">{{ __('labels.low_confidence') }}</option>
+                    <option value="redflag">{{ __('labels.red_flag') }}</option>
                 </select>
             </div>
 
@@ -63,7 +63,6 @@
         </div>
     </div>
 
-    {{-- Totais (arquivo vs preview) --}}
     <div class="rounded-xl border border-gray-200 bg-white p-4 dark:border-gray-800 dark:bg-gray-900">
         @php
             $isPreviewZero = abs($previewSum) < 0.05;
@@ -94,7 +93,6 @@
         </div>
     </div>
 
-    {{-- Tabela --}}
     <div class="rounded-xl border border-gray-200 bg-white dark:border-gray-800 dark:bg-gray-900">
         <div class="max-h-[calc(100vh-260px)] overflow-auto">
             <table class="min-w-full text-sm">
@@ -103,7 +101,7 @@
                     <th class="px-3 py-2">{{ __('labels.line') }}</th>
                     <th class="px-3 py-2">{{ __('labels.account') }}</th>
                     <th class="px-3 py-2">{{ __('labels.description') }}</th>
-                    <th class="px-3 py-2">Classificação da Conta</th>
+                    <th class="px-3 py-2">{{ __('reports.account_classification') ?? 'Classificação da Conta' }}</th>
                     <th class="px-3 py-2 text-right">{{ __('labels.closing_balance') }}</th>
                     <th class="px-3 py-2 text-center">{{ __('labels.ai_suggestion') }}</th>
                     <th class="px-3 py-2">{{ __('labels.rational') }}</th>
@@ -116,43 +114,83 @@
                     @php
                         $s = $this->suggestions[$r->id] ?? null;
                         $effective = $this->effectiveIncluded($r->id);
-                        $rf = (float)($s['redflag'] ?? 0);
+
+                        $effCls = $this->effectiveClassification($r->id);
+                        $effBpId  = $effCls['balance_sheet_id'] ?? null;
+                        $effDreId = $effCls['income_statement_id'] ?? null;
+
+                        $label = '—';
+                        if(!empty($effBpId) && isset($this->classifyOptions['bp'][$effBpId])){
+                            $label = $this->classifyOptions['bp'][$effBpId];
+                        } elseif(!empty($effDreId) && isset($this->classifyOptions['dre'][$effDreId])){
+                            $label = $this->classifyOptions['dre'][$effDreId];
+                        }
+
+                        $isBp = $this->isBpAccount($r->account);
                     @endphp
+
                     <tr class="hover:bg-gray-50 dark:hover:bg-gray-950/40">
                         <td class="px-3 py-2 text-xs text-gray-500 dark:text-gray-400">{{ $r->file_line }}</td>
+
                         <td class="px-3 py-2 font-mono text-xs text-gray-800 dark:text-gray-200">{{ $r->account }}</td>
+
                         <td class="px-3 py-2 text-gray-800 dark:text-gray-200">
                             <div class="max-w-[420px] truncate">{{ $r->description }}</div>
                         </td>
-                        <td class="px-3 py-2 text-gray-800 dark:text-gray-200">
-                            @php
-                                $classify = '';
-                                if(!empty($s['balance_sheet_id'])){
-                                    $classify = $this->classify['bp'][$s['balance_sheet_id']];
-                                }
 
-                                if(!empty($s['income_statement_id'])){
-                                    $classify = $this->classify['dre'][$s['income_statement_id']];
-                                }
-                            @endphp
-                            <div class="max-w-[420px] truncate">{{ $classify }}</div>
+                        <td class="px-3 py-2 text-gray-800 dark:text-gray-200">
+                            <div class="max-w-[420px] truncate text-xs text-gray-600 dark:text-gray-300">
+                                {{ $label }}
+                            </div>
+
+                            @if($effective === true)
+                                <div class="mt-1">
+                                    @if($isBp)
+                                        <select
+                                            class="w-full rounded-lg border-gray-300 bg-white text-xs text-gray-700
+                                                   focus:border-indigo-500 focus:ring-indigo-500
+                                                   dark:border-gray-700 dark:bg-gray-950 dark:text-gray-200"
+                                            wire:change="setClassification({{ $r->id }}, 'bp', $event.target.value)"
+                                        >
+                                            <option value="">{{ __('labels.select') }}</option>
+                                            @foreach(($this->classifyOptions['bp'] ?? []) as $id => $name)
+                                                <option value="{{ $id }}" @selected((string)$effBpId === (string)$id)>{{ $name }}</option>
+                                            @endforeach
+                                        </select>
+                                    @else
+                                        <select
+                                            class="w-full rounded-lg border-gray-300 bg-white text-xs text-gray-700
+                                                   focus:border-indigo-500 focus:ring-indigo-500
+                                                   dark:border-gray-700 dark:bg-gray-950 dark:text-gray-200"
+                                            wire:change="setClassification({{ $r->id }}, 'dre', $event.target.value)"
+                                        >
+                                            <option value="">{{ __('labels.select') }}</option>
+                                            @foreach(($this->classifyOptions['dre'] ?? []) as $id => $name)
+                                                <option value="{{ $id }}" @selected((string)$effDreId === (string)$id)>{{ $name }}</option>
+                                            @endforeach
+                                        </select>
+                                    @endif
+                                </div>
+                            @else
+                                <div class="mt-1 text-[11px] text-gray-400">
+                                    {{ __('labels.only_for_included_accounts') ?? 'Classificação disponível apenas para contas incluídas.' }}
+                                </div>
+                            @endif
                         </td>
+
                         <td class="px-3 py-2 text-right font-semibold text-gray-800 dark:text-gray-200">
                             {{ number_format((float)$r->closing_balance, 2, ',', '.') }}
                         </td>
 
                         <td class="px-3 py-2 text-center">
                             @if($effective === true)
-                                <span
-                                    class="inline-flex rounded-full bg-emerald-100 px-2 py-1
-                                        text-xs font-semibold text-emerald-700
-                                        dark:bg-emerald-900/40 dark:text-emerald-200"
-                                >{{ __('labels.include_1') }}</span>
+                                <span class="inline-flex rounded-full bg-emerald-100 px-2 py-1 text-xs font-semibold text-emerald-700 dark:bg-emerald-900/40 dark:text-emerald-200">
+                                    {{ __('labels.include_1') }}
+                                </span>
                             @elseif($effective === false)
-                                <span class="inline-flex rounded-full bg-rose-100 px-2 py-1
-                                    text-xs font-semibold text-rose-700 dark:bg-rose-900/40
-                                    dark:text-rose-200"
-                                >{{ __('labels.excluded') }}</span>
+                                <span class="inline-flex rounded-full bg-rose-100 px-2 py-1 text-xs font-semibold text-rose-700 dark:bg-rose-900/40 dark:text-rose-200">
+                                    {{ __('labels.excluded') }}
+                                </span>
                             @else
                                 <span class="text-xs text-gray-400">—</span>
                             @endif

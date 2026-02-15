@@ -21,7 +21,26 @@ class ValidateTrialBalanceAiPreview extends Component
 
     public array $suggestions = [];
     public array $overrides = [];
+
+    /**
+     * Classifications description map:
+     *  - bp:  [id => name]
+     *  - dre: [id => name]
+     */
     public array $classify = [];
+
+    /**
+     * Options used by selects (same structure as $classify).
+     * Exists to keep naming explicit in the view.
+     */
+    public array $classifyOptions = [];
+
+    /**
+     * Auditor overrides for classification (only in preview, until applyPreview()):
+     *  [rowId => ['bp' => int|null, 'dre' => int|null]]
+     */
+    public array $classifyOverrides = [];
+
     public int $minConfidence = 16;
 
     public string $sortField = 'file_line';
@@ -36,8 +55,10 @@ class ValidateTrialBalanceAiPreview extends Component
         $cached = false;
 
         if (!$cached) {
-            $suggestions    = $suggester->suggestForFile($file->id);
+            $suggestions = $suggester->suggestForFile($file->id);
+
             $this->classify = $suggester->getClassificationDesc($file->id);
+            $this->classifyOptions = $this->classify;
 
             $cached = [
                 'meta' => [
@@ -46,13 +67,20 @@ class ValidateTrialBalanceAiPreview extends Component
                     'created_at' => now()->toDateTimeString(),
                 ],
                 'suggestions' => $suggestions,
+                'classify_overrides' => [],
+                'included_overrides' => [],
             ];
 
             $store->put($file->id, $userId, $cached);
+        } else {
+            // Restore cached options (if exists)
+            $this->classify = $suggester->getClassificationDesc($file->id);
+            $this->classifyOptions = $this->classify;
         }
 
         $this->suggestions = $cached['suggestions'] ?? [];
-        $this->overrides = [];
+        $this->overrides = $cached['included_overrides'] ?? [];
+        $this->classifyOverrides = $cached['classify_overrides'] ?? [];
     }
 
     public function sortBy(string $field): void
@@ -81,6 +109,63 @@ class ValidateTrialBalanceAiPreview extends Component
         return null;
     }
 
+    /**
+     * Decide if this row should be classified as BP based on your current rule:
+     * BP buckets are: 1.1., 1.2., 2.1., 2.2., 2.4.
+     */
+    private function isBpAccount(?string $account): bool
+    {
+        if (!is_string($account) || $account === '') return false;
+
+        $four = substr($account, 0, 4);
+
+        return in_array($four, ['1.1.', '1.2.', '2.1.', '2.2.', '2.4.'], true);
+    }
+
+    /**
+     * Returns the effective classification ids for a row,
+     * considering auditor overrides first, then suggested defaults.
+     */
+    private function effectiveClassification(int $rowId): array
+    {
+        if (isset($this->classifyOverrides[$rowId])) {
+
+            $bp  = $this->classifyOverrides[$rowId]['bp']  ?? null;
+            $dre = $this->classifyOverrides[$rowId]['dre'] ?? null;
+
+            return [
+                'balance_sheet_id'    => $bp ?: null,
+                'income_statement_id' => $dre ?: null,
+            ];
+        }
+
+        return [
+            'balance_sheet_id'    => $this->suggestions[$rowId]['balance_sheet_id'] ?? null,
+            'income_statement_id' => $this->suggestions[$rowId]['income_statement_id'] ?? null,
+        ];
+    }
+
+    /**
+     * Set classification override for a row in preview.
+     * Only one side can be set at a time.
+     */
+    public function setClassification(int $rowId, string $type, $id): void
+    {
+        $id = ($id === '' || $id === null) ? null : (int) $id;
+
+        $this->classifyOverrides[$rowId] ??= ['bp' => null, 'dre' => null];
+
+        if ($type === 'bp') {
+            $this->classifyOverrides[$rowId]['bp']  = $id;
+            $this->classifyOverrides[$rowId]['dre'] = null;
+        }
+
+        if ($type === 'dre') {
+            $this->classifyOverrides[$rowId]['dre'] = $id;
+            $this->classifyOverrides[$rowId]['bp']  = null;
+        }
+    }
+
     public function toggleIncluded(int $rowId, bool $value): void
     {
         $this->overrides[$rowId] = $value;
@@ -89,6 +174,7 @@ class ValidateTrialBalanceAiPreview extends Component
     public function clearOverrides(): void
     {
         $this->overrides = [];
+        $this->classifyOverrides = [];
         $this->dispatch('toast', message: __('labels.changes_discarded'));
     }
 
@@ -112,10 +198,20 @@ class ValidateTrialBalanceAiPreview extends Component
                 $suggested = $this->suggestions[$row->id]['included'] ?? null;
                 $source = ($suggested === null)
                     ? 'manual'
-                    : ((bool)$suggested === (bool)$finalIncluded ? 'ai_approved' : 'ai_modified');
+                    : ((bool) $suggested === (bool) $finalIncluded ? 'ai_approved' : 'ai_modified');
 
-                $rationale = $this->suggestions[$row->id]['rationale'] ?? null;
+                $rationale  = $this->suggestions[$row->id]['rationale'] ?? null;
                 $confidence = $this->suggestions[$row->id]['confidence'] ?? null;
+
+                $cls = $this->effectiveClassification($row->id);
+                $balanceSheetId     = $cls['balance_sheet_id'] ?? null;
+                $incomeStatementId  = $cls['income_statement_id'] ?? null;
+
+                $balanceSheetId    = ($balanceSheetId === '' ? null : $balanceSheetId);
+                $incomeStatementId = ($incomeStatementId === '' ? null : $incomeStatementId);
+
+                $balanceSheetId    = is_numeric($balanceSheetId) ? (int) $balanceSheetId : $balanceSheetId;
+                $incomeStatementId = is_numeric($incomeStatementId) ? (int) $incomeStatementId : $incomeStatementId;
 
                 $decision = TrialBalanceDecision::create([
                     'trial_balance_data_id' => $row->id,
@@ -132,16 +228,21 @@ class ValidateTrialBalanceAiPreview extends Component
                     'batch_id'              => $batchId,
                     'decided_user_id'       => auth()->id(),
                     'decided_at'            => now(),
+
+                    'balance_sheet_id'      => $balanceSheetId,
+                    'income_statement_id'   => $incomeStatementId,
                 ]);
 
-                // snapshot no dado
                 $rowFull = TrialBalanceData::find($row->id);
+
                 $rowFull->forceFill([
                     'balance_included'         => (bool) $finalIncluded,
                     'balance_last_decision_id' => $decision->id,
                     'balance_decision_source'  => $source,
                     'decided_user_id'          => auth()->id(),
                     'balance_decided_at'       => $decision->decided_at,
+                    'balance_sheet_id'         => $balanceSheetId,
+                    'income_statement_id'      => $incomeStatementId,
                 ])->save();
             }
         });
@@ -185,20 +286,19 @@ class ValidateTrialBalanceAiPreview extends Component
             }
         }
 
-        // filtro por included/excluded/changed/low_confidence em memória (após carregar)
         $filtered = $rows->filter(function ($r) {
             $inc = $this->effectiveIncluded($r->id);
-//            dd($this->filter);
+
             return match ($this->filter) {
                 'included' => $inc === true,
                 'excluded' => $inc === false,
                 'changed'  => array_key_exists($r->id, $this->overrides)
                     && isset($this->suggestions[$r->id])
-                    && (bool)$this->overrides[$r->id] !== (bool)$this->suggestions[$r->id]['included'],
+                    && (bool) $this->overrides[$r->id] !== (bool) $this->suggestions[$r->id]['included'],
                 'low_confidence' => isset($this->suggestions[$r->id]['confidence'])
-                    && (int)$this->suggestions[$r->id]['confidence'] < $this->minConfidence,
+                    && (int) $this->suggestions[$r->id]['confidence'] < $this->minConfidence,
                 'redflag' => isset($this->suggestions[$r->id]['redflag'])
-                    && (float)$this->suggestions[$r->id]['redflag'] >= $this->minRedflag,
+                    && (float) $this->suggestions[$r->id]['redflag'] >= $this->minRedflag,
                 default => true,
             };
         });

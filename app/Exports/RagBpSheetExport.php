@@ -3,10 +3,6 @@
 namespace App\Exports;
 
 use DateTime;
-use Maatwebsite\Excel\Concerns\WithMultipleSheets;
-use Maatwebsite\Excel\Concerns\WithProperties;
-use Maatwebsite\Excel\Concerns\Exportable;
-
 use Maatwebsite\Excel\Concerns\FromArray;
 use Maatwebsite\Excel\Concerns\WithCustomStartCell;
 use Maatwebsite\Excel\Concerns\WithEvents;
@@ -14,7 +10,6 @@ use Maatwebsite\Excel\Concerns\WithHeadings;
 use Maatwebsite\Excel\Concerns\WithStrictNullComparison;
 use Maatwebsite\Excel\Concerns\WithTitle;
 use Maatwebsite\Excel\Events\AfterSheet;
-
 use PhpOffice\PhpSpreadsheet\Style\Alignment;
 use PhpOffice\PhpSpreadsheet\Style\Border;
 
@@ -32,14 +27,18 @@ class RagBpSheetExport implements
     private array $bp;
     private array $periods;
     private array $descByAccount;
+    private array $catalog;
 
     public function __construct(private readonly array $result)
     {
-        $this->bp = (array)($result['BP'] ?? []);
+        $this->bp      = (array) ($result['BP'] ?? []);
+        $this->catalog = (array) ($result['BP_CATALOG'] ?? []);
 
         $this->descByAccount = [];
-        foreach (($result['response'] ?? []) as $acc => $row) {
-            $this->descByAccount[(string)$acc] = (string)($row['description'] ?? '');
+        foreach ($this->catalog as $bucket => $items) {
+            foreach ((array) $items as $code => $name) {
+                $this->descByAccount[(string) $code] = (string) $name;
+            }
         }
 
         $this->periods = $this->sortedPeriods($this->extractPeriodsFromBp($this->bp));
@@ -99,28 +98,17 @@ class RagBpSheetExport implements
 
         foreach ($blocks as $blockTitle => $sections) {
 
-            // Banner
             $rows[] = [$blockTitle, null, null, null, null, null, null, null];
 
             foreach ($sections as $label => $keys) {
 
-                $keys = (array)$keys;
+                $keys = (array) $keys;
 
-                $dataByPeriod = [];
-                foreach ($keys as $k) {
-                    if (!empty($this->bp[$k]) && is_array($this->bp[$k])) {
-                        $dataByPeriod = (array)$this->bp[$k];
-                        break;
-                    }
-                }
-
-                // ===== TOTAL ATIVO / TOTAL PASSIVO
                 if (in_array('assets', $keys, true) || in_array('liabilities', $keys, true)) {
-                    $vFinal = $this->periodTotal($dataByPeriod, $final);
-                    $vInit  = $this->periodTotal($dataByPeriod, $init);
+                    $keyTotal = in_array('assets', $keys, true) ? 'assets' : 'liabilities';
 
-                    $vFinal = $this->ensureSum($vFinal);
-                    $vInit  = $this->ensureSum($vInit);
+                    $vFinal = (float) (($this->bp[$keyTotal][$final]['sum'] ?? 0.0));
+                    $vInit  = (float) (($this->bp[$keyTotal][$init]['sum'] ?? 0.0));
 
                     [$var, $varPct] = $this->variation($vFinal, $vInit);
 
@@ -141,19 +129,36 @@ class RagBpSheetExport implements
 
                 $rows[] = [$label, null, null, null, null, null, null, null];
 
-                $accounts = $this->collectAccountsFromSection($dataByPeriod, $init, $final);
+                $bucketKey = null;
+                foreach ($keys as $k) {
+                    if (array_key_exists($k, $this->bp)) {
+                        $bucketKey = $k;
+                        break;
+                    }
+                }
+
+                $catalogKey = null;
+                foreach ($keys as $k) {
+                    if (!empty($this->catalog[$k])) {
+                        $catalogKey = $k;
+                        break;
+                    }
+                }
+
+                $accounts = $catalogKey ? array_keys((array) $this->catalog[$catalogKey]) : [];
+                sort($accounts, SORT_NATURAL);
 
                 foreach ($accounts as $acc) {
-                    $desc = $this->descByAccount[$acc] ?? '';
+                    $desc = $this->descByAccount[(string) $acc] ?? '';
 
-                    $vFinal = $dataByPeriod[$final][$acc] ?? null;
-                    $vInit  = $dataByPeriod[$init][$acc] ?? null;
+                    $vFinal = (float) (($this->bp[$bucketKey][$final][$acc] ?? 0.0));
+                    $vInit  = (float) (($this->bp[$bucketKey][$init][$acc] ?? 0.0));
 
                     [$var, $varPct] = $this->variation($vFinal, $vInit);
 
                     $rows[] = [
                         '',
-                        $acc,
+                        (string) $acc,
                         $desc,
                         $this->num($vFinal),
                         null,
@@ -163,12 +168,29 @@ class RagBpSheetExport implements
                     ];
                 }
 
-                // ===== SUBTOTAL da seção
-                $sumFinal = $this->periodTotal($dataByPeriod, $final);
-                $sumInit  = $this->periodTotal($dataByPeriod, $init);
+                if ($label === 'Patrimônio Líquido') {
 
-                $sumFinal = $this->ensureSum($sumFinal);
-                $sumInit  = $this->ensureSum($sumInit);
+                    $dreFinal = (float) ($this->bp['freeHeritage'][$final]['DRE'] ?? (-(float) ($this->bp['bpAll'][$final]['sum'] ?? 0.0)));
+                    $dreInit  = (float) ($this->bp['freeHeritage'][$init]['DRE']  ?? (-(float) ($this->bp['bpAll'][$init]['sum'] ?? 0.0)));
+
+                    [$varAll, $varPctAll] = $this->variation($dreFinal, $dreInit);
+
+                    $rows[] = [
+                        '',
+                        'DRE',
+                        'Resultado do Exercício (DRE)',
+                        $this->num($dreFinal),
+                        null,
+                        $this->num($dreInit),
+                        $this->num($varAll),
+                        $varPctAll,
+                    ];
+
+                    $rows[] = [null, null, null, null, null, null, null, null];
+                }
+
+                $sumFinal = (float) (($this->bp[$bucketKey][$final]['sum'] ?? 0.0));
+                $sumInit  = (float) (($this->bp[$bucketKey][$init]['sum'] ?? 0.0));
 
                 [$var, $varPct] = $this->variation($sumFinal, $sumInit);
 
@@ -264,7 +286,7 @@ class RagBpSheetExport implements
                 ]);
 
                 for ($r = 3; $r <= $highestRow; $r++) {
-                    $a = (string)$sheet->getCell("A{$r}")->getValue();
+                    $a = (string) $sheet->getCell("A{$r}")->getValue();
 
                     if (in_array($a, ['ATIVO', 'PASSIVO'], true)) {
                         $sheet->mergeCells("A{$r}:{$lastCol}{$r}");
@@ -279,8 +301,8 @@ class RagBpSheetExport implements
                         continue;
                     }
 
-                    $b = (string)$sheet->getCell("B{$r}")->getValue();
-                    $c = (string)$sheet->getCell("C{$r}")->getValue();
+                    $b = (string) $sheet->getCell("B{$r}")->getValue();
+                    $c = (string) $sheet->getCell("C{$r}")->getValue();
                     $d = $sheet->getCell("D{$r}")->getValue();
 
                     if ($a !== '' && $b === '' && $c === '' && ($d === null || $d === '')) {
@@ -299,7 +321,7 @@ class RagBpSheetExport implements
                             'font' => ['bold' => true],
                             'borders' => [
                                 'top' => ['borderStyle' => Border::BORDER_THIN],
-                                'bottom' => ['borderStyle' => Border::BORDER_THIN], // Opcional: borda dupla
+                                'bottom' => ['borderStyle' => Border::BORDER_THIN],
                             ],
                             'fill' => [
                                 'fillType' => \PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID,
@@ -329,58 +351,13 @@ class RagBpSheetExport implements
         return array_keys($periods);
     }
 
-    private function periodTotal(array $dataByPeriod, string $period): ?float
-    {
-        if (!array_key_exists($period, $dataByPeriod)) {
-            return 0.0;
-        }
-
-        $p = $dataByPeriod[$period];
-
-        if (is_numeric($p)) {
-            return (float)$p;
-        }
-
-        if (is_array($p)) {
-            foreach (['sum', 'SUM', 'total', 'TOTAL'] as $k) {
-                if (array_key_exists($k, $p) && is_numeric($p[$k])) {
-                    return (float)$p[$k];
-                }
-            }
-        }
-
-        return 0.0;
-    }
-
-    private function ensureSum(?float $v): float
-    {
-        return $v === null ? 0.0 : (float)$v;
-    }
-
-    private function collectAccountsFromSection(array $dataByPeriod, string $init, string $final): array
-    {
-        $accounts = [];
-
-        foreach ([$init, $final] as $p) {
-            $arr = (array)($dataByPeriod[$p] ?? []);
-            foreach ($arr as $k => $v) {
-                if (in_array($k, ['sum', 'SUM', 'total', 'TOTAL'], true)) continue;
-                $accounts[(string)$k] = true;
-            }
-        }
-
-        $list = array_keys($accounts);
-        sort($list, SORT_NATURAL);
-        return $list;
-    }
-
     private function sortedPeriods(array $periods): array
     {
         usort($periods, function ($a, $b) {
-            $da = DateTime::createFromFormat('m/Y', (string)$a) ?: null;
-            $db = DateTime::createFromFormat('m/Y', (string)$b) ?: null;
-            $ta = $da ? (int)$da->format('Ym') : 0;
-            $tb = $db ? (int)$db->format('Ym') : 0;
+            $da = DateTime::createFromFormat('m/Y', (string) $a) ?: null;
+            $db = DateTime::createFromFormat('m/Y', (string) $b) ?: null;
+            $ta = $da ? (int) $da->format('Ym') : 0;
+            $tb = $db ? (int) $db->format('Ym') : 0;
             return $ta <=> $tb;
         });
 
@@ -389,8 +366,8 @@ class RagBpSheetExport implements
 
     private function variation($final, $init): array
     {
-        $final = is_null($final) ? null : (float)$final;
-        $init  = is_null($init)  ? null : (float)$init;
+        $final = is_null($final) ? null : (float) $final;
+        $init  = is_null($init)  ? null : (float) $init;
 
         if ($final === null && $init === null) {
             return [null, null];
@@ -412,6 +389,6 @@ class RagBpSheetExport implements
 
     private function num($v): ?float
     {
-        return is_null($v) ? null : (float)$v;
+        return is_null($v) ? null : (float) $v;
     }
 }
