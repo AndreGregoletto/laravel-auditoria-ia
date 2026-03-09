@@ -57,7 +57,7 @@ class ValidateTrialBalanceAiPreview extends Component
         if (!$cached) {
             $suggestions = $suggester->suggestForFile($file->id);
 
-            $this->classify = $suggester->getClassificationDesc($file->id);
+            $this->classify = $suggester->getClassificationName($file->id);
             $this->classifyOptions = $this->classify;
 
             $cached = [
@@ -73,8 +73,7 @@ class ValidateTrialBalanceAiPreview extends Component
 
             $store->put($file->id, $userId, $cached);
         } else {
-            // Restore cached options (if exists)
-            $this->classify = $suggester->getClassificationDesc($file->id);
+            $this->classify = $suggester->getClassificationName($file->id);
             $this->classifyOptions = $this->classify;
         }
 
@@ -241,8 +240,8 @@ class ValidateTrialBalanceAiPreview extends Component
                     'balance_decision_source'  => $source,
                     'decided_user_id'          => auth()->id(),
                     'balance_decided_at'       => $decision->decided_at,
-                    'balance_sheet_id'         => $balanceSheetId,
-                    'income_statement_id'      => $incomeStatementId,
+                    'balance_sheet_id'         => $balanceSheetId ?? null,
+                    'income_statement_id'      => $incomeStatementId ?? null,
                 ])->save();
             }
         });

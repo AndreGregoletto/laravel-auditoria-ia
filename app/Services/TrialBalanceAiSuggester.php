@@ -13,11 +13,7 @@ class TrialBalanceAiSuggester
 {
     public function suggestForFile(int $fileId): array
     {
-        $classification = $this->getClassification($fileId);
-
-        uasort($classification['bp'], function($a, $b) {
-            return strlen($b) - strlen($a);
-        });
+        $classification = $this->getClassificationDesc($fileId);
 
         $rows = TrialBalanceData::query()
             ->where('file_id', $fileId)
@@ -84,8 +80,8 @@ class TrialBalanceAiSuggester
                 $aBp        = ['1.1.', '1.2.', '2.1.', '2.2.', '2.4.'];
 
                 $priority = function ($type) use ($classification, $r) {
-                    foreach ($classification[$type] as $id => $acc){
-                        if(str_contains($r->account, $acc)){
+                    foreach ($classification[$type] as $id => $acc) {
+                        if (str_contains($r->account, $acc)) {
                             return $id;
                         }
                     }
@@ -134,18 +130,18 @@ class TrialBalanceAiSuggester
         if (!$companyId) return [];
 
         $priority = function ($modelClass, $type) use ($companyId) {
-            $value = match ($type){
-                'bp'  => 'balance_sheet_id',
-                'dre' => 'income_statement_id',
-            };
+//            $value = match ($type){
+//                'bp'  => 'id',
+//                'dre' => 'id',
+//            };
 
-            $result = $modelClass::where('company_id', $companyId)->get()->pluck('value', $value);
+            $result = $modelClass::where('company_id', $companyId)->get()->pluck('value', 'id');
             if ($result->isNotEmpty()) return $result->toArray();
 
-            $result = $modelClass::where('company_tree_id', $companyId)->get()->pluck('value', $value);
+            $result = $modelClass::where('company_tree_id', $companyId)->get()->pluck('value', 'id');
             if ($result->isNotEmpty()) return $result->toArray();
 
-            return $modelClass::whereNull('company_id')->whereNull('company_tree_id')->get()->pluck('value', $value)->toArray();
+            return $modelClass::whereNull('company_id')->whereNull('company_tree_id')->get()->pluck('id', 'value')->toArray();
         };
 
         return [
@@ -155,23 +151,19 @@ class TrialBalanceAiSuggester
 
     }
 
-    public function getClassificationDesc($idFile): array
+    public function getClassificationName($idFile): array
     {
         $aClassify = $this->getClassification($idFile);
-
-        uasort($aClassify['bp'], function($a, $b) {
-            return strlen($b) <=> strlen($a);
-        });
 
         $classify = function ($modelClass, $type) use ($aClassify) {
             if (empty($aClassify[$type])) return [];
 
-            $aIds = array_keys($aClassify[$type]);
-            
-            return $modelClass::whereIn('id', $aIds)
+            $ids = array_values($aClassify[$type]);
+
+            return $modelClass::whereIn('id', $ids)
                 ->get()
-                ->sortBy(function ($model) use ($aIds) {
-                    return array_search($model->id, $aIds);
+                ->sortBy(function ($model) use ($ids) {
+                    return array_search($model->id, $ids);
                 })
                 ->pluck('name', 'id')
                 ->toArray();
@@ -182,6 +174,45 @@ class TrialBalanceAiSuggester
             'dre' => array_filter($classify(IncomeStatement::class, 'dre')),
         ];
 
+    }
+
+    public function getClassificationDesc(int $idFile): array
+    {
+        $aClassify = $this->getClassification($idFile);
+
+        $classify = function (string $modelClass, string $type) use ($aClassify): array {
+
+            if (empty($aClassify[$type]) || !is_array($aClassify[$type])) {
+                return [];
+            }
+
+            $ordered = $aClassify[$type];
+
+            uksort($ordered, fn ($a, $b) =>
+                strlen((string) $b) <=> strlen((string) $a)
+                    ?: strcmp((string) $b, (string) $a)
+            );
+
+            $ids = array_values($ordered);
+
+            $ids = array_values(array_unique($ids));
+
+            if (empty($ids)) return [];
+
+            $models = $modelClass::query()
+                ->whereIn('id', $ids)
+                ->get()
+                ->sortBy(fn ($model) => array_search($model->id, $ids, true))
+                ->pluck('value', 'id')
+                ->toArray();
+
+            return $models;
+        };
+
+        return [
+            'bp'  => $classify(PivotBalanceSheetReference::class, 'bp'),
+            'dre' => $classify(PivotIncomeStatementReference::class, 'dre'),
+        ];
     }
 
 }
