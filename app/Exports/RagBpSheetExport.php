@@ -3,10 +3,6 @@
 namespace App\Exports;
 
 use DateTime;
-use Maatwebsite\Excel\Concerns\WithMultipleSheets;
-use Maatwebsite\Excel\Concerns\WithProperties;
-use Maatwebsite\Excel\Concerns\Exportable;
-
 use Maatwebsite\Excel\Concerns\FromArray;
 use Maatwebsite\Excel\Concerns\WithCustomStartCell;
 use Maatwebsite\Excel\Concerns\WithEvents;
@@ -14,13 +10,10 @@ use Maatwebsite\Excel\Concerns\WithHeadings;
 use Maatwebsite\Excel\Concerns\WithStrictNullComparison;
 use Maatwebsite\Excel\Concerns\WithTitle;
 use Maatwebsite\Excel\Events\AfterSheet;
-
 use PhpOffice\PhpSpreadsheet\Style\Alignment;
 use PhpOffice\PhpSpreadsheet\Style\Border;
+use PhpOffice\PhpSpreadsheet\Style\Fill;
 
-/**
- * Aba “02 | BP”
- */
 class RagBpSheetExport implements
     FromArray,
     WithHeadings,
@@ -29,20 +22,13 @@ class RagBpSheetExport implements
     WithCustomStartCell,
     WithEvents
 {
-    private array $bp;
+    private array $groupedSheets;
     private array $periods;
-    private array $descByAccount;
 
     public function __construct(private readonly array $result)
     {
-        $this->bp = (array)($result['BP'] ?? []);
-
-        $this->descByAccount = [];
-        foreach (($result['response'] ?? []) as $acc => $row) {
-            $this->descByAccount[(string)$acc] = (string)($row['description'] ?? '');
-        }
-
-        $this->periods = $this->sortedPeriods($this->extractPeriodsFromBp($this->bp));
+        $this->groupedSheets = (array) ($result['groupedSheets'] ?? []);
+        $this->periods = $this->sortedPeriods(array_keys($this->groupedSheets));
     }
 
     public function title(): string
@@ -61,20 +47,22 @@ class RagBpSheetExport implements
         $init  = $this->periods[0] ?? '';
 
         return [
-            'Grupo',
-            __('labels.account'),
-            __('labels.description'),
+            '',
+            '',
             $final,
-            '',      // separador
             $init,
-            __('labels.variation') ?? 'Variação',
-            __('labels.variation_percent') ?? 'Variação %',
+            'AJUSTE DF.:',
+            $init,
+            'AV%',
+            'AH%',
+            'AHS',
+            'ESCOPO RA',
         ];
     }
 
     public function array(): array
     {
-        if (count($this->periods) < 1) {
+        if (empty($this->periods)) {
             return [];
         }
 
@@ -82,109 +70,114 @@ class RagBpSheetExport implements
         $final = $this->periods[1] ?? $this->periods[0];
 
         $rows = [];
+        $layout = $this->bpLayout();
 
-        $blocks = [
-            'ATIVO' => [
-                'Ativo Circulante'     => ['currentAssets'],
-                'Ativo Não Circulante' => ['nonCurrentAssets', 'nomCurrentAssets'],
-                'TOTAL ATIVO'          => ['assets'],
-            ],
-            'PASSIVO' => [
-                'Passivo Circulante'     => ['currentLiabilities'],
-                'Passivo Não Circulante' => ['nonCurrentLiabilities', 'nomCurrentLiabilities'],
-                'Patrimônio Líquido'     => ['freeHeritage'],
-                'TOTAL PASSIVO'          => ['liabilities'],
-            ],
-        ];
+        foreach ($layout as $block) {
+            $rows[] = [$block['title'], null, null, null, null, null, null, null, null, null];
 
-        foreach ($blocks as $blockTitle => $sections) {
+            foreach ($block['sections'] as $section) {
+                foreach ($section['items'] as $item) {
+                    $id    = (int) $item['id'];
+                    $code  = (string) $item['code'];
+                    $label = (string) $item['label'];
 
-            // Banner
-            $rows[] = [$blockTitle, null, null, null, null, null, null, null];
+                    $vFinal = $this->valueByClassification($final, $id);
+                    $vInit  = $this->valueByClassification($init, $id);
 
-            foreach ($sections as $label => $keys) {
+                    $adjust = 0.0;
+                    $adjusted = $vInit + $adjust;
 
-                $keys = (array)$keys;
-
-                $dataByPeriod = [];
-                foreach ($keys as $k) {
-                    if (!empty($this->bp[$k]) && is_array($this->bp[$k])) {
-                        $dataByPeriod = (array)$this->bp[$k];
-                        break;
-                    }
-                }
-
-                // ===== TOTAL ATIVO / TOTAL PASSIVO
-                if (in_array('assets', $keys, true) || in_array('liabilities', $keys, true)) {
-                    $vFinal = $this->periodTotal($dataByPeriod, $final);
-                    $vInit  = $this->periodTotal($dataByPeriod, $init);
-
-                    $vFinal = $this->ensureSum($vFinal);
-                    $vInit  = $this->ensureSum($vInit);
-
-                    [$var, $varPct] = $this->variation($vFinal, $vInit);
+                    [$avPct, $ahPct] = $this->variationPercentPair($vFinal, $adjusted);
 
                     $rows[] = [
                         $label,
+                        $code,
+                        $this->displayNum($vFinal),
+                        $this->displayNum($vInit),
+                        $this->displayNum($adjust),
+                        $this->displayNum($adjusted),
+                        $avPct,
+                        $ahPct,
                         null,
                         null,
-                        $this->num($vFinal),
-                        null,
-                        $this->num($vInit),
-                        $this->num($var),
-                        $varPct,
-                    ];
-
-                    $rows[] = [null, null, null, null, null, null, null, null];
-                    continue;
-                }
-
-                $rows[] = [$label, null, null, null, null, null, null, null];
-
-                $accounts = $this->collectAccountsFromSection($dataByPeriod, $init, $final);
-
-                foreach ($accounts as $acc) {
-                    $desc = $this->descByAccount[$acc] ?? '';
-
-                    $vFinal = $dataByPeriod[$final][$acc] ?? null;
-                    $vInit  = $dataByPeriod[$init][$acc] ?? null;
-
-                    [$var, $varPct] = $this->variation($vFinal, $vInit);
-
-                    $rows[] = [
-                        '',
-                        $acc,
-                        $desc,
-                        $this->num($vFinal),
-                        null,
-                        $this->num($vInit),
-                        $this->num($var),
-                        $varPct,
                     ];
                 }
 
-                // ===== SUBTOTAL da seção
-                $sumFinal = $this->periodTotal($dataByPeriod, $final);
-                $sumInit  = $this->periodTotal($dataByPeriod, $init);
+                $sumFinal = 0.0;
+                $sumInit = 0.0;
+                $sumAdjust = 0.0;
+                $sumAdjusted = 0.0;
 
-                $sumFinal = $this->ensureSum($sumFinal);
-                $sumInit  = $this->ensureSum($sumInit);
+                foreach ($section['items'] as $item) {
+                    $id = (int) $item['id'];
 
-                [$var, $varPct] = $this->variation($sumFinal, $sumInit);
+                    $lineFinal = $this->valueByClassification($final, $id);
+                    $lineInit  = $this->valueByClassification($init, $id);
+                    $lineAdjust = 0.0;
+                    $lineAdjusted = $lineInit + $lineAdjust;
+
+                    $sumFinal += $lineFinal;
+                    $sumInit += $lineInit;
+                    $sumAdjust += $lineAdjust;
+                    $sumAdjusted += $lineAdjusted;
+                }
+
+                [$avPct, $ahPct] = $this->variationPercentPair($sumFinal, $sumAdjusted);
 
                 $rows[] = [
-                    "Subtotal {$label}",
+                    $section['subtotal'],
+                    null,
+                    $this->displayNum($sumFinal),
+                    $this->displayNum($sumInit),
+                    $this->displayNum($sumAdjust),
+                    $this->displayNum($sumAdjusted),
+                    $avPct,
+                    $ahPct,
                     null,
                     null,
-                    $this->num($sumFinal),
-                    null,
-                    $this->num($sumInit),
-                    $this->num($var),
-                    $varPct,
                 ];
 
-                $rows[] = [null, null, null, null, null, null, null, null];
+                $rows[] = [null, null, null, null, null, null, null, null, null, null];
             }
+
+            $blockFinal = 0.0;
+            $blockInit = 0.0;
+            $blockAdjust = 0.0;
+            $blockAdjusted = 0.0;
+
+            foreach ($block['sections'] as $section) {
+                foreach ($section['items'] as $item) {
+                    $id = (int) $item['id'];
+
+                    $lineFinal = $this->valueByClassification($final, $id);
+                    $lineInit  = $this->valueByClassification($init, $id);
+                    $lineAdjust = 0.0;
+                    $lineAdjusted = $lineInit + $lineAdjust;
+
+                    $blockFinal += $lineFinal;
+                    $blockInit += $lineInit;
+                    $blockAdjust += $lineAdjust;
+                    $blockAdjusted += $lineAdjusted;
+                }
+            }
+
+            [$avPct, $ahPct] = $this->variationPercentPair($blockFinal, $blockAdjusted);
+
+            $rows[] = [
+                $block['total'],
+                null,
+                $this->displayNum($blockFinal),
+                $this->displayNum($blockInit),
+                $this->displayNum($blockAdjust),
+                $this->displayNum($blockAdjusted),
+                $avPct,
+                $ahPct,
+                null,
+                null,
+            ];
+
+            $rows[] = [null, null, null, null, null, null, null, null, null, null];
+            $rows[] = [null, null, null, null, null, null, null, null, null, null];
         }
 
         return $rows;
@@ -194,14 +187,12 @@ class RagBpSheetExport implements
     {
         return [
             AfterSheet::class => function (AfterSheet $event) {
-
                 $sheet = $event->sheet->getDelegate();
                 $highestRow = $sheet->getHighestRow();
-                $lastCol = 'H';
+                $lastCol = 'J';
 
-                $title = 'BP';
                 $sheet->mergeCells("A1:{$lastCol}1");
-                $sheet->setCellValue('A1', $title);
+                $sheet->setCellValue('A1', 'BP');
 
                 $sheet->getStyle("A1:{$lastCol}1")->applyFromArray([
                     'font' => ['bold' => true, 'size' => 14],
@@ -210,7 +201,6 @@ class RagBpSheetExport implements
                         'vertical'   => Alignment::VERTICAL_CENTER,
                     ],
                 ]);
-                $sheet->getRowDimension(1)->setRowHeight(26);
 
                 $sheet->getStyle("A2:{$lastCol}2")->applyFromArray([
                     'font' => ['bold' => true],
@@ -223,195 +213,211 @@ class RagBpSheetExport implements
                     ],
                 ]);
 
-                $sheet->setAutoFilter("A2:{$lastCol}{$highestRow}");
-                $sheet->freezePane('D3');
+                $sheet->freezePane('C3');
 
-                $sheet->getColumnDimension('A')->setWidth(22);
-                $sheet->getColumnDimension('B')->setWidth(22);
-                $sheet->getColumnDimension('C')->setWidth(54);
-                $sheet->getColumnDimension('D')->setWidth(18);
-                $sheet->getColumnDimension('E')->setWidth(3);
-                $sheet->getColumnDimension('F')->setWidth(18);
-                $sheet->getColumnDimension('G')->setWidth(18);
-                $sheet->getColumnDimension('H')->setWidth(14);
+                $sheet->getColumnDimension('A')->setWidth(44);
+                $sheet->getColumnDimension('B')->setWidth(10);
+                $sheet->getColumnDimension('C')->setWidth(16);
+                $sheet->getColumnDimension('D')->setWidth(16);
+                $sheet->getColumnDimension('E')->setWidth(14);
+                $sheet->getColumnDimension('F')->setWidth(16);
+                $sheet->getColumnDimension('G')->setWidth(10);
+                $sheet->getColumnDimension('H')->setWidth(10);
+                $sheet->getColumnDimension('I')->setWidth(10);
+                $sheet->getColumnDimension('J')->setWidth(18);
 
-                $sheet->getStyle("B:B")->getNumberFormat()->setFormatCode('@');
+                $sheet->getStyle("C3:F{$highestRow}")
+                    ->getNumberFormat()
+                    ->setFormatCode('#,##0.00');
 
-                // Numéricos
-                $sheet->getStyle("D3:D{$highestRow}")->getNumberFormat()->setFormatCode('#,##0.00');
-                $sheet->getStyle("F3:F{$highestRow}")->getNumberFormat()->setFormatCode('#,##0.00');
-                $sheet->getStyle("G3:G{$highestRow}")->getNumberFormat()->setFormatCode('#,##0.00');
-
-                // Percentual
-                $sheet->getStyle("H3:H{$highestRow}")->getNumberFormat()->setFormatCode('0.00%');
-
-                // Alinhamentos
-                $sheet->getStyle("C3:C{$highestRow}")->getAlignment()->setHorizontal(Alignment::HORIZONTAL_LEFT);
-                $sheet->getStyle("D3:D{$highestRow}")->getAlignment()->setHorizontal(Alignment::HORIZONTAL_RIGHT);
-                $sheet->getStyle("F3:F{$highestRow}")->getAlignment()->setHorizontal(Alignment::HORIZONTAL_RIGHT);
-                $sheet->getStyle("G3:G{$highestRow}")->getAlignment()->setHorizontal(Alignment::HORIZONTAL_RIGHT);
-                $sheet->getStyle("H3:H{$highestRow}")->getAlignment()->setHorizontal(Alignment::HORIZONTAL_RIGHT);
-
-                $sheet->getStyle("A2:{$lastCol}{$highestRow}")->applyFromArray([
-                    'borders' => [
-                        'allBorders' => [
-                            'borderStyle' => Border::BORDER_HAIR,
-                        ],
-                    ],
-                    'alignment' => [
-                        'vertical' => Alignment::VERTICAL_CENTER,
-                    ],
-                ]);
+                $sheet->getStyle("G3:H{$highestRow}")
+                    ->getNumberFormat()
+                    ->setFormatCode('0.00%');
 
                 for ($r = 3; $r <= $highestRow; $r++) {
-                    $a = (string)$sheet->getCell("A{$r}")->getValue();
+                    $a = trim((string) $sheet->getCell("A{$r}")->getValue());
+                    $b = trim((string) $sheet->getCell("B{$r}")->getValue());
 
                     if (in_array($a, ['ATIVO', 'PASSIVO'], true)) {
                         $sheet->mergeCells("A{$r}:{$lastCol}{$r}");
                         $sheet->getStyle("A{$r}:{$lastCol}{$r}")->applyFromArray([
                             'font' => ['bold' => true, 'size' => 12],
-                            'alignment' => ['horizontal' => Alignment::HORIZONTAL_LEFT],
                             'fill' => [
-                                'fillType' => \PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID,
+                                'fillType' => Fill::FILL_SOLID,
                                 'startColor' => ['argb' => 'FFEFEFEF'],
                             ],
                         ]);
                         continue;
                     }
 
-                    $b = (string)$sheet->getCell("B{$r}")->getValue();
-                    $c = (string)$sheet->getCell("C{$r}")->getValue();
-                    $d = $sheet->getCell("D{$r}")->getValue();
-
-                    if ($a !== '' && $b === '' && $c === '' && ($d === null || $d === '')) {
-                        $sheet->mergeCells("A{$r}:{$lastCol}{$r}");
-                        $sheet->getStyle("A{$r}:{$lastCol}{$r}")->applyFromArray([
-                            'font' => ['bold' => true],
-                            'alignment' => ['horizontal' => Alignment::HORIZONTAL_LEFT],
-                        ]);
-                        continue;
-                    }
-
-                    if (str_starts_with($a, 'Subtotal ') || str_starts_with($a, 'TOTAL ')) {
-                        $sheet->mergeCells("A{$r}:C{$r}");
-
+                    if (
+                        $a !== '' &&
+                        $b === '' &&
+                        str_starts_with($a, 'TOTAL ')
+                    ) {
                         $sheet->getStyle("A{$r}:{$lastCol}{$r}")->applyFromArray([
                             'font' => ['bold' => true],
                             'borders' => [
                                 'top' => ['borderStyle' => Border::BORDER_THIN],
-                                'bottom' => ['borderStyle' => Border::BORDER_THIN], // Opcional: borda dupla
+                                'bottom' => ['borderStyle' => Border::BORDER_DOUBLE],
                             ],
-                            'fill' => [
-                                'fillType' => \PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID,
-                                'startColor' => ['argb' => 'FFFFFDF5'],
+                        ]);
+                        continue;
+                    }
+
+                    if ($a !== '' && $b === '' && !str_starts_with($a, 'TOTAL ')) {
+                        $sheet->getStyle("A{$r}:{$lastCol}{$r}")->applyFromArray([
+                            'font' => ['bold' => true],
+                            'borders' => [
+                                'top' => ['borderStyle' => Border::BORDER_THIN],
+                                'bottom' => ['borderStyle' => Border::BORDER_THIN],
                             ],
                         ]);
                     }
+
+                    if ($b !== '') {
+                        $sheet->getStyle("B{$r}")->applyFromArray([
+                            'font' => ['bold' => true, 'color' => ['argb' => 'FFFF0000']],
+                            'alignment' => ['horizontal' => Alignment::HORIZONTAL_CENTER],
+                        ]);
+                    }
                 }
-            }
+            },
         ];
     }
 
-    private function extractPeriodsFromBp(array $bp): array
+    private function valueByClassification(string $period, int $id): float
     {
-        $periods = [];
-
-        foreach ($bp as $section) {
-            if (!is_array($section)) continue;
-
-            foreach ($section as $period => $payload) {
-                if (is_string($period) && preg_match('~^\d{1,2}/\d{4}$~', $period)) {
-                    $periods[$period] = true;
-                }
-            }
+        if ($id === 47) {
+            return array_sum((array) ($this->groupedSheets[$period]['dre'] ?? []));
         }
 
-        return array_keys($periods);
+        return (float) (($this->groupedSheets[$period]['bp'][$id] ?? 0.0));
     }
 
-    private function periodTotal(array $dataByPeriod, string $period): ?float
+    private function bpLayout(): array
     {
-        if (!array_key_exists($period, $dataByPeriod)) {
-            return 0.0;
-        }
-
-        $p = $dataByPeriod[$period];
-
-        if (is_numeric($p)) {
-            return (float)$p;
-        }
-
-        if (is_array($p)) {
-            foreach (['sum', 'SUM', 'total', 'TOTAL'] as $k) {
-                if (array_key_exists($k, $p) && is_numeric($p[$k])) {
-                    return (float)$p[$k];
-                }
-            }
-        }
-
-        return 0.0;
-    }
-
-    private function ensureSum(?float $v): float
-    {
-        return $v === null ? 0.0 : (float)$v;
-    }
-
-    private function collectAccountsFromSection(array $dataByPeriod, string $init, string $final): array
-    {
-        $accounts = [];
-
-        foreach ([$init, $final] as $p) {
-            $arr = (array)($dataByPeriod[$p] ?? []);
-            foreach ($arr as $k => $v) {
-                if (in_array($k, ['sum', 'SUM', 'total', 'TOTAL'], true)) continue;
-                $accounts[(string)$k] = true;
-            }
-        }
-
-        $list = array_keys($accounts);
-        sort($list, SORT_NATURAL);
-        return $list;
+        return [
+            [
+                'title' => 'ATIVO',
+                'total' => 'TOTAL DO ATIVO',
+                'sections' => [
+                    [
+                        'subtotal' => 'TOTAL ATIVO CIRCULANTE',
+                        'items' => [
+                            ['id' => 1, 'code' => 'A',   'label' => 'Caixa e equivalentes de caixa'],
+                            ['id' => 2, 'code' => 'B',   'label' => 'Contas a receber'],
+                            ['id' => 3, 'code' => 'C',   'label' => 'Depósitos vinculados - conta reserva (CP)'],
+                            ['id' => 4, 'code' => 'D',   'label' => 'Arrendamento financeiro a receber (CP)'],
+                            ['id' => 5, 'code' => 'E',   'label' => 'Estoques'],
+                            ['id' => 6, 'code' => 'F',   'label' => 'Tributos a recuperar (CP)'],
+                            ['id' => 7, 'code' => 'G',   'label' => 'Adiantamento a fornecedores'],
+                            ['id' => 8, 'code' => 'H',   'label' => 'Despesas antecipadas'],
+                            ['id' => 9, 'code' => 'I',   'label' => 'Outros créditos (CP)'],
+                        ],
+                    ],
+                    [
+                        'subtotal' => 'TOTAL ATIVO NÃO CIRCULANTE',
+                        'items' => [
+                            ['id' => 10, 'code' => 'C.1', 'label' => 'Depósitos vinculados - conta reserva (LP)'],
+                            ['id' => 11, 'code' => 'D.1', 'label' => 'Arrendamento financeiro a receber (LP)'],
+                            ['id' => 12, 'code' => 'F.1', 'label' => 'Tributos a recuperar (LP)'],
+                            ['id' => 13, 'code' => 'I.1', 'label' => 'Outros créditos (LP)'],
+                            ['id' => 14, 'code' => 'J',   'label' => 'Depósitos judiciais'],
+                            ['id' => 15, 'code' => 'K',   'label' => 'Partes relacionadas (LP)'],
+                            ['id' => 16, 'code' => 'L',   'label' => 'Investimento'],
+                            ['id' => 17, 'code' => 'M',   'label' => 'Propriedade para investimento'],
+                            ['id' => 18, 'code' => 'M.1', 'label' => 'Direito de uso - arrendamento mercantil'],
+                            ['id' => 19, 'code' => 'N',   'label' => 'Imobilizado'],
+                            ['id' => 20, 'code' => 'O',   'label' => 'Intangível'],
+                        ],
+                    ],
+                ],
+            ],
+            [
+                'title' => 'PASSIVO',
+                'total' => 'TOTAL DO PASSIVO',
+                'sections' => [
+                    [
+                        'subtotal' => 'TOTAL PASSIVO CIRCULANTE',
+                        'items' => [
+                            ['id' => 21, 'code' => 'AA', 'label' => 'Fornecedores (CP)'],
+                            ['id' => 22, 'code' => 'BB', 'label' => 'Obrigações sociais e trabalhistas'],
+                            ['id' => 23, 'code' => 'CC', 'label' => 'Obrigações tributárias (CP)'],
+                            ['id' => 24, 'code' => 'DD', 'label' => 'Arrendamentos financeiros a pagar (CP)'],
+                            ['id' => 25, 'code' => 'EE', 'label' => 'Empréstimos e financiamentos (CP)'],
+                            ['id' => 26, 'code' => 'FF', 'label' => 'Debêntures (CP)'],
+                            ['id' => 27, 'code' => 'GG', 'label' => 'Dividendos (CP)'],
+                            ['id' => 28, 'code' => 'HH', 'label' => 'Pesquisas e desenvolmentos - P&D (CP)'],
+                            ['id' => 29, 'code' => 'II', 'label' => 'Outras obrigações (CP)'],
+                        ],
+                    ],
+                    [
+                        'subtotal' => 'TOTAL PASSIVO NÃO CIRCULANTE',
+                        'items' => [
+                            ['id' => 30, 'code' => 'AA.1', 'label' => 'Fornecedores (LP)'],
+                            ['id' => 31, 'code' => 'CC.1', 'label' => 'Obrigações tributárias (LP)'],
+                            ['id' => 32, 'code' => 'JJ',   'label' => 'Tributos diferidos'],
+                            ['id' => 33, 'code' => 'DD.1', 'label' => 'Arrendamentos financeiros a pagar (LP)'],
+                            ['id' => 34, 'code' => 'EE.1', 'label' => 'Empréstimos e financiamentos (LP)'],
+                            ['id' => 35, 'code' => 'FF.1', 'label' => 'Debêntures (LP)'],
+                            ['id' => 36, 'code' => 'KK',   'label' => 'Provisão para perdas de investimentos'],
+                            ['id' => 37, 'code' => 'LL',   'label' => 'Passivos contingentes'],
+                            ['id' => 38, 'code' => 'MM',   'label' => 'Adiantamento de clientes'],
+                            ['id' => 39, 'code' => 'NN',   'label' => 'Provisão para desmobilização dos ativos'],
+                            ['id' => 40, 'code' => 'OO',   'label' => 'Partes relacionadas'],
+                            ['id' => 41, 'code' => 'HH.1', 'label' => 'Pesquisas e desenvolmentos - P&D (LP)'],
+                            ['id' => 42, 'code' => 'II.1', 'label' => 'Outras obrigações (LP)'],
+                        ],
+                    ],
+                    [
+                        'subtotal' => 'PATRIMÔNIO LÍQUIDO',
+                        'items' => [
+                            ['id' => 43, 'code' => 'XX',   'label' => 'Capital social'],
+                            ['id' => 44, 'code' => 'XX.1', 'label' => 'Reserva de capital'],
+                            ['id' => 45, 'code' => 'XX.2', 'label' => 'Ajuste de avaliação patrimonial'],
+                            ['id' => 46, 'code' => 'XX.3', 'label' => 'Prejuízo acumulado'],
+                            ['id' => 47, 'code' => 'DRE',  'label' => 'Demonstração do resultado do exercício'],
+                        ],
+                    ],
+                ],
+            ],
+        ];
     }
 
     private function sortedPeriods(array $periods): array
     {
         usort($periods, function ($a, $b) {
-            $da = DateTime::createFromFormat('m/Y', (string)$a) ?: null;
-            $db = DateTime::createFromFormat('m/Y', (string)$b) ?: null;
-            $ta = $da ? (int)$da->format('Ym') : 0;
-            $tb = $db ? (int)$db->format('Ym') : 0;
+            $da = DateTime::createFromFormat('m/Y', (string) $a) ?: null;
+            $db = DateTime::createFromFormat('m/Y', (string) $b) ?: null;
+
+            $ta = $da ? (int) $da->format('Ym') : 0;
+            $tb = $db ? (int) $db->format('Ym') : 0;
+
             return $ta <=> $tb;
         });
 
         return array_values($periods);
     }
 
-    private function variation($final, $init): array
+    private function variationPercentPair(float $final, float $base): array
     {
-        $final = is_null($final) ? null : (float)$final;
-        $init  = is_null($init)  ? null : (float)$init;
+        $av = null;
+        $ah = null;
 
-        if ($final === null && $init === null) {
-            return [null, null];
+        if (abs($base) > 0.0000001) {
+            $ah = ($final - $base) / abs($base);
         }
 
-        $var = ($final ?? 0.0) - ($init ?? 0.0);
-
-        if ($init === null || abs($init) < 0.0000001) {
-            if ($final === null || abs($final) < 0.0000001) {
-                return [$var, 0.0];
-            }
-
-            return [$var, null];
-        }
-
-        $pct = $var / abs($init);
-        return [$var, $pct];
+        return [$av, $ah];
     }
 
-    private function num($v): ?float
+    private function displayNum(?float $v): ?float
     {
-        return is_null($v) ? null : (float)$v;
+        if ($v === null) {
+            return null;
+        }
+
+        return abs($v) < 0.0000001 ? null : $v;
     }
 }
