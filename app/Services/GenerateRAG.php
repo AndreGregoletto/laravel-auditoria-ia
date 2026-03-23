@@ -206,11 +206,13 @@ class GenerateRAG
             return [
                 'name'        => $ragName,
                 'companyName' => $company->name,
+                'idFile'      => $idFile,
                 'periodRange' => $periodRange,
                 'aClosing'    => $aClosing,
                 'response'    => $response,
                 'fileOrder'   => $this->fileOrder,
-                'groupedSheets' => $classify
+                'groupedSheets' => $classify,
+                'classify'      => $getClassification->getClassification($idFile)
             ];
         } catch (\Exception $e) {
             dd($e->getMessage());

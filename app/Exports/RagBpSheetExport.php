@@ -2,6 +2,7 @@
 
 namespace App\Exports;
 
+use App\Models\BalanceSheet;
 use DateTime;
 use Maatwebsite\Excel\Concerns\FromArray;
 use Maatwebsite\Excel\Concerns\WithCustomStartCell;
@@ -24,11 +25,13 @@ class RagBpSheetExport implements
 {
     private array $groupedSheets;
     private array $periods;
+    private array $classify;
 
     public function __construct(private readonly array $result)
     {
         $this->groupedSheets = (array) ($result['groupedSheets'] ?? []);
         $this->periods = $this->sortedPeriods(array_keys($this->groupedSheets));
+        $this->classify = $result['classify']['bp'];
     }
 
     public function title(): string
@@ -297,6 +300,21 @@ class RagBpSheetExport implements
 
     private function bpLayout(): array
     {
+        $balanceSheet = BalanceSheet::query()
+            ->where('status', 1)
+            ->orderBy('sort_order')
+            ->get(['id', 'side', 'section', 'code', 'name']);
+
+        $grouped = [];
+
+        foreach ($balanceSheet as $item) {
+            $grouped[$item->side][$item->section][] = [
+                'id'    => (int) $item->id,
+                'code'  => (string) $item->code,
+                'label' => (string) $item->name,
+            ];
+        }
+
         return [
             [
                 'title' => 'ATIVO',
@@ -304,33 +322,11 @@ class RagBpSheetExport implements
                 'sections' => [
                     [
                         'subtotal' => 'TOTAL ATIVO CIRCULANTE',
-                        'items' => [
-                            ['id' => 1, 'code' => 'A',   'label' => 'Caixa e equivalentes de caixa'],
-                            ['id' => 2, 'code' => 'B',   'label' => 'Contas a receber'],
-                            ['id' => 3, 'code' => 'C',   'label' => 'Depósitos vinculados - conta reserva (CP)'],
-                            ['id' => 4, 'code' => 'D',   'label' => 'Arrendamento financeiro a receber (CP)'],
-                            ['id' => 5, 'code' => 'E',   'label' => 'Estoques'],
-                            ['id' => 6, 'code' => 'F',   'label' => 'Tributos a recuperar (CP)'],
-                            ['id' => 7, 'code' => 'G',   'label' => 'Adiantamento a fornecedores'],
-                            ['id' => 8, 'code' => 'H',   'label' => 'Despesas antecipadas'],
-                            ['id' => 9, 'code' => 'I',   'label' => 'Outros créditos (CP)'],
-                        ],
+                        'items' => $grouped['assets']['current'] ?? [],
                     ],
                     [
                         'subtotal' => 'TOTAL ATIVO NÃO CIRCULANTE',
-                        'items' => [
-                            ['id' => 10, 'code' => 'C.1', 'label' => 'Depósitos vinculados - conta reserva (LP)'],
-                            ['id' => 11, 'code' => 'D.1', 'label' => 'Arrendamento financeiro a receber (LP)'],
-                            ['id' => 12, 'code' => 'F.1', 'label' => 'Tributos a recuperar (LP)'],
-                            ['id' => 13, 'code' => 'I.1', 'label' => 'Outros créditos (LP)'],
-                            ['id' => 14, 'code' => 'J',   'label' => 'Depósitos judiciais'],
-                            ['id' => 15, 'code' => 'K',   'label' => 'Partes relacionadas (LP)'],
-                            ['id' => 16, 'code' => 'L',   'label' => 'Investimento'],
-                            ['id' => 17, 'code' => 'M',   'label' => 'Propriedade para investimento'],
-                            ['id' => 18, 'code' => 'M.1', 'label' => 'Direito de uso - arrendamento mercantil'],
-                            ['id' => 19, 'code' => 'N',   'label' => 'Imobilizado'],
-                            ['id' => 20, 'code' => 'O',   'label' => 'Intangível'],
-                        ],
+                        'items' => $grouped['assets']['non_current'] ?? [],
                     ],
                 ],
             ],
@@ -340,45 +336,15 @@ class RagBpSheetExport implements
                 'sections' => [
                     [
                         'subtotal' => 'TOTAL PASSIVO CIRCULANTE',
-                        'items' => [
-                            ['id' => 21, 'code' => 'AA', 'label' => 'Fornecedores (CP)'],
-                            ['id' => 22, 'code' => 'BB', 'label' => 'Obrigações sociais e trabalhistas'],
-                            ['id' => 23, 'code' => 'CC', 'label' => 'Obrigações tributárias (CP)'],
-                            ['id' => 24, 'code' => 'DD', 'label' => 'Arrendamentos financeiros a pagar (CP)'],
-                            ['id' => 25, 'code' => 'EE', 'label' => 'Empréstimos e financiamentos (CP)'],
-                            ['id' => 26, 'code' => 'FF', 'label' => 'Debêntures (CP)'],
-                            ['id' => 27, 'code' => 'GG', 'label' => 'Dividendos (CP)'],
-                            ['id' => 28, 'code' => 'HH', 'label' => 'Pesquisas e desenvolmentos - P&D (CP)'],
-                            ['id' => 29, 'code' => 'II', 'label' => 'Outras obrigações (CP)'],
-                        ],
+                        'items' => $grouped['liabilities']['current'] ?? [],
                     ],
                     [
                         'subtotal' => 'TOTAL PASSIVO NÃO CIRCULANTE',
-                        'items' => [
-                            ['id' => 30, 'code' => 'AA.1', 'label' => 'Fornecedores (LP)'],
-                            ['id' => 31, 'code' => 'CC.1', 'label' => 'Obrigações tributárias (LP)'],
-                            ['id' => 32, 'code' => 'JJ',   'label' => 'Tributos diferidos'],
-                            ['id' => 33, 'code' => 'DD.1', 'label' => 'Arrendamentos financeiros a pagar (LP)'],
-                            ['id' => 34, 'code' => 'EE.1', 'label' => 'Empréstimos e financiamentos (LP)'],
-                            ['id' => 35, 'code' => 'FF.1', 'label' => 'Debêntures (LP)'],
-                            ['id' => 36, 'code' => 'KK',   'label' => 'Provisão para perdas de investimentos'],
-                            ['id' => 37, 'code' => 'LL',   'label' => 'Passivos contingentes'],
-                            ['id' => 38, 'code' => 'MM',   'label' => 'Adiantamento de clientes'],
-                            ['id' => 39, 'code' => 'NN',   'label' => 'Provisão para desmobilização dos ativos'],
-                            ['id' => 40, 'code' => 'OO',   'label' => 'Partes relacionadas'],
-                            ['id' => 41, 'code' => 'HH.1', 'label' => 'Pesquisas e desenvolmentos - P&D (LP)'],
-                            ['id' => 42, 'code' => 'II.1', 'label' => 'Outras obrigações (LP)'],
-                        ],
+                        'items' => $grouped['liabilities']['non_current'] ?? [],
                     ],
                     [
                         'subtotal' => 'PATRIMÔNIO LÍQUIDO',
-                        'items' => [
-                            ['id' => 43, 'code' => 'XX',   'label' => 'Capital social'],
-                            ['id' => 44, 'code' => 'XX.1', 'label' => 'Reserva de capital'],
-                            ['id' => 45, 'code' => 'XX.2', 'label' => 'Ajuste de avaliação patrimonial'],
-                            ['id' => 46, 'code' => 'XX.3', 'label' => 'Prejuízo acumulado'],
-                            ['id' => 47, 'code' => 'DRE',  'label' => 'Demonstração do resultado do exercício'],
-                        ],
+                        'items' => $grouped['equity']['equity'] ?? [],
                     ],
                 ],
             ],

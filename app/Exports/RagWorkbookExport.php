@@ -15,7 +15,7 @@ class RagWorkbookExport implements WithMultipleSheets
         return [
             new RagCoverSheetExport($this->result['companyName'], $this->result['periodRange']), // CAPA
             new RagBpSheetExport($this->result),    // BP
-//            new RagDreSheetExport($this->result),   // DRE
+            new RagDreSheetExport($this->result),   // DRE
             new RagViewExport($this->result),       // BALANCETE
         ];
     }
