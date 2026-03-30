@@ -25,11 +25,15 @@ class RagDreSheetExport implements
 {
     private array $groupedSheets;
     private array $periods;
+    private array $classify;
+    
+    private array $codeToIdMap = [];
 
     public function __construct(private readonly array $result)
     {
         $this->groupedSheets = (array) ($result['groupedSheets'] ?? []);
         $this->periods = $this->sortedPeriods(array_keys($this->groupedSheets));
+        $this->classify = $result['classify']['dre'] ?? [];
     }
 
     public function title(): string
@@ -136,6 +140,137 @@ class RagDreSheetExport implements
         return $rows;
     }
 
+    private function dreLayout(): array
+    {
+        $ids = $this->classify
+            |> (fn($v) => array_flip($v))
+            |> (fn($v) => array_keys($v));
+
+        $items = IncomeStatement::query()
+            ->whereIn('id', $ids)
+            ->where('status', 1)
+            ->orderBy('sort_order')
+            ->get(['id', 'code', 'name'])
+            ->keyBy('code');
+
+        foreach ($items as $item) {
+            $this->codeToIdMap[$item->code] = $item->id;
+        }
+
+        $rows = [];
+
+        $addDetail = function ($code) use ($items, &$rows) {
+            if (isset($items[$code])) {
+                $rows[] = [
+                    'type'  => 'detail',
+                    'id'    => $items[$code]->id,
+                    'code'  => $items[$code]->code,
+                    'label' => $items[$code]->name,
+                ];
+            }
+        };
+
+
+        $addDetail('10');   
+        $addDetail('10.1'); 
+        $rows[] = ['type' => 'formula', 'key' => 'net_revenue', 'label' => 'RECEITA LÍQUIDA'];
+        $rows[] = ['type' => 'blank'];
+
+        $addDetail('20');  
+        $rows[] = ['type' => 'formula', 'key' => 'gross_profit', 'label' => 'LUCRO BRUTO'];
+        $rows[] = ['type' => 'blank'];
+
+        $addDetail('30');   
+        $addDetail('40');   
+        $addDetail('50');   
+        $rows[] = ['type' => 'formula', 'key' => 'operating_expenses', 'label' => 'DESPESAS OPERACIONAIS'];
+        $rows[] = ['type' => 'blank'];
+
+        $addDetail('60');   
+        $addDetail('70');   
+        $rows[] = ['type' => 'formula', 'key' => 'financial_result', 'label' => 'RESULTADO FINANCEIRO'];
+        $rows[] = ['type' => 'blank'];
+
+        $rows[] = ['type' => 'formula', 'key' => 'result_before_taxes', 'label' => 'RESULTADO ANTES DOS IMPOSTOS'];
+        $rows[] = ['type' => 'blank'];
+
+        $addDetail('80'); 
+        $addDetail('90');  
+        $addDetail('100'); 
+        $rows[] = ['type' => 'formula', 'key' => 'net_income', 'label' => 'RESULTADO LÍQUIDO'];
+
+        return $rows;
+    }
+
+    private function valByCode(string $period, string $code): float
+    {
+        if (!isset($this->codeToIdMap[$code])) {
+            return 0.0;
+        }
+        return $this->valueByClassification($period, $this->codeToIdMap[$code]);
+    }
+
+    private function formulaValue(string $key, string $period): float
+    {
+        return match ($key) {
+            'net_revenue'         => $this->valByCode($period, '10') - $this->valByCode($period, '10.1'),
+            'gross_profit'        => $this->formulaValue('net_revenue', $period) - $this->valByCode($period, '20'),
+            'operating_expenses'  => $this->formulaValue('gross_profit', $period)
+                                     - $this->valByCode($period, '30')
+                                     + $this->valByCode($period, '40')
+                                     + $this->valByCode($period, '50'),
+            'financial_result'    => $this->valByCode($period, '60') - $this->valByCode($period, '70'),
+            'result_before_taxes' => $this->formulaValue('operating_expenses', $period) 
+                                     + $this->formulaValue('financial_result', $period),
+            'net_income'          => $this->formulaValue('result_before_taxes', $period)
+                                     - $this->valByCode($period, '80')
+                                     - $this->valByCode($period, '90')
+                                     + $this->valByCode($period, '100'),
+            default               => 0.0,
+        };
+    }
+
+    private function valueByClassification(string $period, int $id): float
+    {
+        return (float) (($this->groupedSheets[$period]['dre'][$id] ?? 0.0));
+    }
+
+    private function sortedPeriods(array $periods): array
+    {
+        usort($periods, function ($a, $b) {
+            $da = DateTime::createFromFormat('m/Y', (string) $a) ?: null;
+            $db = DateTime::createFromFormat('m/Y', (string) $b) ?: null;
+
+            $ta = $da ? (int) $da->format('Ym') : 0;
+            $tb = $db ? (int) $db->format('Ym') : 0;
+
+            return $ta <=> $tb;
+        });
+
+        return array_values($periods);
+    }
+
+    private function variationPercentPair(float $final, float $base): array
+    {
+        $av = null;
+        $ah = null;
+
+        if (abs($base) > 0.0000001) {
+            $ah = ($final - $base) / abs($base);
+        }
+
+        return [$av, $ah];
+    }
+
+    private function displayNum(?float $v): ?float
+    {
+        if ($v === null) {
+            return null;
+        }
+
+        return abs($v) < 0.0000001 ? null : $v;
+    }
+
     public function registerEvents(): array
     {
         return [
@@ -234,116 +369,5 @@ class RagDreSheetExport implements
                 }
             },
         ];
-    }
-
-    private function dreLayout(): array
-    {
-        $items = IncomeStatement::query()
-            ->where('status', 1)
-            ->orderBy('sort_order')
-            ->get(['id', 'code', 'name'])
-            ->map(fn ($item) => [
-                'type'  => 'detail',
-                'id'    => (int) $item->id,
-                'code'  => (string) $item->code,
-                'label' => (string) $item->name,
-            ])
-            ->keyBy('id')
-            ->toArray();
-
-        return [
-            $items[1],
-            $items[2],
-            ['type' => 'formula', 'key' => 'net_revenue', 'label' => 'RECEITA LÍQUIDA'],
-            ['type' => 'blank'],
-
-            $items[3],
-            ['type' => 'formula', 'key' => 'gross_profit', 'label' => 'LUCRO BRUTO'],
-            ['type' => 'blank'],
-
-            ['type' => 'blank'],
-            $items[4],
-            $items[5],
-            $items[6],
-            ['type' => 'formula', 'key' => 'operating_expenses', 'label' => 'DESPESAS OPERACIONAIS'],
-            ['type' => 'blank'],
-
-            ['type' => 'blank'],
-            $items[7],
-            $items[8],
-            ['type' => 'formula', 'key' => 'financial_result', 'label' => 'RESULTADO FINANCEIRO'],
-            ['type' => 'blank'],
-
-            ['type' => 'blank'],
-            ['type' => 'formula', 'key' => 'result_before_taxes', 'label' => 'RESULTADO ANTES DOS IMPOSTOS'],
-            ['type' => 'blank'],
-
-            ['type' => 'blank'],
-            $items[9],
-            $items[10],
-            $items[11],
-            ['type' => 'formula', 'key' => 'net_income', 'label' => 'RESULTADO LÍQUIDO'],
-        ];
-    }
-
-    private function formulaValue(string $key, string $period): float
-    {
-        return match ($key) {
-            'net_revenue'         => $this->valueByClassification($period, 1) - $this->valueByClassification($period, 2),
-            'gross_profit'        => $this->formulaValue('net_revenue', $period) - $this->valueByClassification($period, 3),
-            'operating_expenses'  => $this->formulaValue('gross_profit', $period)
-                - $this->valueByClassification($period, 4)
-                + $this->valueByClassification($period, 5)
-                + $this->valueByClassification($period, 6),
-            'financial_result'    => $this->valueByClassification($period, 7) - $this->valueByClassification($period, 8),
-            'result_before_taxes' => $this->formulaValue('operating_expenses', $period)
-                + $this->formulaValue('financial_result', $period),
-            'net_income'          => $this->formulaValue('result_before_taxes', $period)
-                - $this->valueByClassification($period, 9)
-                - $this->valueByClassification($period, 10)
-                + $this->valueByClassification($period, 11),
-            default               => 0.0,
-        };
-    }
-
-    private function valueByClassification(string $period, int $id): float
-    {
-        return (float) (($this->groupedSheets[$period]['dre'][$id] ?? 0.0));
-    }
-
-    private function sortedPeriods(array $periods): array
-    {
-        usort($periods, function ($a, $b) {
-            $da = DateTime::createFromFormat('m/Y', (string) $a) ?: null;
-            $db = DateTime::createFromFormat('m/Y', (string) $b) ?: null;
-
-            $ta = $da ? (int) $da->format('Ym') : 0;
-            $tb = $db ? (int) $db->format('Ym') : 0;
-
-            return $ta <=> $tb;
-        });
-
-        return array_values($periods);
-    }
-
-    private function variationPercentPair(float $final, float $base): array
-    {
-        $av = null;
-        $ah = null;
-
-        if (abs($base) > 0.0000001) {
-            $ah = ($final - $base) / abs($base);
-        }
-
-        return [$av, $ah];
-    }
-
-    private function displayNum(?float $v): ?float
-    {
-        if ($v === null) {
-            return null;
-        }
-
-        return abs($v) < 0.0000001 ? null : $v;
     }
 }
