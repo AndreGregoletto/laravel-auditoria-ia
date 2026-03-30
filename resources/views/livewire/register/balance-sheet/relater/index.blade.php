@@ -34,7 +34,7 @@
             </select>
         </div>
 
-        <a href="{{ route('settings.register.asset-base-classification.create') }}"
+        <a href="{{ route('settings.register.asset-base-classification.relator.create') }}"
            class="inline-flex items-center rounded-lg bg-indigo-600 px-4 py-2 text-sm font-semibold text-white hover:bg-indigo-700">
             {{ __('buttons.new') }}
         </a>
@@ -96,7 +96,7 @@
                         <td class="px-4 py-3">{{ optional($res->created_at)->translatedFormat('d F Y, H:i') }}</td>
                         <td class="px-4 py-3">{{ optional($res->updated_at)->translatedFormat('d F Y, H:i') }}</td>
                         <td class="px-4 py-3">
-                            <a href="{{ route('settings.register.asset-base-classification.edit', $res->id) }}"
+                            <a href="{{ route('settings.register.asset-base-classification.relator.edit', $res->id) }}"
                                class="text-indigo-600 hover:text-indigo-800 dark:text-indigo-400 dark:hover:text-indigo-300">
                                 {{ __('buttons.edit') }}
                             </a>

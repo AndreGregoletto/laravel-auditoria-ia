@@ -2,7 +2,6 @@
 
 namespace App\Livewire\Register\BalanceSheet\Relater;
 
-use App\Livewire\Reports\TreeCompany;
 use App\Models\Company;
 use App\Models\CompanyTree;
 use App\Models\PivotBalanceSheetReference;
@@ -89,9 +88,7 @@ class Index extends Component
             ->where('company_tree_id', $this->idCompanyTree)
             ->where('company_id', $this->idCompany)
             ->with(['balanceSheet', 'companyTree', 'company', 'userCreate', 'userAlter'])
-//            ->orderBy(['company_tree_id', 'company_id'])
             ->paginate(100);
-
 
         return view('livewire.register.balance-sheet.relater.index',
             compact('response')

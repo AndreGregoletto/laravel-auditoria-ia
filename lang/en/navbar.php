@@ -19,6 +19,7 @@ return [
     'consult'           => 'Consult',
     'new'               => 'New',
     'edit'              => 'Edit',
+    'copy'              => 'Copy',
     'ask_system'        => 'Ask the System',
     'files'             => 'Files',
     'sent'              => 'Sent',

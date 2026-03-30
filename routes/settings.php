@@ -1,5 +1,7 @@
 <?php
 
+use Illuminate\Support\Facades\Route;
+
 use App\Livewire\Company\Index  as CompanyIndex;
 use App\Livewire\Company\Create as CompanyCreate;
 use App\Livewire\Company\Edit   as CompanyEdit;
@@ -25,7 +27,10 @@ use App\Livewire\Register\FileStep\Edit   as FileStepEdit;
 use App\Livewire\Register\BalanceSheet\Index  as BalanceSheetIndex;
 use App\Livewire\Register\BalanceSheet\Create as BalanceSheetCreate;
 use App\Livewire\Register\BalanceSheet\Edit   as BalanceSheetEdit;
-use App\Livewire\Register\BalanceSheet\Relater\Index as BalanceSheetRelatorIndex;
+use App\Livewire\Register\BalanceSheet\Relater\Index  as BalanceSheetRelatorIndex;
+use App\Livewire\Register\BalanceSheet\Relater\Create as BalanceSheetRelatorCreate;
+use App\Livewire\Register\BalanceSheet\Relater\Edit   as BalanceSheetRelatorEdit;
+use App\Livewire\Register\BalanceSheet\Relater\Copy   as BalanceSheetRelatorCopy;
 
 use App\Livewire\Register\IncomeStatement\Index  as IncomeStatementIndex;
 use App\Livewire\Register\IncomeStatement\Create as IncomeStatementCreate;
@@ -76,6 +81,9 @@ Route::prefix('settings')->name('settings.')->group(function (){
 
             Route::prefix('relator')->name('relator.')->group(function () {
                 Route::get('/', BalanceSheetRelatorIndex::class)->name('index');
+                Route::get('/create', BalanceSheetRelatorCreate::class)->name('create');
+                Route::get('/{pivotBalanceSheetReference}/edit', BalanceSheetRelatorEdit::class)->name('edit');
+                Route::get('/copy', BalanceSheetRelatorCopy::class)->name('copy');
             });
         });
 

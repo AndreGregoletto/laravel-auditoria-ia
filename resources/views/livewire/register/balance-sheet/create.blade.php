@@ -1,7 +1,7 @@
 <x-slot name="header">
     <div class="flex items-center justify-between">
         <h1 class="text-xl font-semibold text-gray-900 dark:text-gray-100">
-            {{ __('navbar.settings') }} / {{ __('navbar.register') }} / {{ __('reports.bp_classification') }} / {{ __('navbar.create') }}
+            {{ __('navbar.settings') }} / {{ __('navbar.register') }} / {{ __('reports.bp_classification') }} / {{ __('navbar.new') }}
         </h1>
     </div>
 </x-slot>

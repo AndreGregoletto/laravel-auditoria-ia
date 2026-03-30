@@ -209,8 +209,13 @@
                                         </li>
 
                                         <li class="pc-item">
-                                            <a class="pc-link" href="{{ route('settings.register.file-step.create') }}">
+                                            <a class="pc-link" href="{{ route('settings.register.asset-base-classification.relator.create') }}">
                                                 {{ __('navbar.new') }}
+                                            </a>
+                                        </li>
+                                        <li class="pc-item">
+                                            <a class="pc-link" href="{{ route('settings.register.asset-base-classification.relator.copy') }}">
+                                                {{ __('navbar.copy') }}
                                             </a>
                                         </li>
                                     </ul>

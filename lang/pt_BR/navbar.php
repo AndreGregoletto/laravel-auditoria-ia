@@ -19,6 +19,7 @@ return [
     'consult'           => 'Consultar',
     'new'               => 'Novo',
     'edit'              => 'Editar',
+    'copy'              => 'Copiar',
     'ask_system'        => 'Pergunte ao Sistema',
     'files'             => 'Arquivos',
     'sent'              => 'Enviados',
