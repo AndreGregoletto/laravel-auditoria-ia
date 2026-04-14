@@ -130,15 +130,11 @@ class TrialBalanceAiSuggester
         if (!$companyId) return [];
 
         $priority = function ($modelClass, $type) use ($companyId) {
-//            $value = match ($type){
-//                'bp'  => 'id',
-//                'dre' => 'id',
-//            };
 
-            $result = $modelClass::where('company_id', $companyId)->get()->pluck('value', 'id');
+            $result = $modelClass::where('company_id', $companyId)->get()->pluck('id', 'value');
             if ($result->isNotEmpty()) return $result->toArray();
 
-            $result = $modelClass::where('company_tree_id', $companyId)->get()->pluck('value', 'id');
+            $result = $modelClass::where('company_tree_id', $companyId)->get()->pluck('id', 'value');
             if ($result->isNotEmpty()) return $result->toArray();
 
             return $modelClass::whereNull('company_id')->whereNull('company_tree_id')->get()->pluck('id', 'value')->toArray();
@@ -193,9 +189,10 @@ class TrialBalanceAiSuggester
                     ?: strcmp((string) $b, (string) $a)
             );
 
-            $ids = array_values($ordered);
-
-            $ids = array_values(array_unique($ids));
+            $ids = $ordered
+                |> (fn($t) => array_values($t))
+                |> (fn($t) => array_unique($t))
+                |> (fn($t) => array_values($t));
 
             if (empty($ids)) return [];
 

@@ -3,6 +3,7 @@
 namespace App\Exports;
 
 use App\Models\BalanceSheet;
+use App\Models\PivotBalanceSheetReference;
 use DateTime;
 use Maatwebsite\Excel\Concerns\FromArray;
 use Maatwebsite\Excel\Concerns\WithCustomStartCell;
@@ -26,12 +27,14 @@ class RagBpSheetExport implements
     private array $groupedSheets;
     private array $periods;
     private array $classify;
+    private array $pivotBalance;
 
     public function __construct(private readonly array $result)
     {
         $this->groupedSheets = (array) ($result['groupedSheets'] ?? []);
         $this->periods = $this->sortedPeriods(array_keys($this->groupedSheets));
         $this->classify = $result['classify']['bp'];
+        $this->pivotBalance = $this->pivotBalance(array_values($this->classify));
     }
 
     public function title(): string
@@ -42,6 +45,15 @@ class RagBpSheetExport implements
     public function startCell(): string
     {
         return 'A2';
+    }
+
+    public function pivotBalance($ids): array
+    {
+        return PivotBalanceSheetReference::select(['id', 'balance_sheet_id'])
+            ->whereStatus(1)
+            ->whereIn('ID', $ids)
+            ->pluck('id', 'balance_sheet_id')
+            ->toArray();
     }
 
     public function headings(): array
@@ -151,7 +163,6 @@ class RagBpSheetExport implements
             foreach ($block['sections'] as $section) {
                 foreach ($section['items'] as $item) {
                     $id = (int) $item['id'];
-
                     $lineFinal = $this->valueByClassification($final, $id);
                     $lineInit  = $this->valueByClassification($init, $id);
                     $lineAdjust = 0.0;
@@ -295,6 +306,7 @@ class RagBpSheetExport implements
             return array_sum((array) ($this->groupedSheets[$period]['dre'] ?? []));
         }
 
+        $id = $this->pivotBalance[$id] ?? $id;
         return (float) (($this->groupedSheets[$period]['bp'][$id] ?? 0.0));
     }
 
